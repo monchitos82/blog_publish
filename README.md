@@ -79,7 +79,7 @@ Files may contain some comments that will alter their behavior. In a similar man
 '---------------'                 |    .---------------------------.        
                                   └->  | html file with jinja tags | --> << Jinja Parsing >>
                                        '---------------------------'              |    .------------------.
-                                                                                  └->  | html static file |
+                                                            └---------------------└->  | html static file |
                                                                                        '------------------'
 
 </code></pre>

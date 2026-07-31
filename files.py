@@ -69,7 +69,7 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
                     log.error(f"Copy of static file {filename} failed, error: {error}")
 
 
-def clean_files(path: str, extension: str, target: list | None = None, keep_prefix: str | None ) -> bool:
+def clean_files(path: str, extension: str, target: list | None = None, keep_prefix: str | None = None ) -> bool:
     """Delete files from [path] with an [extension]."""
     for filename in list_of_files(
         dirname=path, extension=extension, clean_extension=False,

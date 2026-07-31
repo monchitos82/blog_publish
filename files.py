@@ -71,8 +71,10 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
             )
             for filename in files:
                 try:
-                    log.warning(f"copying {filename} with extension {extension} into {site}, on {site} scan")
-                    shutil.copy2(src=filename, dst=site)
+                    if len(filename.split("/")[:-1]) == len(site.split("/"):
+                        shutil.copy2(src=filename, dst=site)
+                    else:
+                        log.warning(f"Copying {filename} into {site} mismatches site structure because the path is of different length. Operation bypased")
                     log.debug(f"Static file {filename} copied to {dest}")
 
                 except OSError as error:

@@ -3,9 +3,8 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "monfg"
-        DOMAIN = "codeberg.page"
-        SITE_NAME = "${ACCOUNT}.${DOMAIN}"
+        ACCOUNT = "mongmx"
+        SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
 
         // build specifics
@@ -16,12 +15,13 @@ pipeline {
         // Codeberg pages specifics
         SITE_PAGES = "page"
         SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
-        BASE_URL = "https://${ACCOUNT}.${DOMAIN}/${SITE_PAGES}/${SITE_DIR}"
 
-        // neocities base url:  BASE_URL = "https://${ACCOUNT}.${DOMAIN}/${SITE_PAGES}
-
+        // Base URL definitions
+        BASE_URL = "https://${ACCOUNT}.neocities.org"
+        CODEBERG_PAGES_URL = "https://monfg.codeberg.page/${SITE_PAGES}/${SITE_DIR}"
+        LOCAL_BASE_URL = "http://127.0.0.1:2080/${SITE_DIR}"
         TRACKING_URL = "https://ramongmx.goatcounter.com"
-        LOCAL_BASE_URL = "http://127.0.0.1:2080"
+
         DEST = "../${SITE_DIR}"
         SRC = "../${SOURCE}"
         LOCAL_PATH_ROOT = "/opt/deploy"
@@ -133,7 +133,7 @@ pipeline {
                 mkdir -p ../${STABLE}/${SITE_DIR}
                 cp -r ${LOCAL_PATH_SITE} ../${STABLE}/
                 cp -r ${DEST} ${LOCAL_PATH_ROOT}
-                find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/${SITE_DIR}|g' {} +
+                find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}|g' {} +
                 if [ ! -z "${TRACKING_URL}" ]; then
                   find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
                 fi
@@ -163,7 +163,7 @@ pipeline {
         }
         stage('Go Live in Codeberg') {
             steps {
-                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
+                catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
                         if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                             sh '''
@@ -171,6 +171,7 @@ pipeline {
                             git clone ${SITE_PAGES_URL}
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
+                            find ${SITE_PAGES} -type f -exec sed -i 's|${BASE_URL}|${CODEBERG_PAGES_URL}|g' {} +
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
@@ -182,8 +183,9 @@ pipeline {
                             cd ${SITE_PAGES}
                             git pull
                             cd ..
-                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cp ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
+                            find ${SITE_PAGES} -type f -exec sed -i 's|${BASE_URL}|${CODEBERG_PAGES_URL}|g' {} +
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
@@ -193,15 +195,15 @@ pipeline {
                 }
             }
         }
-        //stage('Go Live in Neocities') {
-        //    steps {
-        //        catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
-        //            sh '''
-        //                $HOME/.local/bin/uv run neocities_upload.py
-        //            '''
-        //        }
-        //    }
-        //}
+        stage('Go Live in Neocities') {
+            steps {
+                catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update page'){
+                    sh '''
+                        $HOME/.local/bin/uv run neocities_upload.py
+                    '''
+                }
+            }
+        }
     }
     post {
         aborted {

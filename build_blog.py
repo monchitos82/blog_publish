@@ -51,7 +51,10 @@ if __name__ == "__main__":
     if not copy_statics(src=SRC, dest=DEST, statics=STATICS):
         file_errors = True
 
-    # get the base of every page ready by setting header, menu and footer
+    year_indexes = None
+    last_year = int(LAST_YEAR)
+    first_year = last_year - int(YEAR_LOOKBACK)
+    YEARS = [str(year) for year in range(first_year, last_year + 1)]
     
     arguments = {
         "author": AUTHOR,
@@ -59,12 +62,12 @@ if __name__ == "__main__":
         "in_index": False,
         "in_main": False,
         "in_post": False,
-        "page_name": None,
         "progressbar": True,
         "menu": None,
         "title": TITLE,
         "tracking_url": None,
         "year" : None,
+        "years" : YEARS,
     }
     
     menu = render_template(
@@ -106,9 +109,7 @@ if __name__ == "__main__":
             )
         if len(split_filename) == 5:
            year = split_filename[-2]
-           page = split_filename[-1]
            file_arguments["year"] = year
-           file_arguments["page_name"] = page
            file_arguments["in_post"] = True
            file_footer = render_template(
                filename=f"{SRC}/templates/footer.html.j2",
@@ -151,10 +152,6 @@ if __name__ == "__main__":
             file_errors = True
             break
 
-    year_indexes = None
-    last_year = int(LAST_YEAR)
-    first_year = last_year - int(YEAR_LOOKBACK)
-    YEARS = [str(year) for year in range(first_year, last_year + 1)]
     file_arguments = dict(arguments)
     file_arguments["progressbar"] = False
     file_arguments["in_index"] = True

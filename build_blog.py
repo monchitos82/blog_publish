@@ -23,6 +23,9 @@ YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../pages")
 TRACKING = os.getenv("TRACKING", "")
+if TRACKING:
+    # tracking exists, use the count endpoint
+    TRACKING += "/count?p="
 
 # These are directory and extensions that should be copied
 STATICS = {

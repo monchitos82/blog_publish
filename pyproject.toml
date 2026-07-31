@@ -15,6 +15,7 @@ dependencies = [
     "Jinja2==3.1.6",
     "Markdown==3.10.1",
     "MarkupSafe==3.0.3",
+    "neocitizen>=1.0.0",
     "requests==2.32.5",
     "toolz==1.1.0",
     "urllib3==2.6.3",

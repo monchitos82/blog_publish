@@ -5,9 +5,11 @@ pipeline {
         ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${ACCOUNT}"
         SOURCE = "rgarciamx"
-        TRACKING = "https://${ACCOUNT}.goatcounter.com/count?p="
+        TRACKING = "https://${ACCOUNT}.goatcounter.com"
+        FALLBACK_TRACKING = "https://${ACCOUNT}-fallback.goatcounter.com"
         // project specifics
         BASE_URL = "https://${ACCOUNT}.codeberg.page"
+        FALLBACK_URL = "https://${ACCOUNT}.neocities.org"
         DEST = "./pages"
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1
@@ -114,6 +116,17 @@ pipeline {
                         git add -A
                         git commit -am \"Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)\"
                         git push origin master
+                    '''
+                }
+            }
+        }
+
+        stage('Publish Fallback') {
+            steps {
+                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
+                    sh '''
+                        cd fallback
+                        ./deploy_fallback.sh
                     '''
                 }
             }

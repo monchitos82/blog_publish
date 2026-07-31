@@ -22,11 +22,11 @@ pipeline {
 
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
-        DEST = "./${SITE_DIR}"
+        DEST = "../${SITE_DIR}"
         SRC = "./${SOURCE}"
         LOCAL_PATH_ROOT = "/opt/deploy"
         LOCAL_PATH = "${LOCAL_PATH_ROOT}/site"
-        STABLE = "./last"
+        STABLE = "../last"
 
         // blog path specifics
         STATICS_IMG = ".ico,.webp"
@@ -161,17 +161,32 @@ pipeline {
         stage('Go Live in Codeberg') {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
-                    sh '''
-                        pwd
-                        cd ..
-                        git clone ${SITE_PAGES_URL}
-                        cp -r ${SOURCE}/${SITE_DIR} ${SITE_PAGES}
-                        cd  ${SITE_PAGES}
-                        git add -A
-                        git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                        git push
-                        cd ..
-                    '''
+                    script {
+                        if (fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
+                            sh '''
+                            echo "Pages is already present"
+                            cd ..
+                            git clone ${SITE_PAGES_URL}
+                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cd  ${SITE_PAGES}
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push
+                            cd ..
+                            '''
+                        } else {
+                            sh '''
+                            cd ${SITE_PAGES}
+                            git pull
+                            cp -r ${SOURCE}/${SITE_DIR} ${SITE_PAGES}
+                            cd  ${SITE_PAGES}
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push
+                            cd ..
+                            '''
+                        }
+                    }
                 }
             }
         }
@@ -203,6 +218,7 @@ pipeline {
             script {
                 if (params.CLEAN_REPOSITORIES) {
                     dir("${SOURCE}") { deleteDir() }
+                    dir("${SITE_DIR}") { deleteDir() }
                     dir("${SITE_PAGES}") { deleteDir() }
                 }
             }

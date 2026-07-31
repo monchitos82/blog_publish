@@ -84,6 +84,15 @@ pipeline {
             }
 
         }
+        stage('Run Tests') {
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh '''
+              $HOME/.local/bin/uv run pytest
+              '''
+            }
+          }
+        }
         stage('Build') {
             steps {
                 script {
@@ -99,13 +108,6 @@ pipeline {
                 }
             }
 
-        }
-        stage('Test') {
-          steps {
-            sh '''
-            $HOME/.local/bin/uv run pytest
-            '''
-          }
         }
         stage('Local Publish') {
             steps {

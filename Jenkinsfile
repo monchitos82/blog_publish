@@ -48,7 +48,7 @@ pipeline {
                             git clone ${GIT_URL}/${SOURCE}
                             git clone ${GIT_URL}/pages
                         '''
-                    else {
+                    } else {
                         if (fileExists '/home/jenkins/agent/workspace/blog/${SOURCE}') {
                             sh '''
                             cd ${SOURCE}

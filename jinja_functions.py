@@ -21,8 +21,8 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
     html_title = f"{urllib.parse.quote(title.lower().replace(' ', '_'))}_{date.replace('/', '_')}"
     return (
         "<h4>"
-        + f'  <a name="{html_title}" href="{base_url}/{path}#{html_title}">'
-        + f"   {title} ({date})"
-        + "   </a>"
+        + f'<a name="{html_title}" href="{base_url}/{path}#{html_title}">'
+        + f"{title} ({date})"
+        + "</a>"
         + "</h4>"
     )

@@ -23,7 +23,7 @@ def save_as_html(
         try:
             with open(html_filename, "w+", encoding="utf-8") as html_file:
                 html_file.write(header)
-                html_file.write(f'\n<main role="main">\n{content}\n</main>\n')
+                html_file.write(f'<main role="main">{content}</main>')
                 html_file.write(footer)
         except OSError:
             log.error(f"Failed to save {html_filename}", exc_info=True)
@@ -58,7 +58,7 @@ def build_year_index(
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
-        year_content = '<ul class="clean">\n'
+        year_content = '<ul class="clean">'
         # the trick here is enable invert to get a desc order by date list of files and then revert the whole list sorted by name
         posts = list_of_files(f"{src}/posts/{year}", clean_extension=False, invert=True)
         if not posts:
@@ -72,11 +72,11 @@ def build_year_index(
             if title:
                 formatted_filename = post.split("/")[-1].split(".")[0]
                 year_content += (
-                    f'    <li class="clean"><h4><a href="{base_url}/posts/'
+                    f'<li class="clean"><h4><a href="{base_url}/posts/'
                     + f'{year}/{formatted_filename}.html">'
-                    + f"{title}</a></h4></li>\n"
+                    + f"{title}</a></h4></li>"
                 )
-        year_content += "</ul>\n<br/>"
+        year_content += "</ul><br/>"
 
         filename = f"{src}/posts/{year}"
         if not save_as_html(

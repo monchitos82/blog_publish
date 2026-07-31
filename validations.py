@@ -15,6 +15,7 @@ async def has_broken_anchors(dest: str) -> bool:
         dirname=dest, extension="html", clean_extension=False
     ):
         async with aiofiles.open(filename) as f:
+            # this operation is expensive, but regexes for anchors would not be better
             content = await f.read()
             soup = BeautifulSoup(content, "html.parser")
             anchors = soup.find_all("a", href=True)

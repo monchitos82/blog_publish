@@ -1,4 +1,3 @@
-import asyncio
 from operations import build_year_index
 
 def test_build_year_index_creates_index(tmp_path):
@@ -13,7 +12,7 @@ def test_build_year_index_creates_index(tmp_path):
     post = posts / "01_01_my-post.md"
     post.write_text("### My Post\nHello")
 
-    result = asyncio.run(build_year_index(
+    result = build_year_index(
         src=str(src),
         dest=str(dest),
         base_url="https://example.com",
@@ -21,7 +20,7 @@ def test_build_year_index_creates_index(tmp_path):
         header="<header/>",
         footer="<footer/>",
         tracking_url=None,
-    ))
+    )
     assert result is True
     index = dest / "posts" / "2026.html"
     assert index.exists()
@@ -36,7 +35,7 @@ def test_build_year_index_empty_year(tmp_path):
     (src / "posts" / "2026").mkdir(parents=True)
     (dest / "posts").mkdir(parents=True)
 
-    result = asyncio.run(build_year_index(
+    result = build_year_index(
         src=str(src),
         dest=str(dest),
         base_url="https://example.com",
@@ -44,7 +43,7 @@ def test_build_year_index_empty_year(tmp_path):
         header="",
         footer="",
         tracking_url=None,
-    ))
+    )
     assert result is True
 
 
@@ -57,7 +56,7 @@ def test_build_year_index_skips_posts_without_h3_title(tmp_path):
 
     (posts / "01_01_no-title.md").write_text("## Bad title")
 
-    asyncio.run(build_year_index(
+    build_year_index(
         src=str(src),
         dest=str(dest),
         base_url="https://example.com",
@@ -65,6 +64,6 @@ def test_build_year_index_skips_posts_without_h3_title(tmp_path):
         header="",
         footer="",
         tracking_url=None,
-    ))
+    )
     content = (dest / "posts" / "2026.html").read_text()
     assert "no-title" not in content

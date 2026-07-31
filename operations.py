@@ -7,7 +7,7 @@ from validations import extract_post_title
 log = logging.getLogger(__name__)
 
 
-async def build_year_index(
+def build_year_index(
     src: str,
     dest: str,
     base_url: str,
@@ -18,7 +18,7 @@ async def build_year_index(
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
-        year_content = f'<ul class="clean">\n'
+        year_content = '<ul class="clean">\n'
         for post in sorted(
             list_of_files(f"{src}/posts/{year}", clean_extension=False),
             key=lambda f: f.split("/")[-1][:5],
@@ -34,18 +34,17 @@ async def build_year_index(
                 )
         year_content += "</ul>\n"
         year_content += "<br/>\n"
-        try:
-            filename = f"{src}/posts/{year}"
-            save_as_html(
-                filename=filename,
-                header=header,
-                footer=footer,
-                content=year_content,
-                replace={src: dest},
-                tracking_url=tracking_url,
-                title=f"{year} index",
-            )
-        except OSError as error:
-            logging.error(f"Failed to save index file for {year}, {error}")
+
+        filename = f"{src}/posts/{year}"
+        if not save_as_html(
+            filename=filename,
+            header=header,
+            footer=footer,
+            content=year_content,
+            replace={src: dest},
+            tracking_url=tracking_url,
+            title=f"{year} index",
+        ):
+            log.error(f"Failed to save index file for {year}")
             return False
     return True

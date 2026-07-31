@@ -123,7 +123,8 @@ def test_copy_statics_copies_matching_files(tmp_path):
     dest_assets = dest / "assets"
     dest_assets.mkdir(parents=True)
     statics = {str(assets): [".css"]}
-    copy_statics(str(src), str(dest), statics)
+    result = copy_statics(str(src), str(dest), statics)
+    assert result is True
     assert (dest_assets / "style.css").exists()
     assert not (dest_assets / "app.js").exists()
 
@@ -137,7 +138,8 @@ def test_copy_statics_wildcard(tmp_path):
     dest_experiments = dest / "experiments"
     dest_experiments.mkdir(parents=True)
     statics = {str(experiments): ["*"]}
-    copy_statics(str(src), str(dest), statics)
+    result = copy_statics(str(src), str(dest), statics)
+    assert result is True
     assert (dest_experiments / "demo.html").exists()
 
 

@@ -61,7 +61,7 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
     return True
 
 
-def copy_statics(src: str, dest: str, statics: list) -> None:
+def copy_statics(src: str, dest: str, statics: list) -> bool:
     """Copy any static files, this runs independently of markdown rendering."""
     for item in statics:
         site = item.replace(src, dest)
@@ -76,6 +76,8 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
 
                 except OSError as error:
                     log.error(f"Copy of static file {filename} failed, error: {error}")
+                    return False
+    return True
 
 
 def clean_files(

@@ -40,9 +40,7 @@ STATICS = {
 
 
 async def run_asynchronously(tasks: list) -> list:
-    results = await asyncio.gather(*tasks)
-    return results
-
+    return await asyncio.gather(*tasks, return_exceptions=True)
 
 if __name__ == "__main__":
 
@@ -55,7 +53,8 @@ if __name__ == "__main__":
 
     if not copy_dirs(src=SRC, dest=DEST, depth=2):
         file_errors = True
-    copy_statics(src=SRC, dest=DEST, statics=STATICS)
+    if not copy_statics(src=SRC, dest=DEST, statics=STATICS):
+        file_errors = True
 
     # get the base of every page ready by setting header, menu and footer
     menu = render_template(
@@ -149,21 +148,19 @@ if __name__ == "__main__":
             "in_index": True,
         },
     )
-    year_indexes = asyncio.run(
-        build_year_index(
-            src=SRC,
-            dest=DEST,
-            base_url=BASE_URL,
-            years=YEARS,
-            header=header,
-            footer=index_footer,
-            tracking_url=TRACKING,
-        )
+    year_indexes = build_year_index(
+        src=SRC,
+        dest=DEST,
+        base_url=BASE_URL,
+        years=YEARS,
+        header=header,
+        footer=index_footer,
+        tracking_url=TRACKING,
     )
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:
-        broken_anchors, _, _ = asyncio.run(
+        results = asyncio.run(
             run_asynchronously(
                 [
                     has_broken_anchors(dest=f"{DEST}"),
@@ -176,3 +173,12 @@ if __name__ == "__main__":
                 ]
             )
         )
+        for result in results:
+            if isinstance(result, Exception):
+                log.error(f"A task failed with an exception: {result}")
+        if not results[0]:
+            log.warning("The build has broken anchors")
+    elif file_errors:
+        log.critical("The build cannot continue, there are file errors making the build inconsistent")
+    elif not year_indexes:
+        log.critical("Year indexes were not built, the build navigation will be broken")

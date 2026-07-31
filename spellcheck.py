@@ -16,7 +16,7 @@ if __name__ == "__main__":
                 tool = language_tool_python.LanguageTool("en-US")
                 matches = tool.check(content)
                 for m in matches:
-                    print(m.ruleId)
+                    print(m.rule_id)
                     print(m.message)
                     print(m.replacements)
     except IOError:

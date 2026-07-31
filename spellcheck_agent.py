@@ -83,6 +83,6 @@ if __name__ == "__main__":
             content = f.read()
             if content:
                 message = f"for the file {filename}, if it is a markdown, evaluate its content: {content}"
-                log.info(evaluate(msg=message))
+                print(evaluate(msg=message))
     except IOError:
         log.error(f"File {filename} could not be read")

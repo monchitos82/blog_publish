@@ -5,7 +5,7 @@ pipeline {
         ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${ACCOUNT}"
         SOURCE = "rgarciamx"
-        TRACKING = "yes"
+        TRACKING = "https://${ACCOUNT}.goatcounter.com/count?p="
         // project specifics
         BASE_URL = "https://${ACCOUNT}.codeberg.page"
         DEST = "./pages"

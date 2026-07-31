@@ -1,13 +1,11 @@
 import logging
-import os
-import shutil
 
 import aiofiles
 import validators
 from bs4 import BeautifulSoup
 
 from files import list_of_files
-from transformations import parse_markdown_file, render_template, save_as_html
+from transformations import save_as_html
 
 log = logging.getLogger(__name__)
 

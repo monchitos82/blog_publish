@@ -4,6 +4,8 @@ import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
 
+from operations import extract_post_title
+
 log = logging.getLogger(__name__)
 
 
@@ -72,8 +74,11 @@ def save_as_html(
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
                 # on build this will have the ./src prefix, cleaning it up
                 if tracking_element:
+                    title = extract_post_title(filename)
+                    if title:
+                        title = f"&t={title}"
                     no_path_filename = ("/").join(html_filename.split("/")[2:])
-                    html_file.write(f'\n    <img src="{tracking_element}/{no_path_filename}">\n')
+                    html_file.write(f'\n    <img src="{tracking_element}/count?p=/{no_path_filename}{title}">\n')
                 html_file.write(footer)
         except OSError as error:
             log.error(f"Failed to save {html_filename}, error: {error}")

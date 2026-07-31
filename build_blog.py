@@ -23,11 +23,6 @@ YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
-TRACKING_ELEMENT = None
-
-if TRACKING:
-    # tracking exists, use the count endpoint
-    TRACKING_ELEMENT = f"{TRACKING}/count?p="
 
 # These are directory and extensions that should be copied
 STATICS = {
@@ -125,7 +120,7 @@ if __name__ == "__main__":
             footer=file_footer,
             content=parse_markdown_file(filename=filename),
             replace={SRC: DEST},
-            tracking_element=TRACKING_ELEMENT,
+            tracking_element=TRACKING,
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")
@@ -151,7 +146,7 @@ if __name__ == "__main__":
             years=YEARS,
             header=header,
             footer=index_footer,
-            tracking_element=TRACKING_ELEMENT,
+            tracking_element=TRACKING,
         )
     )
 

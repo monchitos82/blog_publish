@@ -10,6 +10,7 @@ from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
 from operations import extract_post_title, build_year_index
 from transformations import parse_markdown_file, render_template, save_as_html
 from validations import has_broken_anchors
+from utils import env_list_as_tuple, run_async
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -22,23 +23,6 @@ YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
-
-
-def env_list_as_tuple(var_name: str, default: tuple | None = None) -> tuple | None:
-    env_var = os.getenv(var_name, None)
-    if not env_var:
-        return default
-    split_var = env_var.replace(" ", "").split(",")
-    if split_var[-1] == "":
-        split_var.pop()
-    if not split_var:
-        return default
-    return tuple(split_var)
-
-
-async def run_async(tasks: list) -> list:
-    # this avoids making main explicitly create an event loop
-    return await asyncio.gather(*tasks, return_exceptions=True)
 
 
 if __name__ == "__main__":

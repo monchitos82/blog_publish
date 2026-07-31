@@ -60,3 +60,10 @@ def test_load_static_env_bad_env():
     static = load_static_env(src=src)
     del os.environ["STATIC_"]
     assert static == {}
+
+def test_load_static_env_relative():
+    os.environ["STATIC_.._.._BAD"] = "a, b"
+    src = "base"
+    static = load_static_env(src=src)
+    del os.environ["STATIC_.._.._BAD"]
+    assert static == {}

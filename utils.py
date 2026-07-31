@@ -24,8 +24,8 @@ def load_static_env(src: str, prefix: str = "STATIC") -> dict:
     env_vars = os.environ
     for var in env_vars:
         if prefix in var:
-            dirname = "/".join(var.split("_")[1:]).lower()
-            if dirname and dirname.replace("/", "") != "":
+            dirname = "/".join(var.split("_")[1:]).lower().replace(".", "")
+            if dirname and dirname.replace("/", "") != "" and "//" not in dirname:
                 var_settings = env_list_as_tuple(var_name=var)
                 if var_settings:
                     static[f"{src}/{dirname}"] = var_settings

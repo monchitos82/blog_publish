@@ -10,7 +10,8 @@ a) A source with all the markdown files. In this case, my blog has a simple stru
 
 ```
 myblog/
-│── main.css
+│── assets
+│   └── main.min.css
 ├── img
 │   └── favicon.ico
 ├── index.md       # this is the landing page; this sets <in_main to true>

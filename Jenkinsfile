@@ -6,8 +6,8 @@ pipeline {
         ACCOUNT = "mongmx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
-        USE_CODEBERG = ""
-        USE_NEOCITIES = true
+        USE_CODEBERG = "${params.USE_FALLBACK ? 'true' : ''}"
+        USE_NEOCITIES = "${params.USE_FALLBACK ? '' : 'true'}"
 
         // build specifics
         SOURCE = "blog"
@@ -56,6 +56,10 @@ pipeline {
             defaultValue: true,
             description: 'Update the RSS feed (only works for Posts)'
         )
+        booleanParam(
+            name: 'USE_FALLBACK',
+            defaultValue: false,
+            description: 'Deploy to fallback site'
     }
     stages {
         stage('Environment Setup') {
@@ -168,7 +172,10 @@ pipeline {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        if ( env.USE_CODEBERG ) {
+                        if ( params.USE_FALLBACK ) {
+                            sh '''
+                            echo "Deploying to fallback site"
+                            '''
                             if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                                 sh '''
                                 cd ..
@@ -196,7 +203,7 @@ pipeline {
                                 '''
                             }
                         }
-                        else if ( env.USE_NEOCITIES ) {
+                        else if ( params.USE_FALLBACK ) {
                             sh '''
                             $HOME/.local/bin/uv run neocities_upload.py
                             '''

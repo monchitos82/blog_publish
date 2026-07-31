@@ -4,9 +4,7 @@ pipeline {
         // build specifics
         GIT_ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${GIT_ACCOUNT}"
-        PYTHON = "python3"
         SOURCE = "rgarciamx"
-        VENV_DIR = ".venv"
         // project specifics
         BASE_URL = "https://${GIT_ACCOUNT}.codeberg.page"
         DEST = "./pages"
@@ -17,10 +15,9 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 sh '''
-                    ${PYTHON} -m venv ${VENV_DIR}
-                    . ${VENV_DIR}/bin/activate
-                    pip install --upgrade pip setuptools wheel
-                    pip install -r requirements.txt
+                    curl -LsSf https://astral.sh/uv/install.sh | sh
+                    export PATH="$HOME/.local/bin:$PATH"
+                    uv sync --frozen
                 '''
             }
         }
@@ -30,7 +27,7 @@ pipeline {
                     . ${VENV_DIR}/bin/activate
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
-                    python build_blog.py
+                    uv run build_blog.py
                 '''
             }
 

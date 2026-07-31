@@ -1,6 +1,7 @@
 import asyncio
 import os
 
+
 def env_list_as_tuple(var_name: str, default: tuple | None = None) -> tuple | None:
     env_var = os.getenv(var_name, None)
     if not env_var:

@@ -21,6 +21,16 @@ def render_template(filename: str, **kwargs) -> str:
     return content
 
 
+def render_content_as_template(content: str, **kwargs) -> str:
+    """Render content as a template using jinja2 (no file used here)."""
+    try:
+        template_as_content = Template(content)
+        content = template.render(kwargs)
+    except TemplateError as err:
+        log.error(f"Failed to render the content as template, error: {err}")
+    return content
+
+
 def parse_markdown(content: str) -> str:
     """Parse a markdown string into HTML."""
     try:

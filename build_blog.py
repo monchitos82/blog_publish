@@ -7,11 +7,12 @@ import os
 
 from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
                    list_of_files)
-from operations import extract_post_title, build_year_index
-from transformations import parse_markdown_file, render_template, save_as_html
-from validations import has_broken_anchors
+from operations import build_year_index, extract_post_title
 from rss import generate_rss_feed
+from transformations import (parse_markdown_file, render_content_as_template,
+                             render_template, save_as_html)
 from utils import env_list_as_tuple, run_async
+from validations import has_broken_anchors
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -28,6 +29,7 @@ TITLE = os.getenv("TITLE", None)
 AUTHOR = os.getenv("AUTHOR", None)
 EMAIL = os.getenv("EMAIL", None)
 ACCOUNT = os.getenv("ACCOUNT", None)
+NO_RENDER = os.getenv("NO_RENDER", "<!--NO RENDER-->")
 
 
 if __name__ == "__main__":
@@ -38,12 +40,12 @@ if __name__ == "__main__":
     INDEX_PAGES = env_list_as_tuple("INDEX_PAGES")
     if INDEX_PAGES is None:
         INDEX_PAGES = ["index", "about"]
-    
+
     STATICS = {
-        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".ico")),
-        f"{SRC}/style": env_list_as_tuple("STATICS_STYLE", (".css",)),
+        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".ico", ".css")),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
-        f"{SRC}/misc": env_list_as_tuple("STATICS_MISC", (".html", ".json", ".txt")),
+        f"{SRC}/misc": env_list_as_tuple("STATICS_MISC", (".html", ".json")),
+        f"{SRC}/static": env_list_as_tuple("STATICS_STATIC", (".txt")),
     }
 
     clean_files(path=f"{DEST}", extension="html"),
@@ -124,6 +126,15 @@ if __name__ == "__main__":
                     },
                 )
 
+        if NO_RENDER not in content:
+            content = render_content_as_template(
+                content=content,
+                **{
+                    "base_url": BASE_URL,
+                    "year": year,
+                },
+            )
+
         html_save = save_as_html(
             filename=filename,
             header=header,
@@ -163,18 +174,14 @@ if __name__ == "__main__":
     if not file_errors and year_indexes:
         tasks = [
             has_broken_anchors(dest=f"{DEST}"),
-            async_clean_files(
-                path=f"{SRC}/posts", extension="md", target=YEARS
-            ),
-            async_clean_files(
-                path=f"{SRC}/posts", extension="html", target=YEARS
-            ),
+            async_clean_files(path=f"{SRC}/posts", extension="md", target=YEARS),
+            async_clean_files(path=f"{SRC}/posts", extension="html", target=YEARS),
         ]
         for result in asyncio.run(run_async(tasks)):
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")
-        
-        update_rss = os.getenv('UPDATE_RSS', None)
+
+        update_rss = os.getenv("UPDATE_RSS", None)
         if update_rss:
             log.info("RSS updates enabled")
             if not generate_rss_feed(
@@ -190,6 +197,8 @@ if __name__ == "__main__":
                 log.warning("The RSS feed could not be generated")
 
     elif file_errors:
-        log.critical("The build cannot continue, there are file errors making the build inconsistent")
+        log.critical(
+            "The build cannot continue, there are file errors making the build inconsistent"
+        )
     elif not year_indexes:
         log.critical("Year indexes were not built, the build navigation will be broken")

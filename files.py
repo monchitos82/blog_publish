@@ -76,7 +76,9 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
                     if len(split_filename[:-1]) == len(split_site):
                         shutil.copy2(src=filename, dst=site)
                     else:
-                        log.warning(f"Copying {filename} into {dest} as {site}/{split_filename[-1]} cannot be done, path structure mismatches")
+                        log.warning(
+                            f"Copying {filename} into {dest} as {site}/{split_filename[-1]} cannot be done, path structure mismatches"
+                        )
                     log.debug(f"Static file {filename} copied to {dest}")
 
                 except OSError as error:

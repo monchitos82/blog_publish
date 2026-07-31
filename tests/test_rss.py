@@ -23,7 +23,7 @@ def test_generate_rss(tmp_path):
         site_title="some title",
     )
     assert result is True
-    feed = dest / "feed.xml"
+    feed = dest / "atom.xml"
     assert feed.exists()
     content = feed.read_text()
     assert "My Post" in content

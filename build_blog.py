@@ -97,6 +97,7 @@ if __name__ == "__main__":
                 },
             )
         if "[ NAV_MAIN ]: #" in content or "<!-- NAV_MAIN -->" in content:
+            log.warning(f"{filename} is in index")
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
                 **{

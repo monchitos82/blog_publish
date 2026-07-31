@@ -4,7 +4,7 @@ import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
 
-from operations import extract_post_title
+from validations import extract_post_title
 
 log = logging.getLogger(__name__)
 

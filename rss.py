@@ -25,13 +25,13 @@ def generate_rss_feed(
         fg = FeedGenerator()
         fg.id(site_name)
         fg.title(site_title)
-        fg.author({"name": author, "email": email})
-        fg.link(href=base_url, rel="alternate")
+        fg.author({"name": f"{author}", "email": f"{email}")
+        fg.link(href="f{base_url}", rel="alternate")
         fg.logo(f"{base_url}/img/favicon.ico")
         fg.subtitle("Personal blog updates")
         fg.link(href=f"{base_url}/feed.xml", rel="self")
         fg.language("en")
-        fg.generator(generator="")
+        fg.generator(generator="blog generator", version="0.1")
 
         for year in years:
             for post in sorted(

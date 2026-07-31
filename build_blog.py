@@ -96,8 +96,6 @@ if __name__ == "__main__":
                     "in_main": True,
                 },
             )
-        if "notes" in filename:
-            log.warning(content)
         if "[ NAV_MAIN ]: #" in content or "<!-- NAV_MAIN -->" in content:
             log.warning(f"{filename} is in index")
             file_footer = render_template(

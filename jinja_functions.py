@@ -22,7 +22,7 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
     return (
         f'<span><a name="{html_title}"/></a></span><br class="short-br"/>'
         + "<h4>"
-        + f'<a href="{base_url}/{path}#{html_title}">'
+        + f'<a href="{base_url}/{path}#{html_title}" class="decorated">'
         + f"{title} ({date})"
         + "</a>"
         + "</h4>"

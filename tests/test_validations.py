@@ -15,16 +15,10 @@ def test_has_broken_anchors_detects_invalid(tmp_path):
     assert asyncio.run(has_broken_anchors(str(tmp_path))) is True
 
 
-def test_has_broken_anchors_allows_relative(tmp_path):
+def test_has_broken_anchors_disallows_relative(tmp_path):
     f = tmp_path / "page.html"
     f.write_text('<a href="./local.html">local</a>')
-    assert asyncio.run(has_broken_anchors(str(tmp_path))) is False
-
-
-def test_has_broken_anchors_allows_parent_relative(tmp_path):
-    f = tmp_path / "page.html"
-    f.write_text('<a href="../other.html">up</a>')
-    assert asyncio.run(has_broken_anchors(str(tmp_path))) is False
+    assert asyncio.run(has_broken_anchors(str(tmp_path))) is True
 
 
 def test_has_broken_anchors_ignores_hash(tmp_path):

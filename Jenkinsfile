@@ -21,11 +21,19 @@ pipeline {
                 '''
             }
         }
-        stage('Build') {
+        stage('Cleanup') {
             steps {
                 sh '''
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
+                    find ./pages -name '*.html' -delete
+                '''
+            }
+
+        }
+        stage('Build') {
+            steps {
+                sh '''
                     $HOME/.local/bin/uv run build_blog.py
                 '''
             }

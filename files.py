@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 
@@ -38,10 +39,12 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                     pass
                 except OSError as error:
                     # other errors should be addressed
-                    log.error(f"Creation of directory {item} failed, error: {error}")
+                    logging.error(
+                        f"Creation of directory {item} failed, error: {error}"
+                    )
                     return False
     except OSError as error:
-        log.error(f"Access to {src} failed, error: {error}")
+        logging.error(f"Access to {src} failed, error: {error}")
         return False
     return True
 
@@ -58,7 +61,9 @@ def copy_statics(statics: list, src: str, dest: str) -> None:
                 try:
                     shutil.copy2(src=filename, dst=site)
                 except OSError as error:
-                    log.error(f"Copy of static file {filename} failed, error: {error}")
+                    logging.error(
+                        f"Copy of static file {filename} failed, error: {error}"
+                    )
 
 
 async def clean_files(path: str, extension: str, target: list | None = None) -> bool:
@@ -72,7 +77,7 @@ async def clean_files(path: str, extension: str, target: list | None = None) -> 
             found = False
             for target_file in target:
                 if filename.split("/")[-1] == f"{target_file}.{extension}":
-                    log.info(f"found file: {filename} targetted for delete")
+                    logging.info(f"found file: {filename} targetted for delete")
                     found = True
                     break
             if not found:
@@ -81,7 +86,7 @@ async def clean_files(path: str, extension: str, target: list | None = None) -> 
             if ".keep" not in filename:
                 os.remove(filename)
         except OSError:
-            log.error("Site could not be cleaned", exc_info=True)
+            logging.error("Site could not be cleaned", exc_info=True)
             return False
-    log.info("Site clean!")
+    logging.info("Site clean!")
     return True

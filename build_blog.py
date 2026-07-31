@@ -44,9 +44,9 @@ if __name__ == "__main__":
     arguments = parser.parse_args()
     file_errors = False
     base_dirname = SRC
-    if not copy_dirs(depth=1):
+    if not copy_dirs(src=SRC, dest=DEST, depth=1):
         file_errors = True
-    copy_statics(statics=STATICS)
+    copy_statics(src=SRC, dest=DEST, statics=STATICS)
 
     # get the base of every page ready by setting header, menu and footer
     menu = render_template(
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     year_indexes = None
     YEARS = [LAST_YEAR]
 
-    if append_last_title_to_index(filename=last_file, year=LAST_YEAR):
+    if append_last_title_to_index(filename=last_file, year=LAST_YEAR, src=SRC):
         last_year = int(LAST_YEAR)
         first_year = last_year - int(YEAR_LOOKBACK)
         YEARS = [str(year) for year in range(first_year, last_year + 1)]
@@ -124,7 +124,12 @@ if __name__ == "__main__":
         )
         year_indexes = asyncio.run(
             build_year_index(
-                years=YEARS, header=header, footer=index_footer, base_url=BASE_URL
+                years=YEARS,
+                header=header,
+                footer=index_footer,
+                src=SRC,
+                dest=DEST,
+                base_url=BASE_URL,
             )
         )
 

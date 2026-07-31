@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 
@@ -26,7 +27,7 @@ async def has_broken_anchors(dest: str) -> bool:
                     if not validators.url(href):
                         if href[:2] == "./" or href[:3] == "../":
                             continue
-                        log.error(f"invalid anchor: {anchor} in file: {filename}")
+                        logging.error(f"invalid anchor: {anchor} in file: {filename}")
                         return True
     return False
 
@@ -46,10 +47,10 @@ def find_last_post(year: str, src: str) -> str:
                 last = filename
                 last_ctime = file_ctime
             elif last_ctime == file_ctime:
-                log.warning(
+                logging.warning(
                     f"Two files {last} | {filename} have the same creation timestamp"
                 )
-    log.info(f"Last file found: {last}")
+    logging.info(f"Last file found: {last}")
     return last
 
 
@@ -61,7 +62,7 @@ def extract_post_title(filename: str) -> str:
         if "###" in title:
             return title.replace("###", "").replace("\n", "").strip()
     except OSError as error:
-        log.error(f"Failed to open post when looking for a title: {error}")
+        logging.error(f"Failed to open post when looking for a title: {error}")
     return None
 
 
@@ -76,7 +77,7 @@ def get_index_titles(year: str, src: str) -> list:
             for anchor in anchors:
                 titles.append(anchor.get_text(strip=True))
     except (OSError, AttributeError) as error:
-        log.error(f"Failed to extract titles for index of year {year}: {error}")
+        logging.error(f"Failed to extract titles for index of year {year}: {error}")
     return titles
 
 
@@ -87,7 +88,7 @@ def append_last_title_to_index(filename: str, year: str, src: str) -> bool:
     try:
         shutil.copyfile(year_index, backup)
     except (OSError, FileNotFoundError) as error:
-        log.error(f"Failed to create backup: {error}")
+        logging.error(f"Failed to create backup: {error}")
         return False
     year_index_data = []
     try:
@@ -113,12 +114,12 @@ def append_last_title_to_index(filename: str, year: str, src: str) -> bool:
                     for line in year_index_data:
                         f.write(line)
             except OSError:
-                log.error(
+                logging.error(
                     f"Failed to update the year {year} index, a backup was created"
                 )
                 return False
     except (OSError, ValueError) as error:
-        log.error(f"Failed to open the year {year} index: {error}")
+        logging.error(f"Failed to open the year {year} index: {error}")
         return False
     os.remove(backup)
     return True
@@ -144,6 +145,6 @@ async def build_year_index(
                 replace={src: dest},
             )
         except OSError as error:
-            log.error(f"Failed to save index file for {year}, {error}")
+            logging.error(f"Failed to save index file for {year}, {error}")
             return False
     return True

@@ -1,3 +1,5 @@
+import logging
+
 import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
@@ -11,9 +13,9 @@ def render_template(filename: str, **kwargs) -> str:
             template = Template(source=f.read())
             content = template.render(kwargs)
     except OSError as err:
-        log.error(f"Could not open the template, error: {err}")
+        logging.error(f"Could not open the template, error: {err}")
     except TemplateError as err:
-        log.error(f"Failed to render the template, error: {err}")
+        logging.error(f"Failed to render the template, error: {err}")
     return content
 
 
@@ -30,7 +32,7 @@ def parse_markdown(content: str) -> str:
             ],
         )
     except (OSError, TypeError, ValueError) as error:
-        log.error(f"Failed to parse markdown content, {error}")
+        logging.error(f"Failed to parse markdown content, {error}")
         content = ""
     return content
 
@@ -45,7 +47,9 @@ def parse_markdown_file(filename: str) -> str:
             if md_content:
                 content = parse_markdown(content=md_content)
     except OSError as error:
-        log.error(f"failed to generate content from {markdown_file}, error: {error}")
+        logging.error(
+            f"failed to generate content from {markdown_file}, error: {error}"
+        )
     return content
 
 
@@ -59,14 +63,14 @@ def save_as_html(
     html_file += ".html"
     save = False
     if content:
-        log.info(f"Saving {filename} as {html_file}")
+        logging.info(f"Saving {filename} as {html_file}")
         try:
             with open(html_file, "w+", encoding="utf-8") as f:
                 f.write(header)
                 f.write(f'\n    <main role="main">\n{content}\n    </main>\n')
                 f.write(footer)
         except OSError as error:
-            log.error(f"Failed to save {html_file}, error: {error}")
+            logging.error(f"Failed to save {html_file}, error: {error}")
         else:
             save = True
     return save

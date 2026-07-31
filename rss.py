@@ -1,5 +1,6 @@
 import logging
 
+from datetime import datetime
 from feedgen.feed import FeedGenerator
 from files import list_of_files
 from operations import extract_post_title
@@ -25,15 +26,18 @@ def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> Non
             ):
                 title = extract_post_title(filename=post)
                 # titles are in a format "title text (mm/yy)"
-                title_date = f'01-{title[-7:].replace("(", "").replace(")", "").replace("/", "-20")}'
+                title_date = title[-7:]
                 title_text = title[:-8]
                 title_url = f"{settings.get('base_url')}/posts/{year}/{title}"
+
+                print(title_date, title_text, title_url)
 
                 fe = fg.add_entry()
                 fe.id(title)
                 fe.title(title_text)
                 fe.link(href=title_url)
-                fe.pubDate(title_date)
+                fe.pubDate(datetime.strptime(title_date, "(%m/%y)").strftime("%Y-%m-%dT%H:%M:%SZ"))
+
 
         fg.rss_file(f"{dest}/feed.xml", pretty=True)
     except (OSError, AttributeError) as error:

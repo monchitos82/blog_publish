@@ -116,10 +116,6 @@ pipeline {
                 cp -r /opt/deploy/site ./last/
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
-                if [[ "${TRACKING_URL}" != "" ]]; then
-                  echo "Tracking URL is: ${TRACKING_URL}"
-                  # find /opt/deploy/site -type f -exec sed -i 's|.*${TRACKING_URL}.*|    <!-- no tracking -->|g' {} +
-                fi
                 """
             }
         }

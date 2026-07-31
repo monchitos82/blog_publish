@@ -7,9 +7,7 @@ import os
 
 from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files
 from operations import (
-    append_last_title_to_index,
     build_year_index,
-    find_last_post,
     has_broken_anchors,
 )
 from transformations import parse_markdown_file, render_template, save_as_html

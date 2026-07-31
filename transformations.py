@@ -53,7 +53,7 @@ def render_content_as_template(
         content = template_as_content.render(kwargs)
     except TemplateError as err:
         log.error(f"Failed to render the content as template, error: {err}")
-        log.error(content)
+        content = None
     return content
 
 

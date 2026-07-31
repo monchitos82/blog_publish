@@ -17,7 +17,7 @@ pipeline {
                 sh '''
                     curl -LsSf https://astral.sh/uv/install.sh | sh
                     export PATH="$HOME/.local/bin:$PATH"
-                    uv sync --frozen
+                    $HOME/.local/bin/uv sync --frozen
                 '''
             }
         }
@@ -26,7 +26,7 @@ pipeline {
                 sh '''
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
-                    uv run build_blog.py
+                    $HOME/.local/bin/uv run build_blog.py
                 '''
             }
 

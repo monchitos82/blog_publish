@@ -106,9 +106,7 @@ def parse_markdown(content: str) -> str:
     try:
         content = markdown.markdown(
             content,
-            output_formats="html5",
             extensions=[
-                "smarty",
                 "sane_lists",
                 "tables",
             ],

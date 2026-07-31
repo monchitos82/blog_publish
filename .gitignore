@@ -1,4 +1,3 @@
 *.html
-*.toml
 venv/*
 __pycache__/*

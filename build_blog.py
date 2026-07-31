@@ -100,7 +100,7 @@ if __name__ == "__main__":
                 )
         elif split_filename[-1] == "about": # abusing the in_index flag to treat about as index menu
             file_footer = render_template(
-                filename=f"{SRC}/tempaltes/footer.html.j2",
+                filename=f"{SRC}/templates/footer.html.j2",
                 **{
                     "base_url": BASE_URL,
                     "in_index": True,

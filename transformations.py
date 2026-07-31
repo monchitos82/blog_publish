@@ -60,7 +60,6 @@ def save_as_html(
 ) -> bool:
     """Save content as html file."""
     html_filename = filename
-    print(f"Saving filename: {filename}")
     for item in replace:
         html_filename = f"{html_filename.replace(item, replace[item])}"
     html_filename += ".html"

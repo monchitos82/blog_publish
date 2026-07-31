@@ -76,10 +76,10 @@ if __name__ == "__main__":
     )
 
     # convert all /src markdowns to HTML files and populate /site
-
     for filename in list_of_files(dirname=base_dirname):
         file_footer = footer
-        if "README" in filename or filename.startswith("."):
+        no_path_filename = filename.split("/")[-1]
+        if "README" in filename or no_path_filename.startswith("."):
             continue
 
         # parsing content firsthand to do transformations later
@@ -125,7 +125,7 @@ if __name__ == "__main__":
             content=content,
             replace={SRC: DEST},
             tracking_url=TRACKING,
-            title=extract_post_title(f"{filename}.md")
+            title=extract_post_title(f"{filename}.md"),
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")

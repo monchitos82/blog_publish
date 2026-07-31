@@ -72,15 +72,15 @@ def setup_otel_tracing() -> trace.Tracer:
             "k8s.node.name": os.getenv("NODE_NAME", "Undefined"),
         }
     )
-    trace.set_tracer_provider(TracerProvider(resource=resource))
-
     otlp_tracing_exporter = OTLPSpanExporter(
         endpoint="host.containers.internal:4317",
         insecure=True,
     )
-    trace.get_tracer_provider().add_span_processor(
+    provider = TracerProvider(resource=resource)
+    provider.add_span_processor(
         SimpleSpanProcessor(otlp_tracing_exporter)
     )
+    trace.set_tracer_provider(provider)
     return trace.get_tracer("blog_builder")
 
 

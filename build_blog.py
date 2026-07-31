@@ -42,7 +42,6 @@ if __name__ == "__main__":
     }
 
     STATICS.update(load_static_env(src=SRC))
-    print(STATICS)
 
     clean_files(path=f"{DEST}", extension="html")
 

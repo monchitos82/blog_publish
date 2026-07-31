@@ -73,9 +73,9 @@ pipeline {
             steps {
                 script {
                     if (params.CLEAN_REPOSITORIES) {
-                        dir("${SOURCE}") { deleteDir() }
-                        dir("${SITE_PAGES}") { deleteDir() }
-                        dir("${SITE_DIR}") { deleteDir() }
+                        dir("../${SOURCE}") { deleteDir() }
+                        dir("../${SITE_PAGES}") { deleteDir() }
+                        dir("../${SITE_DIR}") { deleteDir() }
                         sh '''
                             cd ..
                             git clone ${GIT_URL}
@@ -88,7 +88,7 @@ pipeline {
                             cd ..
                             cd ${SOURCE}
                             git pull
-                            cd blog_builder
+                            cd ../blog_builder
                             '''
                         } else {
                             sh '''
@@ -177,9 +177,9 @@ pipeline {
         cleanup {
             script {
                 if (params.CLEAN_REPOSITORIES) {
-                    dir("${SOURCE}") { deleteDir() }
-                    dir("${SITE_DIR}") { deleteDir() }
-                    dir("${SITE_PAGES}") { deleteDir() }
+                    dir("../${SOURCE}") { deleteDir() }
+                    dir("../${SITE_DIR}") { deleteDir() }
+                    dir("../${SITE_PAGES}") { deleteDir() }
                 }
             }
         }

@@ -48,7 +48,7 @@ pipeline {
                 script {
                     if (params.CLEAN_REPOSITORIES) {
                         dir("${SOURCE}") { deleteDir() }
-                        dir("pages") { deleteDir() }
+                        dir("site") { deleteDir() }
                         sh '''
                             git clone ${GIT_URL}/${SOURCE}
                             mkdir -p site
@@ -82,7 +82,7 @@ pipeline {
             steps {
                 sh """
                 mkdir -p /opt/deploy/site
-                cp -r ./pages/* /opt/deploy/site/
+                cp -r ./site /opt/deploy/site
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
                 """
             }
@@ -128,7 +128,7 @@ pipeline {
             script {
                 if (params.CLEAN_REPOSITORIES) {
                     dir("${SOURCE}") { deleteDir() }
-                    dir("pages") { deleteDir() }
+                    dir("site") { deleteDir() }
                 }
             }
         }

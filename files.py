@@ -22,11 +22,11 @@ def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> 
     return files_list
 
 
-def copy_dirs(src: str, dest: str, depth=0) -> bool:
+def copy_dirs(src: str, dest: str, depth=1) -> bool:
     """Mirror the structure of directories within a src path (1 level non-recursive)."""
     try:
         for item in os.listdir(src):
-            if os.path.isdir(os.path.join(src, item)):
+            if os.path.isdir(os.path.join(src, item)) and not item.startswith("."):
                 # added some recursion after splitting posts, ideally 1 level depth max
                 if depth:
                     copy_dirs(

@@ -21,7 +21,7 @@ BASE_URL = os.getenv("BASE_URL", None)
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
-DEST = os.getenv("DEST", "../pages")
+DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
 TRACKING_ELEMENT = None
 
@@ -33,7 +33,7 @@ if TRACKING:
 STATICS = {
     f"{SRC}": [".txt", ".ico"],
     f"{SRC}/assets": [".css", ".js"],
-    f"{SRC}/img": [".png"],
+    f"{SRC}/img": [".png", ".jpeg", ".svg"],
     f"{SRC}/archive": [".json", ".yaml", ".py", ".js", ".log", ".txt"],
 }
 

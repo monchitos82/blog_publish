@@ -20,7 +20,7 @@ pipeline {
 
         // neocities base url:  BASE_URL = "https://${ACCOUNT}.${DOMAIN}/${SITE_PAGES}
 
-        TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
+        TRACKING_URL = "https://ramongmx.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "../${SITE_DIR}"
         SRC = "../${SOURCE}"

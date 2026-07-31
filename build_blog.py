@@ -26,7 +26,6 @@ log.addHandler(console_handler)
 AUTO = os.getenv("AUTO", False)
 BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
 
-CURSING = ["moron"]  # Foul words in your language
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 
@@ -57,7 +56,7 @@ def render_template(filename: str, **kwargs) -> str:
 
 
 def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> list:
-    """Generate a list of files having an [extension] structure."""
+    """Generate a list of files having an [extension]."""
     files_list = []
 
     for root, _, files in os.walk(dirname):
@@ -195,14 +194,26 @@ async def build_year_index(
     return True
 
 
-async def has_foul_language(dest: str = DEST, extension: str = "html") -> bool:
+async def has_foul_language(dest: str = DEST, extension: str = "html") -> bool|None:
     """Scan the rendered docs looking for foul language."""
     clean = True
+    try:
+        with open('foul.txt', 'r') as f:
+            foul_language_content = [word for word in f]
+    except OSError:
+        log.warning('No list of bad words found, the scan will not continue')
+        return None
+    else:
+        foul_language = []
+        # in case the foul language words are comma separated
+        for word in foul_language_content:
+            split_word = word.split(',')
+            foul_language += [word_.strip() for word_ in split_word]
     files = list_of_files(dirname=dest, extension=extension, clean_extension=False)
     for filename in files:
         async with aiofiles.open(filename) as f:
             content = await f.read()
-            for word in CURSING:
+            for word in foul_language:
                 if word.lower() in str(content).lower():
                     log.warning(f"'{word}' found in {filename}")
                     clean = False
@@ -324,6 +335,35 @@ def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool
     return True
 
 
+async def clean_files(path: str, extension: str, target: list | None = None) -> bool:
+    """Delete files from [path] with an [extension]."""
+    site_clean = False
+    files = list_of_files(dirname=path, extension=extension, clean_extension=False)
+    if target:
+        for filename in list(files):
+            found = False
+            for item in target:
+                # this if prevents deleting anything mismatching the filename
+                if filename.split("/")[-1] == f"{item}.{extension}":
+                    found = True
+                    break
+            if not found:
+                files.remove(filename)
+
+    for filename in files:
+        log.debug(f"Removing file {filename}")
+        try:
+            # do not delete what is meant to stay
+            if ".keep" not in filename:
+                os.remove(filename)
+        except OSError:
+            log.error(f"Site could not be cleaned", exc_info=True)
+            break
+    log.info("Site clean!")
+    site_clean = True
+    return site_clean
+
+
 async def run_asynchronously(tasks: list) -> list:
     results = await asyncio.gather(*tasks)
     return results
@@ -401,6 +441,7 @@ if __name__ == "__main__":
         # sys.exit(1)
 
     year_indexes = None
+    YEARS = [LAST_YEAR]
 
     if append_last_title_to_index(filename=last_file, year=LAST_YEAR):
         last_year = int(LAST_YEAR)
@@ -421,12 +462,14 @@ if __name__ == "__main__":
     if not file_errors and year_indexes:
         foul_language, broken_anchors = asyncio.run(
             run_asynchronously(
-                [has_foul_language(), has_broken_anchors(dest=f"{DEST}")]
+                [has_foul_language(),
+                has_broken_anchors(dest=f"{DEST}")],
+                clean_files(path=f"{SRC}/posts", extension="md", target=YEARS)
             )
         )
 
         if arguments.scan and not foul_language:
-            log.info("Cursing found in the results, do you want to continue? [Y/n]")
+            log.info("Foul language was found in the results, do you want to continue? [Y/n]")
             response = "N"
             if not AUTO:
                 response = input()

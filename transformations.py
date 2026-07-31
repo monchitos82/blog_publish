@@ -4,14 +4,15 @@ import urllib.parse
 import markdown
 from jinja2 import Template, pass_context
 from jinja2.exceptions import TemplateError
+from jinja2.runtime import Context
 
 log = logging.getLogger(__name__)
 
 
 @pass_context
-def title_h4_href(context: dict, title: str, date: str, path: str) -> str:
-    log.warning(f"Title is: {title} and path is: {path}, {type(context)}")
-    base_url = context.get("base_url")
+def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
+    """Render a header using an anchor quick reference format"""
+    base_url = context.get("base_url", "")
     html_title = f"{urllib.parse.quote(title)}_{date.replace('/', '_')}"
     return f"""
     <h4>
@@ -57,7 +58,6 @@ def render_annotations(
     split_filename = filename.split("/")
 
     if filename == f"{src}/index":
-        # base, index.md at root
         file_arguments["in_main"] = True
         file_footer = render_template(
             filename=f"{src}/templates/footer.html.j2",
@@ -67,6 +67,7 @@ def render_annotations(
             filename=f"{src}/templates/header.html.j2",
             **file_arguments,
         )
+
     if len(split_filename) == 5:
         year = split_filename[-2]
         file_arguments["year"] = year

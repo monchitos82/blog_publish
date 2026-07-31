@@ -72,6 +72,7 @@ if __name__ == "__main__":
             "base_url": BASE_URL,
             "in_post": False,
             "in_index": False,
+            "in_main": False,
         },
     )
 
@@ -94,6 +95,15 @@ if __name__ == "__main__":
                         "in_post": True,
                     },
                 )
+        else: # if index.md (aka main)
+            file_footer = render_template(
+                filename=f"{SRC}/templates/footer.html.j2",
+                **{
+                    "base_url": BASE_URL,
+                    "in_main": True,
+                },
+            )
+
         html_save = save_as_html(
             filename=filename,
             header=header,

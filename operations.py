@@ -83,10 +83,8 @@ def build_year_index(
 
         filename = f"{src}/posts/{year}"
         file_arguments = kwargs
-        file_arguments["file_title"] = f"{year}_index"
+        file_arguments["file_title"] = f"{year} Index"
         file_arguments["file_name"] = f"{year}_index"
-
-        print(file_arguments)
 
         header = parse_template(
             filename=f"{src}/templates/header.html.j2",

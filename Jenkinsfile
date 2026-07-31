@@ -167,10 +167,8 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        if (fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
+                        if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                             sh '''
-                            pwd
-                            echo "Pages is already present"
                             cd ..
                             git clone ${SITE_PAGES_URL}
                             cp -r ${SITE_DIR} ${SITE_PAGES}
@@ -182,6 +180,8 @@ pipeline {
                             '''
                         } else {
                             sh '''
+                            echo "Pages is already present"
+                            cd ..
                             cd ${SITE_PAGES}
                             git pull
                             cd ..

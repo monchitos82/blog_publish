@@ -38,6 +38,7 @@ STATICS = {
     f"{SRC}": [".txt", ".ico"],
     f"{SRC}/assets": [".css", ".js"],
     f"{SRC}/img": [".png"],
+    f"{SRC}/archive": [".json", ".yaml", ".py", ".js", ".log", ".txt"],
 }
 
 
@@ -330,7 +331,7 @@ async def run_asynchronously(tasks: list) -> list:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scan", "-s", help="scan for cursing", action="store_true")
+    parser.add_argument("--scan", "-s", help="scan for foul language", action="store_true")
     arguments = parser.parse_args()
     file_errors = False
     base_dirname = SRC
@@ -354,30 +355,38 @@ if __name__ == "__main__":
     )
     footer = render_template(
         filename=f"{SRC}/templates/footer.html.j2",
-        **{"base_url": BASE_URL},
+        **{
+            "base_url": BASE_URL,
+            "in_post": False,
+        },
     )
 
     # convert all /src markdowns to HTML files and populate /site
 
     for filename in list_of_files(dirname=base_dirname):
+        file_footer = footer
         if "README" in filename:
             continue
+        # adding a different footer in the event of creating a post:
+        split_filename = filename.split("/")
+        if split_filename[-1] != "index":
+            if len(split_filename) == 5:
+                 year = split_filename[-2]
+                 file_footer = render_template(
+                    filename=f"{SRC}/templates/footer.html.j2",
+                    **{
+                        "base_url": BASE_URL,
+                        "year": year,
+                        "in_post": True,
+                    },
+                 )
         html_save = save_as_html(
             filename=filename,
             header=header,
-            footer=footer,
+            footer=file_footer,
             content=parse_markdown_file(filename=filename),
             replace={SRC: DEST},
         )
-        if "gobble" in filename:
-            html_save = save_as_html(
-                filename=filename,
-                header="",
-                footer="",
-                content=parse_markdown_file(filename=filename),
-                replace={SRC: DEST},
-            )
-
         if not html_save:
             log.error(f"File {filename} failed to be generated!")
             file_errors = True

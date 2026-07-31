@@ -16,6 +16,9 @@ stage('Setup Environment') {
             steps {
                 script {
                     def uvExists = sh(script: "command -v uv", returnStatus: true) == 0
+                    sh '''
+                        command -v uv
+                    '''
                     def forceSetup = env.FORCE_SETUP?.toBoolean()
 
                     if (!uvExists || forceSetup) {

@@ -168,7 +168,7 @@ pipeline {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        if ( USE_CODEBERG ) {
+                        if ( ${USE_CODEBERG} ) {
                             if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                                 sh '''
                                 cd ..
@@ -196,7 +196,7 @@ pipeline {
                                 '''
                             }
                         }
-                        if ( USE_NEOCITIES ) {
+                        if ( ${USE_NEOCITIES} ) {
                             sh '''
                             $HOME/.local/bin/uv run neocities_upload.py
                             '''

@@ -39,7 +39,7 @@ if __name__ == "__main__":
     STATICS = {
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
-        f"{SRC}/docs": env_list_as_tuple("STATICS_DOCS", (".html", ".txt")),
+        f"{SRC}/extra": env_list_as_tuple("STATICS_EXTRA", (".html")),
     }
 
     clean_files(path=f"{DEST}", extension="html")

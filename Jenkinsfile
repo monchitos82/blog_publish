@@ -9,9 +9,9 @@ pipeline {
         SITE_TITLE = "${AUTHOR}'s blog"
 
         // build specifics
-        SOURCE = "blog"
+        SOURCE = "blogb"
         SITE_DIR = "site"
-        GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
+        GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/blog.git" //${SOURCE}.git"
 
         // Codeberg pages specifics
         SITE_PAGES = "page"

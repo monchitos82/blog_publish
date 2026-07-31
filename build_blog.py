@@ -98,7 +98,6 @@ if __name__ == "__main__":
                 },
             )
 
-
         if filename == f"{SRC}/index":
             # base, index.md at root
             file_footer = render_template(
@@ -109,6 +108,7 @@ if __name__ == "__main__":
                     "in_main": True,
                 },
             )
+
         if "<!-- NAV_MAIN -->" in content:
             log.warning(f"{filename} is in index")
             file_footer = render_template(

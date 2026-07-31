@@ -5,8 +5,10 @@ import shutil
 log = logging.getLogger(__name__)
 
 
-def load_file_content(filename: str, extension: str = ".md", limit: int = 262100) -> str | None:
+def load_file_content(filename: str, extension: str | None = None, limit: int = 262100) -> str | None:
     content = None
+    if extension:
+        filename = f"{filename}.{extension}"
     try:
         if os.path.getsize(filename) <= limit:
             with open(filename, encoding="utf-8") as f:
@@ -51,7 +53,7 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
             os.mkdir(dest)
 
         for item in os.listdir(src):
-            if item.startswith("."):
+            if item.startswith(".") or ".git" in item:
                 # no dotfiles
                 continue
             if os.path.isdir(os.path.join(src, item)):

@@ -9,13 +9,13 @@ from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
 def test_load_file_content(tmp_path):
     src = tmp_path / "a.md"
     src.write_text("foo")
-    content = load_file_content(filename=src, extension=".md")
+    content = load_file_content(filename=src)
     assert content == "foo"
 
 def test_load_file_content_too_large(tmp_path):
     src = tmp_path / "a.md"
     src.write_text("foo bar")
-    content = load_file_content(filename=src, limit=1, extension=".md")
+    content = load_file_content(filename=src, limit=1)
     assert content is None
 
 

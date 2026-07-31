@@ -38,6 +38,7 @@ AUTHOR = os.getenv("AUTHOR", "")
 EMAIL = os.getenv("EMAIL", "")
 SITE_NAME = os.getenv("SITE_NAME", "")
 SITE_TITLE = os.getenv("SITE_TITLE", "")
+IN_CODEBERG = os.getenv("USE_CODEBERG", False)
 
 if __name__ == "__main__":
     file_errors = False
@@ -70,6 +71,7 @@ if __name__ == "__main__":
         "in_index": False,
         "in_main": False,
         "in_post": False,
+        "in_codeberg" IN_CODEBERG,
         "progressbar": True,
         "menu": None,
         "years": YEARS,

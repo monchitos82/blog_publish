@@ -6,6 +6,8 @@ pipeline {
         ACCOUNT = "mongmx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
+        USE_CODEBERG = true
+        USE_NEOCITIES = false
 
         // build specifics
         SOURCE = "blog"
@@ -166,43 +168,40 @@ pipeline {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
+                        if ( USE_CODEBERG ) {
+                            if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
+                                sh '''
+                                cd ..
+                                git clone ${SITE_PAGES_URL}
+                                cd ..
+                                cp -r ${SITE_DIR} ${SITE_PAGES}
+                                cd  ${SITE_PAGES}
+                                find . -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
+                                git add -A
+                                git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                                git push
+                                '''
+                            } else {
+                                sh '''
+                                echo "Pages is already present"
+                                cd ..
+                                cd ${SITE_PAGES}
+                                git pull
+                                cd ..
+                                cp -r ${SITE_DIR} ${SITE_PAGES}
+                                cd  ${SITE_PAGES}
+                                find . -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
+                                git add -A
+                                git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                                git push
+                                '''
+                            }
+                        } else if ( USE_NEOCITIES ) {
                             sh '''
-                            cd ..
-                            git clone ${SITE_PAGES_URL}
-                            cd ..
-                            cp -r ${SITE_DIR} ${SITE_PAGES}
-                            cd  ${SITE_PAGES}
-                            find . -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
-                            git add -A
-                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push
-                            '''
-                        } else {
-                            sh '''
-                            echo "Pages is already present"
-                            cd ..
-                            cd ${SITE_PAGES}
-                            git pull
-                            cd ..
-                            cp -r ${SITE_DIR} ${SITE_PAGES}
-                            cd  ${SITE_PAGES}
-                            find . -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
-                            git add -A
-                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push
+                            $HOME/.local/bin/uv run neocities_upload.py
                             '''
                         }
                     }
-                }
-            }
-        }
-        stage('Go Live in Neocities') {
-            steps {
-                catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update page'){
-                    sh '''
-                    $HOME/.local/bin/uv run neocities_upload.py
-                    '''
                 }
             }
         }

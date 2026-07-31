@@ -110,7 +110,8 @@ if __name__ == "__main__":
             file_title = extract_post_title(filename=filename)
             if file_title:
                 file_arguments["file_title"] = file_title
-            file_arguments["file_name"] = trimmed_filename
+            if trimmed_filename:
+                file_arguments["file_name"] = trimmed_filename
 
             file_header, file_footer = render_annotations(
                 src=SRC,
@@ -120,9 +121,6 @@ if __name__ == "__main__":
                 content=content,
                 **file_arguments,
             )
-
-            print(file_arguments)
-            print(file_footer)
 
             # using NO_RENDER bypasses the jinja rendering on the content
             if "<!-- NO_RENDER -->" not in content:
@@ -150,6 +148,7 @@ if __name__ == "__main__":
     index_arguments["file_title"] = ""
     index_arguments["file_name"] = ""
 
+    print(BASE_URL, index_arguments)
     year_indexes = build_year_index(
         src=SRC,
         dest=DEST,

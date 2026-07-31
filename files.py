@@ -60,10 +60,11 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
             files = list_of_files(
                 dirname=item, extension=extension, clean_extension=False
             )
+            print(item, extension, files)
             for filename in files:
                 try:
                     shutil.copy2(src=filename, dst=site)
-                    print(f"Static file {filename} copied to {dest}")
+                    log.info(f"Static file {filename} copied to {dest}")
                     
                 except OSError as error:
                     log.error(f"Copy of static file {filename} failed, error: {error}")

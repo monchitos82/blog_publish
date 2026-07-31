@@ -6,8 +6,14 @@ import logging
 import os
 import sys
 
-from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
-                   list_of_files, load_file_content)
+from files import (
+    async_clean_files,
+    clean_files,
+    copy_dirs,
+    copy_statics,
+    list_of_files,
+    load_file_content,
+)
 from operations import build_year_index, extract_post_title, save_as_html
 from rss import generate_rss_feed
 from transformations import parse_markdown, parse_template, render_annotations

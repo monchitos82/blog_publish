@@ -19,6 +19,7 @@ pipeline {
 
         //blog path specifics
         STATICS_IMG = ".ico,.webp"
+        STATICS_ASSETS = ".css"
 
     }
     parameters {

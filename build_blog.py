@@ -106,6 +106,7 @@ if __name__ == "__main__":
                 continue
 
             file_arguments = dict(arguments)
+            print(filename)
             file_title = extract_post_title(filename=filename)
             if file_title:
                 file_arguments["file_title"] = file_title

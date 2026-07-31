@@ -58,7 +58,7 @@ def parse_markdown_file(filename: str) -> str:
 
 
 def save_as_html(
-    filename: str, header: str, footer: str, content: str, replace: dict, tracking_element: str,
+    filename: str, header: str, footer: str, content: str, replace: dict, tracking_element: str, extension: str = "md"
 ) -> bool:
     """Save content as html file."""
     html_filename = filename
@@ -74,9 +74,11 @@ def save_as_html(
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
                 # on build this will have the ./src prefix, cleaning it up
                 if tracking_element:
-                    title = extract_post_title(filename)
+                    title = extract_post_title(f"{filename}.{extension}")
                     if title:
                         title = f"&t={title}"
+                    else:
+                        title = ""
                     no_path_filename = ("/").join(html_filename.split("/")[2:])
                     html_file.write(f'\n    <img src="{tracking_element}/count?p=/{no_path_filename}{title}">\n')
                 html_file.write(footer)

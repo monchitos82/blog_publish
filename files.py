@@ -63,6 +63,7 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
             for filename in files:
                 try:
                     shutil.copy2(src=filename, dst=site)
+                    log.debug(f"Static file {filename} copied to {dest}")
                 except OSError as error:
                     log.error(f"Copy of static file {filename} failed, error: {error}")
 

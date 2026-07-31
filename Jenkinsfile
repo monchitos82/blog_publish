@@ -83,7 +83,8 @@ pipeline {
             steps {
                 sh """
                 mkdir -p /opt/deploy
-                cp -r /opt/deploy /opt/last
+                mkdir -p ./latest
+                cp -r /opt/deploy ./latest
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
                 find /opt/deploy/site -type f -exec sed -i 's|${TRACKING}|#|g' {} +
@@ -126,7 +127,7 @@ pipeline {
         aborted {
             sh """
             echo 'Rolling back local changes'
-            mv /opt/last /opt/deploy
+            cp -r ./latest/* /opt/deploy/
             """
         }
         failure {

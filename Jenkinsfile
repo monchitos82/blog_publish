@@ -204,7 +204,7 @@ pipeline {
                                 '''
                             }
                         }
-                        else if ( params.USE_FALLBACK ) {
+                        else {
                             sh '''
                             $HOME/.local/bin/uv run neocities_upload.py
                             '''

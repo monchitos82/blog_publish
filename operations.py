@@ -34,11 +34,11 @@ def build_year_index(
     """Create a yearly index of all posts available."""
     for year in years:
         year_content = '<ul class="clean">\n'
-        # the trick here is enable invert to get a desc sort by date and then revert the whole list to sort results last to first
+        # the trick here is enable invert to get a desc order by date list of files and then revert the whole list sorted by name
         for post in sorted(
             list_of_files(f"{src}/posts/{year}", clean_extension=False, invert=True),
             key=lambda f: f.split("/")[-1][:5],
-            #reverse=True,
+            reverse=True,
         ):
             title = extract_post_title(filename=post)
             if title:

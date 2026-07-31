@@ -310,31 +310,25 @@ def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool
 
 async def clean_files(path: str, extension: str, target: list | None = None) -> bool:
     """Delete files from [path] with an [extension]."""
-    site_clean = False
-    files = list_of_files(dirname=path, extension=extension, clean_extension=False)
-    if target:
-        for filename in list(files):
+    for filename in list_of_files(dirname=path, extension=extension, clean_extension=False):
+        cleanup = True
+        if target: # if there are targetted files, when these are not found the cleanup skips
             found = False
-            for item in target:
-                # this if prevents deleting anything mismatching the filename
-                if filename.split("/")[-1] == f"{item}.{extension}":
+            for target_file in target:
+                if filename.split("/")[-1] == f"{target_file}.{extension}":
+                    log.info(f"found file: {filename} targetted for delete")
                     found = True
                     break
             if not found:
-                files.remove(filename)
-
-    for filename in files:
-        log.debug(f"Removing file {filename}")
+                continue
         try:
-            # do not delete what is meant to stay
             if ".keep" not in filename:
                 os.remove(filename)
         except OSError:
-            log.error(f"Site could not be cleaned", exc_info=True)
-            break
+            log.error("Site could not be cleaned", exc_info=True)
+            return False
     log.info("Site clean!")
-    site_clean = True
-    return site_clean
+    return True
 
 
 async def run_asynchronously(tasks: list) -> list:

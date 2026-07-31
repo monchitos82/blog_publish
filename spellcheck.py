@@ -1,4 +1,9 @@
+import logging
+import sys
+
 from neuspell import BertChecker
+
+log = logging.getLogger(__name__)
 
 checker = BertChecker()
 checker.from_pretrained()

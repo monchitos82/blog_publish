@@ -13,13 +13,12 @@ from files import (
     list_of_files,
     load_file_content,
 )
-from operations import build_year_index
+from operations import build_year_index, save_as_html
 from rss import generate_rss_feed
 from transformations import (
     parse_markdown,
     parse_template,
     render_annotations,
-    save_as_html,
 )
 from utils import load_static_env, run_async
 from validations import has_broken_anchors

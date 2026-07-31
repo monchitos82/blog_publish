@@ -1,9 +1,35 @@
 import logging
 
 from files import list_of_files
-from transformations import save_as_html
 
 log = logging.getLogger(__name__)
+
+
+def save_as_html(
+    filename: str,
+    header: str,
+    footer: str,
+    content: str,
+    replace: dict,
+) -> bool:
+    """Save content as html file."""
+    html_filename = filename
+    for item in replace:
+        html_filename = f"{html_filename.replace(item, replace[item])}"
+    html_filename += ".html"
+    save = False
+    if content:
+        log.info(f"Saving {filename} as {html_filename}")
+        try:
+            with open(html_filename, "w+", encoding="utf-8") as html_file:
+                html_file.write(header)
+                html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
+                html_file.write(footer)
+        except OSError:
+            log.error(f"Failed to save {html_filename}", exc_info=True)
+        else:
+            save = True
+    return save
 
 
 def extract_post_title(filename: str, title_format: str = "### ") -> str | None:

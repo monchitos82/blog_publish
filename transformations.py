@@ -9,6 +9,22 @@ from jinja_functions import JinjaFunctions
 log = logging.getLogger(__name__)
 
 
+def parse_markdown(content: str) -> str:
+    """Parse a markdown string into HTML."""
+    try:
+        content = markdown.markdown(
+            content,
+            extensions=[
+                "sane_lists",
+                "tables",
+            ],
+        )
+    except (OSError, TypeError, ValueError):
+        log.error("Failed to parse markdown content", exc_info=True)
+        content = ""
+    return content
+
+
 def parse_template(
     filename: str | None = None,
     content: str | None = None,
@@ -95,46 +111,3 @@ def render_annotations(
                 **file_arguments,
             )
     return (file_header, file_footer)
-
-
-def parse_markdown(content: str) -> str:
-    """Parse a markdown string into HTML."""
-    try:
-        content = markdown.markdown(
-            content,
-            extensions=[
-                "sane_lists",
-                "tables",
-            ],
-        )
-    except (OSError, TypeError, ValueError):
-        log.error("Failed to parse markdown content", exc_info=True)
-        content = ""
-    return content
-
-
-def save_as_html(
-    filename: str,
-    header: str,
-    footer: str,
-    content: str,
-    replace: dict,
-) -> bool:
-    """Save content as html file."""
-    html_filename = filename
-    for item in replace:
-        html_filename = f"{html_filename.replace(item, replace[item])}"
-    html_filename += ".html"
-    save = False
-    if content:
-        log.info(f"Saving {filename} as {html_filename}")
-        try:
-            with open(html_filename, "w+", encoding="utf-8") as html_file:
-                html_file.write(header)
-                html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
-                html_file.write(footer)
-        except OSError:
-            log.error(f"Failed to save {html_filename}", exc_info=True)
-        else:
-            save = True
-    return save

@@ -1,4 +1,4 @@
-from operations import build_year_index, extract_post_title
+from operations import build_year_index, extract_post_title, save_as_html
 
 
 def test_extract_post_title_returns_title(tmp_path):
@@ -87,3 +87,57 @@ def test_build_year_index_skips_posts_without_h3_title(tmp_path):
     )
     content = (dest / "posts" / "2026.html").read_text()
     assert "no-title" not in content
+
+
+def test_save_as_html_creates_file(tmp_path):
+    filename = str(tmp_path / "page")
+    result = save_as_html(
+        filename=filename,
+        header="<header/>",
+        footer="<footer/>",
+        content="<p>hello</p>",
+        replace={},
+    )
+    assert result is True
+    assert (tmp_path / "page.html").exists()
+
+
+def test_save_as_html_applies_replace(tmp_path):
+    src = tmp_path / "src"
+    dest = tmp_path / "dest"
+    src.mkdir()
+    dest.mkdir()
+    filename = str(src / "page")
+    save_as_html(
+        filename=filename,
+        header="",
+        footer="",
+        content="<p>hi</p>",
+        replace={str(src): str(dest)},
+    )
+    assert (dest / "page.html").exists()
+
+
+def test_save_as_html_empty_content_returns_false(tmp_path):
+    result = save_as_html(
+        filename=str(tmp_path / "page"),
+        header="",
+        footer="",
+        content="",
+        replace={},
+    )
+    assert result is False
+
+
+def test_save_as_html_writes_header_and_footer(tmp_path):
+    filename = str(tmp_path / "page")
+    save_as_html(
+        filename=filename,
+        header="<HEADER>",
+        footer="<FOOTER>",
+        content="<p>body</p>",
+        replace={},
+    )
+    content = (tmp_path / "page.html").read_text()
+    assert content.startswith("<HEADER>")
+    assert content.endswith("<FOOTER>")

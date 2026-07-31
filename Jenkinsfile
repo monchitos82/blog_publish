@@ -19,7 +19,7 @@ pipeline {
         )
         booleanParam(
             name: 'KEEP_REPOSITORIES', 
-            defaultValue: false, 
+            defaultValue: true, 
             description: 'Preserve the existing repositories in the workspace'
         )
     }
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     def uvExists = fileExists '/home/jenkins/.local/bin/uv'
-                    if (!uvExists || env.FORCE_INSTALL) {
+                    if (!uvExists || params.FORCE_SETUP) {
                         sh '''
                             curl -LsSf https://astral.sh/uv/install.sh | sh
                             export PATH="$HOME/.local/bin:$PATH"
@@ -74,7 +74,7 @@ pipeline {
         }
         cleanup {
             script {
-                if (!env.KEEP_REPOSITORIES) {
+                if (!params.KEEP_REPOSITORIES) {
                     dir("${SOURCE}") { deleteDir() }
                     dir("pages") { deleteDir() }
                 }

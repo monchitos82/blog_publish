@@ -73,7 +73,7 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
                 try:
                     filename = file_.split("/")[-1]
                     if f"{site}/{filename}" == f"{dest}/{filename}":
-                        shutil.copy2(src=file, dst=site)
+                        shutil.copy2(src=file_, dst=site)
                     else:
                         log.warning(f"Copying {file_} into {site} mismatches site structure because the path is of different length. Operation bypased")
                     log.debug(f"Static file {file_} copied to {dest}")

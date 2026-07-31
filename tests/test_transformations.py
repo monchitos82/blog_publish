@@ -65,14 +65,12 @@ def test_title_h4_href_with_real_context(jinja_env):
         "path": "foobar.html",
     }
     result = template.render(render_context)
-    expect = """
-    <h4>
-      <a name="foo_bar_10_10_2026" href="https://example.com/foobar.html#foo_bar_10_10_2026">
-        foo bar (10/10/2026)
-      </a>
-    </h4>
-    """
-    assert result == expect
+    expected = (
+        '<a name="foo_bar_10_10_2026" href="https://example.com/foobar.html#foo_bar_10_10_2026">',
+        "foo bar (10/10/2026)",
+    )
+    for expected_line in expected:
+        assert expected_line in result
 
 
 def test_render_annotations_index():

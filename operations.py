@@ -76,8 +76,7 @@ def build_year_index(
                     + f'{year}/{formatted_filename}.html">'
                     + f"{title}</a></h4></li>\n"
                 )
-        year_content += "</ul>\n"
-        year_content += "<br/>\n"
+        year_content += "</ul>\n<br/>"
 
         filename = f"{src}/posts/{year}"
         if not save_as_html(

@@ -19,10 +19,10 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
     """Render a header using an anchor quick reference format"""
     base_url = context.get("base_url", "")
     html_title = f"{urllib.parse.quote(title.lower().replace(' ', '_'))}_{date.replace('/', '_')}"
-    return f"""
-    <h4>
-      <a name=\"{html_title}\" href=\"{base_url}/{path}#{html_title}\">
-        {title} ({date})
-      </a>
-    </h4>
-    """
+    return (
+        "<h4>"
+        + f'  <a name="{html_title}" href="{base_url}/{path}#{html_title}">'
+        + f"   {title} ({date})"
+        + "   </a>"
+        + "</h4>"
+    )

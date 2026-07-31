@@ -22,6 +22,7 @@ def parse_markdown(content: str) -> str:
     except (OSError, TypeError, ValueError):
         log.error("Failed to parse markdown content", exc_info=True)
         content = ""
+
     return content
 
 

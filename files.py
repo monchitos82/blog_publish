@@ -75,7 +75,7 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
                     if f"{site}/{filename}" == f"{dest}/{filename}":
                         shutil.copy2(src=file_, dst=site)
                     else:
-                        log.warning(f"Copying {file_} into {site} mismatches site structure because the path is of different length. Operation bypased")
+                        log.warning(f"Copying {file_} into {site} as {dest}/{filename} cannot be done")
                     log.debug(f"Static file {file_} copied to {dest}")
 
                 except OSError as error:

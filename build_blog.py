@@ -65,6 +65,8 @@ if __name__ == "__main__":
         "author": AUTHOR,
         "base_url": BASE_URL,
         "tracking_url": TRACKING_URL,
+        "file_name": None,
+        "file_title": None,
         "in_index": False,
         "in_main": False,
         "in_post": False,

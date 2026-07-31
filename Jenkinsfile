@@ -100,10 +100,11 @@ pipeline {
             steps {
                 sh """
                 mkdir -p /opt/deploy
+                mkdir -p /opt/deploy/site
                 mkdir -p ./last
                 pwd
                 date > ./last/timestamp
-                cp -r /opt/deploy ./last/
+                cp -r /opt/deploy/site ./last/
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
                 find /opt/deploy/site -type f -exec sed -i 's|.*${TRACKING}.*|    <!-- no tracking -->|g' {} +
@@ -146,7 +147,7 @@ pipeline {
         aborted {
             sh """
             echo 'Rolling back local changes'
-            cp -r ./last/* /opt/deploy/
+            cp -r ./last/site /opt/deploy/
             """
         }
         failure {

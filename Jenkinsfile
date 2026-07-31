@@ -5,8 +5,7 @@ pipeline {
         ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${ACCOUNT}"
         SOURCE = "rgarciamx"
-        TRACKING = "https://${ACCOUNT}-codeberg.goatcounter.com"
-        NEOCITIES_TRACKING = "https://${ACCOUNT}-neocities.goatcounter.com"
+        TRACKING = "https://${ACCOUNT}-neocities.goatcounter.com"
         // project specifics
         BASE_URL = "https://${ACCOUNT}.codeberg.page"
         NEOCITIES_URL = "https://${ACCOUNT}.neocities.org"
@@ -119,6 +118,7 @@ pipeline {
                         git add -A
                         git commit -am \"Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)\"
                         git push origin master
+                        cd ..
                     '''
                 }
             }

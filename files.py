@@ -87,7 +87,8 @@ def clean_files(path: str, extension: str, target: list | None = None, keep_pref
                 continue
         try:
             if ".keep" not in filename:
-                if keep_prefix and filename.startswith(keep_prefix):
+                if keep_prefix is not None and filename.startswith(keep_prefix):
+                    log.info(f"{filename} will be preserved, prefix matched {keep_prefix}")
                     continue
                 os.remove(filename)
         except OSError:

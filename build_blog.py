@@ -16,22 +16,17 @@ from jinja2 import Template
 from jinja2.exceptions import TemplateError
 
 log = logging.getLogger(__name__)
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(
-    logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-)
 log.setLevel(logging.DEBUG)
-log.addHandler(console_handler)
+log.addHandler(logging.StreamHandler())
 
+# These are env variables needed for this script to work properly
 BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
-
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
-
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../pages")
 
-# These are directory and extensions that should be copied, the rest is ignored
+# These are directory and extensions that should be copied
 STATICS = {
     f"{SRC}": [".txt", ".ico"],
     f"{SRC}/assets": [".css", ".js"],
@@ -310,9 +305,12 @@ def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool
 
 async def clean_files(path: str, extension: str, target: list | None = None) -> bool:
     """Delete files from [path] with an [extension]."""
-    for filename in list_of_files(dirname=path, extension=extension, clean_extension=False):
-        cleanup = True
-        if target: # if there are targetted files, when these are not found the cleanup skips
+    for filename in list_of_files(
+        dirname=path, extension=extension, clean_extension=False
+    ):
+        if (
+            target
+        ):  # if there are targetted files, when these are not found the cleanup skips
             found = False
             for target_file in target:
                 if filename.split("/")[-1] == f"{target_file}.{extension}":
@@ -338,7 +336,9 @@ async def run_asynchronously(tasks: list) -> list:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--scan", "-s", help="scan for foul language", action="store_true")
+    parser.add_argument(
+        "--scan", "-s", help="scan for foul language", action="store_true"
+    )
     arguments = parser.parse_args()
     file_errors = False
     base_dirname = SRC
@@ -379,15 +379,15 @@ if __name__ == "__main__":
         split_filename = filename.split("/")
         if split_filename[-1] != "index":
             if len(split_filename) == 5:
-                 year = split_filename[-2]
-                 file_footer = render_template(
+                year = split_filename[-2]
+                file_footer = render_template(
                     filename=f"{SRC}/templates/footer.html.j2",
                     **{
                         "base_url": BASE_URL,
                         "year": year,
                         "in_post": True,
                     },
-                 )
+                )
         html_save = save_as_html(
             filename=filename,
             header=header,
@@ -430,7 +430,7 @@ if __name__ == "__main__":
             run_asynchronously(
                 [
                     has_broken_anchors(dest=f"{DEST}"),
-                    clean_files(path=f"{SRC}/posts", extension="md", target=YEARS)
+                    clean_files(path=f"{SRC}/posts", extension="md", target=YEARS),
                 ]
             )
         )

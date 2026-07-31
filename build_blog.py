@@ -65,13 +65,11 @@ if __name__ == "__main__":
     arguments = {
         "author": AUTHOR,
         "base_url": BASE_URL,
-        "in_es": False,
         "in_index": False,
         "in_main": False,
         "in_post": False,
         "progressbar": True,
         "menu": None,
-        "year": None,
         "years": YEARS,
     }
 

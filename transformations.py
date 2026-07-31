@@ -93,6 +93,7 @@ def render_annotations(
 
     if len(split_filename) == 5:
         year = split_filename[-2]
+        # injecting argument to make sure the post goes back to its year index
         file_arguments["year"] = year
         file_arguments["in_post"] = True
         file_footer = parse_template(

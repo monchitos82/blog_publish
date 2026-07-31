@@ -154,7 +154,7 @@ def test_render_annotations_in_post():
     footer = ""
     content = ""
     filename = "foo/bar/posts/2026/foobar"
-    arguments = {"in_post": False, "year": "2000"}
+    arguments = {"in_post": False}
     _, file_footer = render_annotations(
         src=src,
         header=header,

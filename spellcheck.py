@@ -16,7 +16,9 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
     try:
         model = ChatOllama(
             model=os.getenv("OLLAMA_MODEL", "granite4.1:8b"),
-            base_url=os.getenv("OLLAMA_BASE_URL", "http://192.168.0.120:11434"),
+            base_url=os.getenv(
+                "OLLAMA_BASE_URL", "http://host.containers.internal:11434"
+            ),
         )
     except Exception as error:
         print(f"No model was created, error: {error}")

@@ -5,12 +5,22 @@ import datetime
 import logging
 import os
 
-from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
-                   list_of_files, load_file_content)
+from files import (
+    async_clean_files,
+    clean_files,
+    copy_dirs,
+    copy_statics,
+    list_of_files,
+    load_file_content,
+)
 from operations import build_year_index
 from rss import generate_rss_feed
-from transformations import (parse_markdown, parse_template,
-                             render_annotations, save_as_html)
+from transformations import (
+    parse_markdown,
+    parse_template,
+    render_annotations,
+    save_as_html,
+)
 from utils import env_list_as_tuple, load_static_env, run_async
 from validations import has_broken_anchors
 
@@ -20,8 +30,8 @@ log.addHandler(logging.StreamHandler())
 
 # These are env variables needed for this script to work properly
 BASE_URL = os.getenv("BASE_URL", "")
-LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
-YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
+YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
+FIRST_YEAR = os.getenv("FIRST_YEAR", str(datetime.datetime.now.year - 1))
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 AUTHOR = os.getenv("AUTHOR", "")
@@ -48,9 +58,7 @@ if __name__ == "__main__":
         file_errors = True
 
     year_indexes = None
-    last_year = int(LAST_YEAR)
-    first_year = last_year - int(YEAR_LOOKBACK)
-    YEARS = [str(year) for year in range(first_year, last_year + 1)]
+    YEARS = [str(year) for year in range(int(FIRST_YEAR), int(YEAR) + 1)]
 
     arguments = {
         "author": AUTHOR,

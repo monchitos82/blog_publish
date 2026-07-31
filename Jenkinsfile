@@ -69,33 +69,5 @@ pipeline {
                 }
             }
         }
-        stage('Sources Setup') {
-            steps {
-                script {
-                    if (params.CLEAN_REPOSITORIES) {
-                        dir("${SOURCE}") { deleteDir() }
-                        dir("${SITE_PAGES}") { deleteDir() }
-                        dir("${SITE_DIR}") { deleteDir() }
-                        sh '''
-                            git clone ${GIT_URL}
-                        '''
-                    } else {
-                        if (fileExists("/home/jenkins/agent/workspace/${SOURCE}")) {
-                            sh '''
-                            echo "Source is already present"
-                            cd ${SOURCE}
-                            git pull
-                            cd ..
-                            '''
-                        } else {
-                            sh '''
-                            git clone ${GIT_URL}
-                            '''
-                        }
-                    }
-                }
-            }
-
-        }
     }
 }

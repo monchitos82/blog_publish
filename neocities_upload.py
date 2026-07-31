@@ -14,8 +14,8 @@ def upload_site(api_key: str = "", dest: str = "./site") -> bool:
     try:
         api = NeocitiesApi(api_key=api_key)
         api.upload_dir(dest)
-    except ApiError as error:
-        log.error(f"Failed to upload site {dest}, error: {error}")
+    except ApiError:
+        log.error(f"Failed to upload site {dest}", exc_info=True)
     else:
         result = True
     return result

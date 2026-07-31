@@ -63,7 +63,7 @@ def generate_rss_feed(
                     )
 
         fg.rss_file(f"{dest}/atom.xml")
-    except (OSError, AttributeError) as error:
-        log.error(f"Failed to generate RSS feed: {error}")
+    except (OSError, AttributeError):
+        log.error("Failed to generate RSS feed", exc_info=True)
         return False
     return True

@@ -23,8 +23,8 @@ def parse_template(
             try:
                 with open(filename) as template_file:
                     template = Template(source=template_file.read())
-            except OSError as err:
-                log.error(f"Could not open the template, error: {err}")
+            except OSError:
+                log.error("Could not open the template", exc_info=True)
                 return ""
         else:
             if not content:
@@ -37,11 +37,11 @@ def parse_template(
         if template:
             try:
                 template.globals.update(JinjaFunctions.functions)
-            except (AttributeError, ValueError) as err:
-                log.warning(f"There are no available jinja functions, error: {err}")
+            except (AttributeError, ValueError):
+                log.error("There are no available jinja functions", exc_info=True)
             rendered_content = template.render(kwargs)
-    except TemplateError as err:
-        log.error(f"Failed to render the template {filename}, error: {err}")
+    except TemplateError:
+        log.error(f"Failed to render the template {filename}", exc_info=True)
     return rendered_content
 
 
@@ -107,8 +107,8 @@ def parse_markdown(content: str) -> str:
                 "tables",
             ],
         )
-    except (OSError, TypeError, ValueError) as error:
-        log.error(f"Failed to parse markdown content, {error}")
+    except (OSError, TypeError, ValueError):
+        log.error("Failed to parse markdown content", exc_info=True)
         content = ""
     return content
 
@@ -133,8 +133,8 @@ def save_as_html(
                 html_file.write(header)
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
                 html_file.write(footer)
-        except OSError as error:
-            log.error(f"Failed to save {html_filename}, error: {error}")
+        except OSError:
+            log.error(f"Failed to save {html_filename}", exc_info=True)
         else:
             save = True
     return save

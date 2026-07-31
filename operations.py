@@ -17,8 +17,8 @@ def extract_post_title(filename: str, title_format: str = "### ") -> str | None:
             # if the title is in a markdown comment
             if "]: #" in post_title:
                 post_title = post_title.replace("]: #", "").replace("[", "").strip()
-    except OSError as error:
-        log.warning(f"Failed to open post when looking for a title: {error}")
+    except OSError:
+        log.warning("Failed to open post when looking for a title", exc_info=True)
     return post_title
 
 

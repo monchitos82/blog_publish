@@ -19,8 +19,8 @@ def load_file_content(
             log.error(
                 f"The file size exceeds the limit of {limit} bytes, content will not be loaded"
             )
-    except (IOError, OSError) as error:
-        log.error(f"Failed to access the file {filename}, error {error}")
+    except (IOError, OSError):
+        log.error(f"Failed to access the file {filename}", exc_info=True)
     return content
 
 
@@ -77,12 +77,12 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                     # this is an acceptable scenario
                     log.warning(f"Directory {item} is already present in: {dest}")
                     pass
-                except OSError as error:
+                except OSError:
                     # other errors should be addressed
-                    log.error(f"Creation of directory {item} failed, error: {error}")
+                    log.error(f"Creation of directory {item} failed", exc_info=True)
                     return False
-    except OSError as error:
-        log.error(f"Access to {src} failed, error: {error}")
+    except OSError:
+        log.error(f"Access to {src} failed", exc_info=True)
         return False
     return True
 
@@ -111,8 +111,10 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
                         )
                     log.debug(f"Static file {filename} copied to {dest}")
 
-                except OSError as error:
-                    log.error(f"Copy of static file {filename} failed, error: {error}")
+                except OSError:
+                    log.error(
+                        f"Copy of static file {filename} failed, error", exc_info=True
+                    )
                     return False
     return True
 

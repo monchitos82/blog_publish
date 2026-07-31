@@ -40,10 +40,19 @@ pipeline {
         }
         stage('Setup Sources') {
             steps {
-                sh '''
-                    git clone ${GIT_URL}/${SOURCE} # clone my sources
-                    git clone ${GIT_URL}/pages # clone the destination repository
-                '''
+                script {
+                    if (params.KEEP_REPOSITORIES) {
+                        sh '''
+                            git pull ${GIT_URL}/${SOURCE} # clone my sources
+                            git pull ${GIT_URL}/pages # clone the destination repository
+                        '''
+                    } else {
+                        sh '''
+                            git clone ${GIT_URL}/${SOURCE} # clone my sources
+                            git clone ${GIT_URL}/pages # clone the destination repository
+                        '''
+                    }
+                }
             }
 
         }

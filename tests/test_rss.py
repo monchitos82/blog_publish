@@ -17,6 +17,7 @@ def test_generate_rss(tmp_path):
         dest=str(dest),
         years=["2026"],
         author="some author",
+        email="email@example.com",
         base_url="https://example.com",
         site_name="some site",
         site_title="some title",

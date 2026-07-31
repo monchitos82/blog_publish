@@ -30,7 +30,6 @@ def generate_rss_feed(
         fg.link(href=base_url, rel="alternate")
         fg.subtitle("Updates from my blog")
         fg.language("en")
-        fg.contributor(name=author)
 
         for year in years:
             for post in sorted(

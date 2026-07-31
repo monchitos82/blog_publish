@@ -2,7 +2,7 @@ pipeline {
     agent { label 'python' }
     environment {
         // site specifics
-        AUTHOR = "Ramon Garcia"
+        AUTHOR = "Ramon F Garcia"
         ACCOUNT = "ramongarciamx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"

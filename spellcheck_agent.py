@@ -45,7 +45,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
     output = None
     try:
         model = ChatOllama(
-            model=os.getenv("OLLAMA_MODEL", "granite4.1:8b"),
+            model=os.getenv("OLLAMA_MODEL", "phi4-mini"),
             base_url=os.getenv(
                 "OLLAMA_BASE_URL", "http://host.containers.internal:11434"
             ),

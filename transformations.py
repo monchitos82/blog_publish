@@ -1,10 +1,22 @@
 import logging
+import urllib.parse
 
 import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
 
 log = logging.getLogger(__name__)
+
+
+def title_h4_href(title: str, date: str, path: str) -> str:
+    html_title = f"{urllib.parse.quote(title)}_{date.replace('/', '_')}"
+    return f"""
+      <h4>
+        <a name=\"{html_title}\" href=\"{path}#{html_title}\">
+          {title.replace("_", " ").title()} ({date})
+        </a>
+      </h4>
+    """
 
 
 def render_template(filename: str, **kwargs) -> str:
@@ -25,10 +37,64 @@ def render_content_as_template(content: str, **kwargs) -> str:
     """Render content as a template using jinja2 (no file used here)."""
     try:
         template_as_content = Template(content)
+        template_as_content.globals["title_h4_href"] = title_h4_href
         content = template_as_content.render(kwargs)
     except TemplateError as err:
         log.error(f"Failed to render the content as template, error: {err}")
     return content
+
+
+def render_annotations(
+    filename: str, header: str, footer: str, content: str, **kwargs
+) -> tuple:
+    """Render annotations and transformation for specific filename cases"""
+    file_header = header
+    file_footer = footer
+    file_arguments = kwargs
+    split_filename = filename.split("/")
+
+    if filename == f"{SRC}/index":
+        # base, index.md at root
+        file_arguments["in_main"] = True
+        file_footer = render_template(
+            filename=f"{SRC}/templates/footer.html.j2",
+            **file_arguments,
+        )
+        file_header = render_template(
+            filename=f"{SRC}/templates/header.html.j2",
+            **file_arguments,
+        )
+    if len(split_filename) == 5:
+        year = split_filename[-2]
+        file_arguments["year"] = year
+        file_arguments["in_post"] = True
+        file_footer = render_template(
+            filename=f"{SRC}/templates/footer.html.j2",
+            **file_arguments,
+        )
+
+    if "<!-- NAV_MAIN -->" in content:
+        file_arguments["in_index"] = True
+        file_footer = render_template(
+            filename=f"{SRC}/templates/footer.html.j2",
+            **file_arguments,
+        )
+
+    if "<!-- NAV_MAIN_ES -->" in content:
+        file_arguments["in_index"] = True
+        file_arguments["in_es"] = True
+        file_footer = render_template(
+            filename=f"{SRC}/templates/footer.html.j2",
+            **file_arguments,
+        )
+
+    if "<!-- NO_PROGRESSBAR -->" in content:
+        file_arguments["progressbar"] = False
+        file_header = render_template(
+            filename=f"{SRC}/templates/header.html.j2",
+            **file_arguments,
+        )
+    return (file_header, file_footer)
 
 
 def parse_markdown(content: str) -> str:

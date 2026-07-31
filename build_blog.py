@@ -5,12 +5,16 @@ import datetime
 import logging
 import os
 
-from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
-                   list_of_files)
+from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files
 from operations import build_year_index, extract_post_title
 from rss import generate_rss_feed
-from transformations import (parse_markdown_file, render_content_as_template,
-                             render_template, save_as_html)
+from transformations import (
+    parse_markdown_file,
+    render_annotations,
+    render_content_as_template,
+    render_template,
+    save_as_html,
+)
 from utils import env_list_as_tuple, load_static_env, run_async
 from validations import has_broken_anchors
 
@@ -86,56 +90,19 @@ if __name__ == "__main__":
 
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=SRC):
-        file_header = header
-        file_footer = footer
         split_filename = filename.split("/")
         if "README" in filename or split_filename[-1].startswith("."):
             continue
 
         content = parse_markdown_file(filename=filename)
         file_arguments = dict(arguments)
-
-        if filename == f"{SRC}/index":
-            # base, index.md at root
-            file_arguments["in_main"] = True
-            file_footer = render_template(
-                filename=f"{SRC}/templates/footer.html.j2",
-                **file_arguments,
-            )
-            file_header = render_template(
-                filename=f"{SRC}/templates/header.html.j2",
-                **file_arguments,
-            )
-        if len(split_filename) == 5:
-            year = split_filename[-2]
-            file_arguments["year"] = year
-            file_arguments["in_post"] = True
-            file_footer = render_template(
-                filename=f"{SRC}/templates/footer.html.j2",
-                **file_arguments,
-            )
-
-        if "<!-- NAV_MAIN -->" in content:
-            file_arguments["in_index"] = True
-            file_footer = render_template(
-                filename=f"{SRC}/templates/footer.html.j2",
-                **file_arguments,
-            )
-        
-        if "<!-- NAV_MAIN_ES -->" in content:
-            file_arguments["in_index"] = True
-            file_arguments["in_es"] = True
-            file_footer = render_template(
-                filename=f"{SRC}/templates/footer.html.j2",
-                **file_arguments,
-            )
-
-        if "<!-- NO_PROGRESSBAR -->" in content:
-            file_arguments["progressbar"] = False
-            file_header = render_template(
-                filename=f"{SRC}/templates/header.html.j2",
-                **file_arguments,
-            )
+        file_header, file_footer = render_annotations(
+            filename=filename,
+            header=header,
+            footer=footer,
+            content=content,
+            **file_arguments,
+        )
 
         if "<!-- NO_RENDER -->" not in content:
             content = render_content_as_template(

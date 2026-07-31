@@ -11,6 +11,7 @@ pipeline {
         SOURCE = "blog"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         BASE_URL = "https://${ACCOUNT}.neocities.org"
+        TRACKING_URL = "https://${ACCOUNT}.goatcounter.org"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "./site"
         SRC = "./${SOURCE}"
@@ -115,6 +116,9 @@ pipeline {
                 cp -r /opt/deploy/site ./last/
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
+                if [[ "${TRACKING_URL}" != "" ]]; then
+                  # find /opt/deploy/site -type f -exec sed -i 's|.*${TRACKING}.*|    <!-- no tracking -->|g' {} +
+                fi
                 """
             }
         }

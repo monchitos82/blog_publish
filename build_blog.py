@@ -13,7 +13,7 @@ from files import (
     list_of_files,
     load_file_content,
 )
-from operations import build_year_index, save_as_html
+from operations import build_year_index, extract_post_title, save_as_html
 from rss import generate_rss_feed
 from transformations import (
     parse_markdown,
@@ -29,6 +29,7 @@ log.addHandler(logging.StreamHandler())
 
 # These are env variables needed for this script to work properly
 BASE_URL = os.getenv("BASE_URL", "")
+TRACKING_URL = os.getenv("TRACKING_URL", "")
 YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 FIRST_YEAR = os.getenv("FIRST_YEAR", str(datetime.datetime.now().year - 1))
 SRC = os.getenv("SRC", "../source")
@@ -63,6 +64,7 @@ if __name__ == "__main__":
     arguments = {
         "author": AUTHOR,
         "base_url": BASE_URL,
+        "tracking_url": TRACKING_URL,
         "in_index": False,
         "in_main": False,
         "in_post": False,
@@ -104,6 +106,10 @@ if __name__ == "__main__":
                 continue
 
             file_arguments = dict(arguments)
+            file_title = extract_post_title(filename=filename)
+            if file_title:
+                file_arguments["file_title"] = file_title
+            file_arguments["file_name"] = filename
             file_header, file_footer = render_annotations(
                 src=SRC,
                 filename=filename,

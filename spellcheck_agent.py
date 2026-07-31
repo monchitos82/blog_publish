@@ -31,7 +31,6 @@ except OSError as error:
 
 
 def evaluate(msg: str, tools: list = tools) -> str | None:
-    log.error(msg, tools)
     model = None
     agent = None
     result = {}

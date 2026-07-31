@@ -8,14 +8,18 @@ log = logging.getLogger(__name__)
 
 def extract_post_title(filename: str, title_format: str = "### ") -> str | None:
     """Extract the title of a post based on the H3 header for a markdown file"""
+    post_title = None
     try:
         with open(filename) as post_file:
             title = post_file.readline()
         if title_format in title:
-            return title.replace(title_format, "").replace("\n", "").strip()
+            post_title = title.replace(title_format, "").replace("\n", "").strip()
+            # if the title is in a markdown comment
+            if "[//]:" in post_title:
+                post_title.replace("[//]:", "").strip()
     except OSError as error:
         log.warning(f"Failed to open post when looking for a title: {error}")
-    return None
+    return post_title
 
 
 def build_year_index(

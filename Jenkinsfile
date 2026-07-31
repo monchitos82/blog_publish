@@ -162,7 +162,7 @@ pipeline {
                 cd -
                 for filename in ${CHANGED_FILES}; do
                     echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
-                    $HOME/.local/bin/uv run ./tools/spellcheck ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
+                    $HOME/.local/bin/uv run ./tools/spellcheck.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
                     echo "" >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
                 done
                 '''

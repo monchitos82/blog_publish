@@ -6,6 +6,16 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_ollama import ChatOllama
 
 tools = []
+agent_prompt = """
+You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion.
+Do not include the original text in your reply and make your response as brief as possible
+"""
+
+try:
+    with open("./base_prompt.md") as b:
+        base_prompt = b.read()
+except OSError:
+    base_prompt = ""
 
 
 def evaluate(msg: str, tools: list = tools) -> str | None:
@@ -29,7 +39,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
             agent = create_agent(
                 model=model,
                 tools=tools,
-                system_prompt="You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion, do not include the original text in your reply and make your response as brief as possible",
+                system_prompt=(base_promt + "\n" + agent_prompt),
             )
         except Exception as error:
             print(f"No agent was setup for the model, error: {error}")
@@ -41,7 +51,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                     {
                         "messages": [
                             HumanMessage(
-                                content=f"please analyze the following content and find spelling and grammar errors: {msg}, do not analyze code snippets and don't give recommendations, just point the errors when they are present"
+                                content=f"please analyze the following content and find spelling and grammar errors: {msg}, do not analyze code snippets and do not suggest editions, just point the errors when they are present"
                             )
                         ]
                     }

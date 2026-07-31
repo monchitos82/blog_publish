@@ -126,39 +126,28 @@ if __name__ == "__main__":
             file_errors = True
             break
 
-    last_file = find_last_post(src=SRC, year=LAST_YEAR)
-    if not last_file:
-        log.error(
-            "There is a conflict in post creation timestamps, the post will not be inserted"
-        )
-    else:
-        log.info(f"Last file found for year {year}: {last_file}")
-
     year_indexes = None
-    YEARS = [LAST_YEAR]
-
-    if append_last_title_to_index(src=SRC, filename=last_file, year=LAST_YEAR):
-        last_year = int(LAST_YEAR)
-        first_year = last_year - int(YEAR_LOOKBACK)
-        YEARS = [str(year) for year in range(first_year, last_year + 1)]
-        index_footer = render_template(
-            filename=f"{SRC}/templates/footer.html.j2",
-            **{
-                "base_url": BASE_URL,
-                "in_index": True,
-            },
+    last_year = int(LAST_YEAR)
+    first_year = last_year - int(YEAR_LOOKBACK)
+    YEARS = [str(year) for year in range(first_year, last_year + 1)]
+    index_footer = render_template(
+        filename=f"{SRC}/templates/footer.html.j2",
+        **{
+            "base_url": BASE_URL,
+            "in_index": True,
+        },
+    )
+    year_indexes = asyncio.run(
+        build_year_index(
+            src=SRC,
+            dest=DEST,
+            base_url=BASE_URL,
+            years=YEARS,
+            header=header,
+            footer=index_footer,
+            tracking_element=TRACKING,
         )
-        year_indexes = asyncio.run(
-            build_year_index(
-                src=SRC,
-                dest=DEST,
-                base_url=BASE_URL,
-                years=YEARS,
-                header=header,
-                footer=index_footer,
-                tracking_element=TRACKING,
-            )
-        )
+    )
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:

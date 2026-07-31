@@ -9,9 +9,9 @@ pipeline {
         SITE_TITLE = "${AUTHOR}'s blog"
 
         // build specifics
-        SOURCE = "blogb"
+        SOURCE = "blog"
         SITE_DIR = "site"
-        GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/blog.git" //${SOURCE}.git"
+        GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
 
         // Codeberg pages specifics
         SITE_PAGES = "page"
@@ -96,134 +96,6 @@ pipeline {
                 }
             }
 
-        }
-        stage('Run Tests') {
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-              sh '''
-              $HOME/.local/bin/uv run pytest
-              '''
-            }
-          }
-        }
-        stage('Build') {
-            steps {
-                script {
-                    if (params.UPDATE_RSS) {
-                      environment {
-                        UPDATE_RSS = true
-                      }
-                    }
-                    sh '''
-                    mkdir -p ${DEST}
-                    $HOME/.local/bin/uv run build_blog.py
-                    '''
-                }
-            }
-
-        }
-        stage('Local Publish') {
-            steps {
-                sh """
-                mkdir -p ${LOCAL_PATH}
-                mkdir -p ${STABLE}/${SITE_DIR}
-                cp -r ${LOCAL_PATH} ${STABLE}/
-                cp -r ${DEST} ${LOCAL_PATH_ROOT}
-                find ${LOCAL_PATH} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/${SITE_DIR}|g' {} +
-                if [ ! -z "${TRACKING_URL}" ]; then
-                  find ${LOCAL_PATH} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
-                fi
-                """
-            }
-        }
-        stage('Promote Release') {
-
-            when {
-                expression {
-                    params.LOCAL_VALIDATION == true
-                }
-            }
-            options {
-                timeout time: 3, unit: 'MINUTES'
-            }
-            steps {
-                script {
-                    try {
-                        input message: 'Promote the latest update?', ok: 'Publish', cancel: 'Reject'
-                    } catch (err) {
-                        currentBuild.result = 'ABORTED'
-                        error('Publish was rejected')
-                    }
-                }
-            }
-        }
-
-        stage('Go Live in Codeberg') {
-            steps {
-                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
-                    script {
-                        if (fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
-                            sh '''
-                            pwd
-                            echo "Pages is already present"
-                            cd ..
-                            git clone ${SITE_PAGES_URL}
-                            cp -r ${SITE_DIR} ${SITE_PAGES}
-                            cd  ${SITE_PAGES}
-                            git add -A
-                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push
-                            cd ..
-                            '''
-                        } else {
-                            sh '''
-                            pwd
-                            cd ${SITE_PAGES}
-                            git pull
-                            cp -r ${SOURCE}/${SITE_DIR} ${SITE_PAGES}
-                            cd  ${SITE_PAGES}
-                            git add -A
-                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push
-                            cd ..
-                            '''
-                        }
-                    }
-                }
-            }
-        }
-        stage('Go Live in Neocities') {
-            steps {
-                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
-                    sh '''
-                        cd ..
-                        cd ${SOURCE}
-                        $HOME/.local/bin/uv run neocities_upload.py
-                        cd ..
-                    '''
-                }
-            }
-        }
-    }
-    post {
-        aborted {
-            sh """
-            echo 'Rolling back local changes'
-            cp -r ${STABLE}/${SITE_DIR} ${LOCAL_PATH_ROOT}
-            """
-        }
-        failure {
-            echo 'Upon failure you should clean repositories for the next run!'
-            cleanWs()
-        }
-        cleanup {
-            script {
-                if (params.CLEAN_REPOSITORIES) {
-                    dir("${SOURCE}") { deleteDir() }
-                    dir("${SITE_DIR}") { deleteDir() }
-                    dir("${SITE_PAGES}") { deleteDir() }
-                }
-            }
         }
     }
 }

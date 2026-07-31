@@ -3,23 +3,30 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "ramongmx"
-        SITE_NAME = "${ACCOUNT}.neocities.org"
+        ACCOUNT = "monfg"
+        DOMAIN = "codeberg.org"
+        SITE_NAME = "${ACCOUNT}.${DOMAIN}"
         SITE_TITLE = "${AUTHOR}'s blog"
 
         // build specifics
         SOURCE = "blog"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
-        BASE_URL = "https://${ACCOUNT}.neocities.org"
+        BASE_URL = "https://${ACCOUNT}.${DOMAIN}"
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "./site"
         SRC = "./${SOURCE}"
+        LOCAL_PATH_ROOT = "/opt/deploy"
+        LOCAL_PATH = "${LOCAL_PATH_ROOT}/site"
+        STABLE = "./last"
 
-        //blog path specifics
+        // blog path specifics
         STATICS_IMG = ".ico,.webp"
         STATICS_ASSETS = ".css"
 
+        // Codeberg pages specifics
+        SITE_PAGES = "page"
+        SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
     }
     parameters {
         booleanParam(
@@ -111,13 +118,13 @@ pipeline {
         stage('Local Publish') {
             steps {
                 sh """
-                mkdir -p /opt/deploy/site
-                mkdir -p ./last/site
-                cp -r /opt/deploy/site ./last/
-                cp -r ./site /opt/deploy/
-                find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
+                mkdir -p ${LOCAL_PATH}
+                mkdir -p ${STABLE}/site
+                cp -r ${LOCAL_PATH} ${STABLE}/
+                cp -r ${DEST} ${LOCAL_PATH_ROOT}
+                find ${LOCAL_PATH} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
                 if [ ! -z "${TRACKING_URL}" ]; then
-                  find /opt/deploy/site -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
+                  find ${LOCAL_PATH} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
                 fi
                 """
             }
@@ -148,6 +155,12 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     sh '''
+                        git clone ${SITE_PAGES_URL}
+                        cp -r ${DEST} ${SITE_PAGES}
+                        cd  ${SITE_PAGES}
+                        git add -A
+                        git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                        git push origin master
                         $HOME/.local/bin/uv run neocities_upload.py
                     '''
                 }
@@ -158,7 +171,7 @@ pipeline {
         aborted {
             sh """
             echo 'Rolling back local changes'
-            cp -r ./last/site /opt/deploy/
+            cp -r ${STABLE}/site ${LOCAL_PATH_ROOT}
             """
         }
         failure {

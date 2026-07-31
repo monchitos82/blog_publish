@@ -3,11 +3,9 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "rgarciamx"
+        ACCOUNT = "ramongarciamx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
-        USE_FALLBACK = "${params.USE_FALLBACK ? 'true' : ''}"
-        USE_NEOCITIES = "${params.USE_FALLBACK ? '' : 'true'}"
 
         // build specifics
         SOURCE = "blog"
@@ -15,12 +13,11 @@ pipeline {
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
 
         // Codeberg pages specifics
-        SITE_PAGES = "page"
+        SITE_PAGES = "pages"
         SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
 
         // Base URL definitions
-        BASE_URL = "https://${ACCOUNT}.neocities.org"
-        CODEBERG_PAGES_URL = "https://${ACCOUNT}.codeberg.page/${SITE_PAGES}/${SITE_DIR}"
+        BASE_URL = "https://${ACCOUNT}.codeberg.page/${SITE_DIR}"
         LOCAL_BASE_URL = "http://127.0.0.1:2080/${SITE_DIR}"
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
 
@@ -56,11 +53,6 @@ pipeline {
             defaultValue: true,
             description: 'Update the RSS feed (only works for Posts)'
         )
-        booleanParam(
-            name: 'USE_FALLBACK',
-            defaultValue: false,
-            description: 'Deploy to fallback site'
-        )
     }
     stages {
         stage('Environment Setup') {
@@ -81,7 +73,6 @@ pipeline {
                 script {
                     if (params.CLEAN_REPOSITORIES) {
                         dir("../${SOURCE}") { deleteDir() }
-                        dir("../${SITE_PAGES}") { deleteDir() }
                         dir("../${SITE_DIR}") { deleteDir() }
                         dir("../${STABLE}") { deleteDir() }
                         sh '''
@@ -172,40 +163,31 @@ pipeline {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        if ( params.USE_FALLBACK ) {
+                        sh '''
+                        echo "Deploying to fallback site"
+                        '''
+                        if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                             sh '''
-                            echo "Deploying to fallback site"
+                            cd ..
+                            git clone ${SITE_PAGES_URL}
+                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cd  ${SITE_PAGES}
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push origin pages
                             '''
-                            if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
-                                sh '''
-                                cd ..
-                                git clone ${SITE_PAGES_URL}
-                                cp -r ${SITE_DIR} ${SITE_PAGES}
-                                cd  ${SITE_PAGES}
-                                find . -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
-                                git add -A
-                                git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                                git push
-                                '''
-                            } else {
-                                sh '''
-                                echo "Pages is already present"
-                                cd ..
-                                cd ${SITE_PAGES}
-                                git pull
-                                cd ..
-                                cp -r ${SITE_DIR} ${SITE_PAGES}
-                                cd  ${SITE_PAGES}
-                                find . -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
-                                git add -A
-                                git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                                git push
-                                '''
-                            }
-                        }
-                        else {
+                        } else {
                             sh '''
-                            $HOME/.local/bin/uv run neocities_upload.py
+                            echo "Pages is already present"
+                            cd ..
+                            cd ${SITE_PAGES}
+                            git pull
+                            cd ..
+                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cd  ${SITE_PAGES}
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push origin pages
                             '''
                         }
                     }
@@ -235,4 +217,4 @@ pipeline {
             }
         }
     }
-}
+}                                

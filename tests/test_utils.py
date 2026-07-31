@@ -52,12 +52,14 @@ def test_run_async_multiple():
 
 
 def test_load_static_env():
-    os.environ["STATIC_TEST_1"] = "a, b"
-    os.environ["STATIC_TEST2"] = "*"
+    os.environ["STATICs_TEST_1"] = "a, b"
+    os.environ["STATICs_TEST2"] = "*"
+    os.environ["STATICS_TEST3"] = "x"
     src = "base"
-    static = load_static_env(src=src)
-    del os.environ["STATIC_TEST_1"]
-    del os.environ["STATIC_TEST2"]
+    static = load_static_env(src=src, prefix="STATICs")
+    del os.environ["STATICs_TEST_1"]
+    del os.environ["STATICs_TEST2"]
+    del os.environ["STATICS_TEST3"]
     expected = {
         f"{src}/test/1": ("a", "b"),
         f"{src}/test2": ("*",),
@@ -74,10 +76,10 @@ def test_load_static_env_bad_env():
 
 
 def test_load_static_env_relative():
-    os.environ["STATIC_.._.._ETC"] = "a, b"
+    os.environ["STATIC<_.._.._ETC"] = "a, b"
     src = "base"
     static = load_static_env(src=src)
-    del os.environ["STATIC_.._.._ETC"]
+    del os.environ["STATIC<_.._.._ETC"]
     assert static == {
         "base/etc": (
             "a",

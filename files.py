@@ -19,7 +19,7 @@ def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> 
                     )
                 else:
                     files_list.append(os.path.join(root, file_))
-    return files_list
+    return files_list[::-1]
 
 
 def copy_dirs(src: str, dest: str, depth=0) -> bool:

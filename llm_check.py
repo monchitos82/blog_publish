@@ -34,7 +34,7 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
 
         if result and isinstance(result, AIMessage):
             try:
-                output = result.content.encode
+                output = result.content.decode("utf-8")
             except AttributeError as error:
                 log.error(f"No AI message was received, error: {error}")
         else:

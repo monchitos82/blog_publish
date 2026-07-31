@@ -39,7 +39,6 @@ if __name__ == "__main__":
         f"{SRC}/assets": env_list_as_tuple("STATICS_ASSETS", (".css",)),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg")),
         f"{SRC}/archive": env_list_as_tuple("STATICS_ARCHIVE", ("*",)),
-        f"{SRC}/experiments": env_list_as_tuple("STATICS_EXPERIMENTS", ("*",)),
     }
 
     clean_files(path=f"{DEST}", extension="html"),

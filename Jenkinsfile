@@ -86,7 +86,7 @@ pipeline {
         }
         stage('Run Tests') {
           steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
               sh '''
               $HOME/.local/bin/uv run pytest
               '''

@@ -24,6 +24,11 @@ pipeline {
             defaultValue: false, 
             description: 'Remove the repositories in the workspace'
         )
+        booleanParam(
+            name: 'LOCAL_VALIDATION', 
+            defaultValue: true, 
+            description: 'Execute a local deployment to validate results'
+        )
     }
     stages {
         stage('Setup Environment') {
@@ -95,6 +100,15 @@ pipeline {
             }
         }
         stage('Publish to the public') {
+            
+            when {
+                expression { 
+                    params.LOCAL_VALIDATION == true
+                }
+            }
+            options {
+                timeout time: 1, unit: 'HOURS'
+            }
             steps {
                 script {
                     try {

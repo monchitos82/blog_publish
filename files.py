@@ -5,7 +5,7 @@ import shutil
 log = logging.getLogger(__name__)
 
 
-def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> list:
+def list_of_files(dirname: str, extension: str = "md", clean_extension=True, invert=False) -> list:
     """Generate a list of files having an [extension]."""
     files_list = []
 
@@ -19,7 +19,9 @@ def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> 
                     )
                 else:
                     files_list.append(os.path.join(root, file_))
-    return files_list[::-1]
+    if invert:
+        return files_list[::-1]
+    return files_list
 
 
 def copy_dirs(src: str, dest: str, depth=0) -> bool:

@@ -25,7 +25,7 @@ def generate_rss_feed(
         fg = FeedGenerator()
         fg.id(site_name)
         fg.title(site_title)
-        fg.author({"name": f"{author}", "email": f"{email}")
+        fg.author({"name": f"{author}", "email": f"{email}"})
         fg.link(href="f{base_url}", rel="alternate")
         fg.logo(f"{base_url}/img/favicon.ico")
         fg.subtitle("Personal blog updates")

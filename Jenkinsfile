@@ -6,8 +6,8 @@ pipeline {
         ACCOUNT = "mongmx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
-        USE_CODEBERG = false
-        USE_NEOCITIES = true
+        USE_CODEBERG = 0
+        USE_NEOCITIES = 1
 
         // build specifics
         SOURCE = "blog"

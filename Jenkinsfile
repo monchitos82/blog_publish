@@ -9,7 +9,7 @@ pipeline {
         BASE_URL = "https://${GIT_ACCOUNT}.codeberg.page"
         DEST = "./pages"
         SRC = "./${SOURCE}"
-        YEAR_LOOKBACK = 2
+        YEAR_LOOKBACK = 1
     }
     parameters {
         booleanParam(

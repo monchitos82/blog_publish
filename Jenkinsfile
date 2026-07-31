@@ -53,6 +53,11 @@ pipeline {
             defaultValue: true,
             description: 'Update the RSS feed (only works for Posts)'
         )
+        booleanParam(
+            name: 'SPELL_CHECK',
+            defaultValue: false,
+            description: 'Use LLM for content spellcheck'
+        )
     }
     stages {
         stage('Environment Setup') {
@@ -138,6 +143,22 @@ pipeline {
                 '''
             }
         }
+        stage('Spell Check Content') {
+            when {
+                expression {
+                    params.SPELL_CHECK == true
+                }
+            }
+            steps {
+                sh '''
+                for html_file in $(find ${DEST} -name '*.html' | egrep -v 'index|snippets'); do
+                    echo "### ${html_file}" >> ${LOCAL_PATH_SITE}/output.md
+                    $HOME/.local/bin/uv run spellcheck.py ${html_file} >> ${LOCAL_PATH_SITE}/output.md
+                    echo "" >> ${LOCAL_PATH_SITE}/output.md
+                done
+                '''
+            }
+        }
         stage('Promote Release') {
 
             when {
@@ -146,7 +167,7 @@ pipeline {
                 }
             }
             options {
-                timeout time: 3, unit: 'MINUTES'
+                timeout time: 20, unit: 'MINUTES'
             }
             steps {
                 script {

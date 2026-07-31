@@ -1,4 +1,5 @@
 import os
+import sys
 
 from langchain.agents import create_agent
 from langchain_core.messages import AIMessage, HumanMessage
@@ -54,3 +55,14 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                 else:
                     print("Malformed response was received")
     return output
+
+
+if __name__ == "__main__":
+    filename = sys.argv[1]
+    try:
+        with open(filename) as f:
+            content = f.read()
+            if content:
+                print(evaluate(msg=content))
+    except IOError:
+        print(f"File {filename} could not be read")

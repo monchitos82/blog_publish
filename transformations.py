@@ -79,9 +79,9 @@ def save_as_html(
                 # on build this will have the ./src prefix, cleaning it up
                 if tracking_url:
                     no_path_filename = ("/").join(html_filename.split("/")[2:])
-                    tracking_element = f'\n    <img src="{tracking_url}/count?p=/{no_path_filename}">\n'
+                    tracking_element = f'\n    <img style="display:none;" src="{tracking_url}/count?p=/{no_path_filename}">\n'
                     if title is not None:
-                        tracking_element = f'\n    <img src="{tracking_url}/count?p=/{no_path_filename}&t={title}">\n'
+                        tracking_element = f'\n    <img style="display:none;" src="{tracking_url}/count?p=/{no_path_filename}&t={title}">\n'
                     html_file.write(tracking_element)
                 html_file.write(footer)
         except OSError as error:

@@ -29,7 +29,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
             agent = create_agent(
                 model=model,
                 tools=tools,
-                system_prompt="You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion",
+                system_prompt="You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion, do not include the original text in your reply and make your response as brief as possible",
             )
         except Exception as error:
             print(f"No agent was setup for the model, error: {error}")
@@ -41,7 +41,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                     {
                         "messages": [
                             HumanMessage(
-                                content=f"please analyze the following text and find spelling and grammar errors: {msg}, make your response formatted in HTML"
+                                content=f"please analyze the following content and find spelling and grammar errors: {msg}, do not analyze code snippets and don't give recommendations, just point the errors when they are present"
                             )
                         ]
                     }

@@ -131,7 +131,7 @@ if __name__ == "__main__":
     last_file = find_last_post(src=SRC, year=LAST_YEAR)
     if not last_file:
         log.error(
-            "There is a conflict in post creation timestamps, the process will stop"
+            "There is a conflict in post creation timestamps, the post will not be inserted"
         )
 
     year_indexes = None

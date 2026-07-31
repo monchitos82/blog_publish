@@ -90,17 +90,10 @@ def get_index_titles(src: str, year: str) -> list:
 def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
     """Append the last title to year index"""
     year_index = f"{src}/templates/{year}.md.j2"
-    backup = f"{year_index}.backup"
-    try:
-        shutil.copyfile(year_index, backup)
-    except (OSError, FileNotFoundError) as error:
-        log.error(f"Failed to create backup: {error}")
-        return False
     year_index_data = []
     try:
         with open(year_index) as year_index_file:
-            # the index is a small file so reading it is safe
-            year_index_data = year_index_file.readlines()
+            year_index_data = year_index_file.readlines() # less than 100 lines per year
         if filename not in ",".join(year_index_data):
             title = extract_post_title(filename=filename)
             # check if the title is new, in case of an update, duplicates are avoided
@@ -112,7 +105,7 @@ def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
                     + f"{title}</a></h4></li>\n"
                 )
                 # making sure it's not appending twice the same line
-                if entry != year_index_data:
+                if entry not in year_index_data:
                     year_index_data.insert(1, entry)
         if year_index_data:
             try:
@@ -127,7 +120,6 @@ def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
     except (OSError, ValueError) as error:
         logging.error(f"Failed to open the year {year} index: {error}")
         return False
-    os.remove(backup)
     return True
 
 

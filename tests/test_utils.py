@@ -1,6 +1,8 @@
 import os
 
-from utils import env_list_as_tuple, run_async, load_static_env
+import pytest
+
+from utils import env_list_as_tuple, run_async, load_static_env, clean_terms, PATH_CLEAR_TERMS
 import asyncio
 
 
@@ -62,8 +64,18 @@ def test_load_static_env_bad_env():
     assert static == {}
 
 def test_load_static_env_relative():
-    os.environ["STATIC_.._.._BAD"] = "a, b"
+    os.environ["STATIC_.._.._ETC"] = "a, b"
     src = "base"
     static = load_static_env(src=src)
-    del os.environ["STATIC_.._.._BAD"]
-    assert static == {}
+    del os.environ["STATIC_.._.._ETC"]
+    assert static == {'base/etc': ('a', 'b',)}
+
+words = [
+    (":(){ :|:& };:", ""),
+    ("/../etc/", "etc/"),
+    ("${SOMETHING}@", "SOMETHING@")
+]
+
+@pytest.mark.parametrize("word, result", words)
+def test_clean_terms(word, result):
+    assert clean_terms(word=word, terms=PATH_CLEAR_TERMS) == result

@@ -32,7 +32,7 @@ pipeline {
         )
     }
     stages {
-        stage('Setup Environment') {
+        stage('Environment Setup') {
             steps {
                 script {
                     if (!fileExists('/home/jenkins/.local/bin/uv') || params.FORCE_SETUP) {
@@ -45,7 +45,7 @@ pipeline {
                 }
             }
         }
-        stage('Setup Sources') {
+        stage('Sources Setup') {
             steps {
                 script {
                     if (params.CLEAN_REPOSITORIES) {
@@ -80,7 +80,7 @@ pipeline {
             }
 
         }
-        stage('Publish Local') {
+        stage('Local Publish') {
             steps {
                 sh """
                 mkdir -p /opt/deploy
@@ -92,7 +92,7 @@ pipeline {
                 """
             }
         }
-        stage('Promote release') {
+        stage('Promote Release') {
             
             when {
                 expression { 
@@ -114,7 +114,7 @@ pipeline {
             }
         }
 
-        stage('Publish') {
+        stage('Go Live') {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     sh '''

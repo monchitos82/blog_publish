@@ -12,18 +12,14 @@ a) A source with all the markdown files. In this case, my blog has a simple stru
 myblog/
 ├── archive
 ├── assets
-│   ├── index.md
 │   └── style.css
 ├── favicon.ico
 ├── img
 ├── index.md
 ├── posts
 │   ├── 2024
-│   ├── 2024.md
 │   ├── 2025
-│   ├── 2025.md
-│   ├── 2026
-│   └── 2026.md
+│   └── 2026
 ├── robots.txt
 ├── snippets
 └── templates

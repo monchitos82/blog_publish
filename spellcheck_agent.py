@@ -17,7 +17,7 @@ def git_diff() -> str | None:
     result = None
     try:
         with subprocess.Popen(
-            ["git", "diff"], stdout=subprocess.PIPE
+            ["git", "diff", "HEAD~1", "HEAD"], stdout=subprocess.PIPE
         ) as git_diff_process:
             result = git_diff_process.stdout.read()
     except subprocess.SubprocessError as error:

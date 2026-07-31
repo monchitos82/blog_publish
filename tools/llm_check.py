@@ -5,7 +5,7 @@ import sys
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
 
-from utils.otel import setup_otel_instrumentation
+from utils.otel import setup_otel_instrumentation, setup_otel_tracing
 
 log = logging.getLogger(__name__)
 
@@ -27,9 +27,13 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
 
     if model:
         setup_otel_instrumentation()
+        trace = setup_otel_tracing()
+        tracer = trace.get_tracer("llm_check")
+
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=message)]
         try:
-            result = model.invoke(messages)
+            with tracer.start_as_current_span("ollama_request"):
+                result = model.invoke(messages)
         except Exception as error:
             log.error(f"No response was given, error: {error}")
             return

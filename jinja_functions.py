@@ -31,6 +31,8 @@ def title_h4_href(
     if not path:
         path = context.get("path", None)
 
+    print(context)
+
     decorated_url = ""
     if path and base_url:
         decorated_url = f'<a href="{base_url}/{path}#{html_title}" class="decorated">'

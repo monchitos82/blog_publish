@@ -66,6 +66,6 @@ if __name__ == "__main__":
                     system_prompt=system_prompt,
                 )
                 if response:
-                    print(response.encode("ascii"))
+                    print(response.encode("utf-8"))
     except IOError:
         log.error(f"File {filename} could not be read")

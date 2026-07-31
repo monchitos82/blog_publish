@@ -74,6 +74,7 @@ if __name__ == "__main__":
             "in_post": False,
             "in_index": False,
             "in_main": False,
+            "scrollable": False,
         },
     )
 
@@ -81,10 +82,13 @@ if __name__ == "__main__":
     for filename in list_of_files(dirname=base_dirname):
         file_footer = footer
         split_filename = filename.split("/")
+        scrollbar = False
         if "README" in filename or split_filename[-1].startswith("."):
             continue
 
         content = parse_markdown_file(filename=filename)
+        if "<!-- SCROLLABLE -->" in content:
+            scrollbar = True
 
         if filename == f"{SRC}/index":
             # base, index.md at root
@@ -94,15 +98,17 @@ if __name__ == "__main__":
                     "base_url": BASE_URL,
                     "tracking_url": TRACKING,
                     "in_main": True,
+                    "scrollbar": scrollbar,
                 },
             )
-        if "[ NAV_MAIN ]: #" in content or "<!-- NAV_MAIN -->" in content:
+        if "<!-- NAV_MAIN -->" in content:
             log.warning(f"{filename} is in index")
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
                 **{
                     "base_url": BASE_URL,
                     "in_index": True,
+                    "scrollbar": scrollbar,
                 },
             )
         else:
@@ -117,10 +123,11 @@ if __name__ == "__main__":
                         "year": year,
                         "in_post": True,
                         "page_name": f"{page}",
+                        "scrollbar": scrollbar,
                     },
                 )
 
-        if "[ NO_RENDER ] #" not in content and "<!-- NO_RENDER -->" not in content:
+        if "<!-- NO_RENDER -->" not in content:
             content = render_content_as_template(
                 content=content,
                 **{

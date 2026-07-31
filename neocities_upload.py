@@ -3,7 +3,8 @@ import sys
 
 import logging
 
-from neocitizen import NeocitiesApi, ApiError
+from neocitizen import NeocitiesApi
+from neocitizen.errors import ApiError
 
 log = logging.getLogger(__name__)
 

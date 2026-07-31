@@ -35,6 +35,8 @@ def parse_template(
     **kwargs,
 ) -> str:
     """Render a filename template using jinja2."""
+    if "index" in filename:
+        print(filename, content, **kwargs)
     try:
         template = None
         if not content and not filename:

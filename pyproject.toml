@@ -32,6 +32,7 @@ python_files = [
     "test_utils.py",
     "test_files.py",
     "test_operations.py",
+    "test_rss.py",
     "test_validations.py",
     "test_transformations.py"
 ]

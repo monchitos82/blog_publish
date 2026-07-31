@@ -33,7 +33,7 @@ def test_build_year_index_creates_index(tmp_path):
     (dest / "posts").mkdir(exist_ok=True)
 
     post = posts / "01_01_my-post.md"
-    post.write_text("### My Post\nHello")
+    post.write_text("### My Post (01/01)\nHello")
 
     result = build_year_index(
         src=str(src),

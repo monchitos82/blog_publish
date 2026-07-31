@@ -7,6 +7,7 @@ pipeline {
         BASE_URL = "https://rgarciamx.codeberg.page"
         SRC = "../rgarciamx"
         DEST = "../pages"
+        YEAR_LOOKBACK = 2
     }
     stages {
         stage('Setup Environment') {

@@ -37,7 +37,9 @@ The publishing process relies on Codeberg Pages, so a `pages` repository is need
 
 There are some variables needed to run the script:
 
-`BASE_URL` This is the Codeberg pages URL for my user
-`SRC`      This is the path to my source repository
-`DEST`     This is the path to my pages repository, defaults to "../pages"
+`BASE_URL`      This is the Codeberg pages URL for my user
+`SRC`           This is the path to my source repository
+`DEST`          This is the path to my pages repository, defaults to "../pages"
+`YEAR`          This is the current year, defaults to the Year (yyyy) in the machine
+`YEAR_LOOKBACK` Years to look back, for my blog, it should be 2, so it builds from 2024 until 2026. Defaults to 1
 

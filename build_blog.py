@@ -15,7 +15,6 @@ import validators
 from bs4 import BeautifulSoup
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
-from dataclasses import dataclass
 
 log = logging.getLogger(__name__)
 console_handler = logging.StreamHandler()
@@ -28,9 +27,9 @@ log.addHandler(console_handler)
 AUTO = os.getenv("AUTO", False)
 BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
 
-LOCATIONS = {"posts": True, "landing": False}
-CURSING = ["fuck", "asshole"]
-YEARS = ["2024", "2025", "2026"]
+CURSING = ["moron"] # Foul words in your language
+LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
+YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../pages")
@@ -344,7 +343,6 @@ if __name__ == "__main__":
         **{
             "base_url": BASE_URL,
             "menu": menu,
-            "locations": json.dumps(LOCATIONS),
         },
     )
     footer = render_template(
@@ -378,14 +376,17 @@ if __name__ == "__main__":
             file_errors = True
             break
 
-    last_file = (find_last_post(year=YEARS[-1], src=SRC))
+    last_file = (find_last_post(year=LAST_YEAR, src=SRC))
     if not last_file:
         log.error("There is a conflict in post creation timestamps, the process will stop")
         #sys.exit(1)
     
     year_indexes = None
 
-    if append_last_title_to_index(filename=last_file, year=YEARS[-1]):
+    if append_last_title_to_index(filename=last_file, year=LAST_YEAR):
+        last_year = int(LAST_YEAR)
+        first_year = last_year - int(YEAR_LOOKBACK)
+        YEARS = [str(year) for year in range(first_year, last_year + 1)]
         year_indexes = asyncio.run(build_year_index(years=YEARS, header=header, footer=footer))
 
     # if all year indexes are ready we can build the index from them

@@ -78,8 +78,12 @@ if __name__ == "__main__":
 
     for filename in list_of_files(dirname=base_dirname):
         file_footer = footer
-        if "README" in filename:
+        if "README" in filename or filename.startswith("."):
             continue
+
+        # parsing content firsthand to do transformations later
+        content = parse_markdown_file(filename=filename)
+
         # adding a different footer in the event of creating a post:
         split_filename = filename.split("/")
         if split_filename[-1] not in ("index", "about"):
@@ -112,14 +116,14 @@ if __name__ == "__main__":
                     "in_main": True,
                 },
             )
-
+                
         html_save = save_as_html(
             filename=filename,
             header=header,
             footer=file_footer,
-            content=parse_markdown_file(filename=filename),
+            content=content,
             replace={SRC: DEST},
-            tracking_element=TRACKING,
+            tracking_url=TRACKING,
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")
@@ -145,7 +149,7 @@ if __name__ == "__main__":
             years=YEARS,
             header=header,
             footer=index_footer,
-            tracking_element=TRACKING,
+            tracking_url=TRACKING,
         )
     )
 

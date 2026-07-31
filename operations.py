@@ -8,11 +8,11 @@ log = logging.getLogger(__name__)
 
 
 async def build_year_index(
-    src: str, dest: str, base_url: str, years: list, header: str, footer: str, tracking_element: str,
+    src: str, dest: str, base_url: str, years: list, header: str, footer: str, tracking_url: str,
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
-        year_content = f'<ul class="clean">\n'
+        year_content = f'<!-- ### {year} index -->\n<ul class="clean">\n'
         for post in sorted(
             list_of_files(f"{src}/posts/{year}", clean_extension=False),
             key=lambda f: f.split("/")[-1][:5],
@@ -36,7 +36,7 @@ async def build_year_index(
                 footer=footer,
                 content=year_content,
                 replace={src: dest},
-                tracking_element=tracking_element,
+                tracking_url=tracking_url,
 
             )
         except OSError as error:

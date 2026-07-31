@@ -14,12 +14,14 @@ pipeline {
     stages {
         stage('Setup Environment') {
             steps {
-                def uvExists = fileExists '/home/jenkins/.local/bin/uv'
-                sh '''
-                    curl -LsSf https://astral.sh/uv/install.sh | sh
-                    export PATH="$HOME/.local/bin:$PATH"
-                    uv sync --frozen
-                '''
+                script {
+                    def uvExists = fileExists '/home/jenkins/.local/bin/uv'
+                    sh '''
+                        curl -LsSf https://astral.sh/uv/install.sh | sh
+                        export PATH="$HOME/.local/bin:$PATH"
+                        uv sync --frozen
+                    '''
+                }
             }
         }
         stage('Setup Sources') {

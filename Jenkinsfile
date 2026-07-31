@@ -19,8 +19,8 @@ pipeline {
         )
         booleanParam(
             name: 'CLEAN_REPOSITORIES', 
-            defaultValue: true, 
-            description: 'Preserve the existing repositories in the workspace'
+            defaultValue: false, 
+            description: 'Remove the repositories in the workspace'
         )
     }
     stages {

@@ -50,7 +50,7 @@ pipeline {
         )
         booleanParam(
             name: 'UPDATE_RSS',
-            defaultValue: true,
+            defaultValue: false,
             description: 'Update the RSS feed (only works for Posts)'
         )
         booleanParam(

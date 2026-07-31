@@ -1,22 +1,22 @@
 pipeline {
     agent { label 'python' }
     environment {
-        LOCAL_BASE_URL = "http://127.0.0.1:2080"
-        // build specifics
+        // site specifics
         ACCOUNT = "ramongarciamx"
-        SOURCE = "rgarciamx"
         AUTHOR = "Ramon Garcia"
         EMAIL = "${ACCOUNT}@proton.me"
         TITLE = "Ramon's blog"
+        SOURCE = "rgarciamx"
+
+        //build specifics
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         TRACKING = "https://${ACCOUNT}.goatcounter.com"
-        // project specifics
         BASE_URL = "https://${ACCOUNT}.neocities.org"
+        LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "./site"
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1
         INDEX_PAGES = "index, about, notes"
-
     }
     parameters {
         booleanParam(

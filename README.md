@@ -31,11 +31,12 @@ myblog/
     ├── header.html.j2
     └── menu.html.j2
 ```
+
 The templates (`j2`) are auto-populated with the contents of `/posts/<<year>>/` so pretty much all I have to do is write my posts as markdown and let the build script take care of the rest. Within the Python file there is a list of years, ideally, every new year we add a directory to `posts/` and a `<<year>>.md.j2` template so the new files are detected and the indexes populated.
 
-The publishing process relies on Codeberg Pages, so a `pages` repository is needed.
+b) The publishing process relies on Codeberg Pages, so a `pages` repository is needed.
 
-There are some variables needed to run the script:
+c) There are some variables needed to run the script:
 
 `BASE_URL`      This is the Codeberg pages URL for my user
 `SRC`           This is the path to my source repository
@@ -43,3 +44,4 @@ There are some variables needed to run the script:
 `YEAR`          This is the current year, defaults to the Year (yyyy) in the machine
 `YEAR_LOOKBACK` Years to look back, for my blog, it should be 2, so it builds from 2024 until 2026. Defaults to 1
 
+These are defined in the Jenkinsfile as well

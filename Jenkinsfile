@@ -105,6 +105,7 @@ pipeline {
           steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
               sh '''
+              echo ${CODEBERG_PAGES_URL}
               $HOME/.local/bin/uv run pytest
               '''
             }
@@ -172,7 +173,6 @@ pipeline {
                             cd ..
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
-                            echo "${CODEBERG_PAGES_URL}"
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
@@ -186,7 +186,6 @@ pipeline {
                             cd ..
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
-                            //find . -type f -exec sed -i 's|${BASE_URL}|${CODEBERG_PAGES_URL}|g' {} +
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push

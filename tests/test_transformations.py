@@ -15,9 +15,7 @@ from transformations import (
 @pytest.fixture
 def jinja_env():
     env = Environment(loader=FunctionLoader(lambda name: ""))
-    functions = JinjaFunctions.functions
-    for function in functions:
-        env.globals[function] = functions[function]
+    env.globals.update(JinjaFunctions.functions)
     return env
 
 

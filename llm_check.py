@@ -34,7 +34,7 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
 
         if result and isinstance(result, AIMessage):
             try:
-                output = result.content.decode("utf-8")
+                output = result.content
             except AttributeError as error:
                 log.error(f"No AI message was received, error: {error}")
         else:
@@ -58,14 +58,14 @@ if __name__ == "__main__":
             content = f.read()
             if content:
                 message = (
-                    f"for the file {filename}, perform a spellcheck and validate its grammar on its content:",
-                    f"=START=\n{content}\n=END=",
+                    f"for the file {filename}, perform a spellcheck and validate its grammar on its content:\n"
+                    f"=START=\n{content}\n=END="
                 )
-                print(
-                    evaluate_prompt(
-                        message=message,
-                        system_prompt=system_prompt,
-                    )
+                response = evaluate_prompt(
+                    message=message,
+                    system_prompt=system_prompt,
                 )
+                if response:
+                    print(response.encode("ascii"))
     except IOError:
         log.error(f"File {filename} could not be read")

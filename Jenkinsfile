@@ -3,11 +3,11 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "monfg"
+        ACCOUNT = "ramongamx"
         EMAIL = "${ACCOUNT}@proton.me"
-        TITLE = "Ramon's blog"
-        SITE_NAME = "monfg"
-        SOURCE = "rgarciamx"
+        TITLE = "Ramon G"
+        SITE_NAME = "ramongamx"
+        SOURCE = "ramongamx"
 
         //build specifics
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"

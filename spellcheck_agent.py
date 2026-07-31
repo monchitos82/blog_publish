@@ -1,33 +1,40 @@
+import logging
 import os
-import sys
 import subprocess
+import sys
 
 from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_ollama import ChatOllama
 
+log = logging.getLogger(__name__)
+
 
 @tool
 def git_diff() -> str | None:
-    """ Will get the git diff result for the current dir """
+    """Will get the git diff result for the current dir"""
     result = None
-    git_diff_command = subprocess.Popen(['git', 'diff'], stdout=subprocess.PIPE)
-    with git_diff_command as p:
-        result = p.stdout.read()
+    try:
+        with subprocess.Popen(
+            ["git", "diff"], stdout=subprocess.PIPE
+        ) as git_diff_process:
+            result = git_diff_process.stdout.read()
+    except subprocess.SubprocessError as error:
+        log.error(f"Failed to execute git diff on local files, error: {error}")
     return result
 
 
-tools = ['git_diff']
+tools = ["git_diff"]
 agent_prompt = """
-You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion.
-Do not include the original text in your reply and make your responses as brief as possible.
+You are an assistant whose function is to validate content is grammatically correct"
 """
 
 try:
     with open("./base_prompt.md") as b:
         base_prompt = b.read()
-except OSError:
+except OSError as error:
+    log.error(f"Could not read base prompt, error: {error}")
     base_prompt = ""
 
 
@@ -44,7 +51,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
             ),
         )
     except Exception as error:
-        print(f"No model was created, error: {error}")
+        log.error(f"No model was created, error: {error}")
         return
 
     if model:
@@ -55,26 +62,12 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                 system_prompt=(base_prompt + "\n" + agent_prompt),
             )
         except Exception as error:
-            print(f"No agent was setup for the model, error: {error}")
+            log.error(f"No agent was setup for the model, error: {error}")
             return
 
         if agent:
             try:
-                result = agent.invoke(
-                    {
-                        "messages": [
-                            HumanMessage(
-                                content=f"""
-                                Review the following content and find spelling and grammar errors.
-                                Do not analyze code snippets and do not suggest editions, just point the errors when they are present.
-                                START OF CONTENT -
-                                {msg}
-                                - END OF CONTENT
-                                """
-                            )
-                        ]
-                    }
-                )
+                result = agent.invoke({"messages": [HumanMessage(content=msg)]})
             except Exception as error:
                 print(f"No response was given, error: {error}")
                 return
@@ -85,9 +78,9 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                     if isinstance(messages[1], AIMessage):
                         output = messages[1].content
                     else:
-                        print("No AI message was received")
+                        log.error("No AI message was received")
                 else:
-                    print("Malformed response was received")
+                    log.error("Malformed response was received")
     return output
 
 
@@ -97,6 +90,7 @@ if __name__ == "__main__":
         with open(filename) as f:
             content = f.read()
             if content:
-                print(evaluate(msg=content))
+                message = f"check in the git diff if this file {filename} changed, if it is a markdown and it changed, evaluate its content: {content}"
+                log.info(evaluate(msg=message))
     except IOError:
-        print(f"File {filename} could not be read")
+        log.error(f"File {filename} could not be read")

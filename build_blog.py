@@ -94,7 +94,11 @@ if __name__ == "__main__":
         if "README" in filename or split_filename[-1].startswith("."):
             continue
 
-        content = load_file_content(filename, extension="md")
+        raw_content = load_file_content(filename, extension="md")
+        if not raw_content:
+            continue
+
+        content = parse_markdown(content=raw_content)
         if not content:
             continue
 
@@ -115,8 +119,6 @@ if __name__ == "__main__":
                     "base_url": BASE_URL,
                 },
             )
-
-        content = parse_markdown(content=content)
 
         html_save = save_as_html(
             filename=filename,

@@ -69,17 +69,17 @@ if __name__ == "__main__":
     
     menu = render_template(
         filename = f"{SRC}/templates/menu.html.j2",
-        arguments,
+        **arguments,
     )
     arguments["menu"] = menu
     
     header = render_template(
         filename = f"{SRC}/templates/header.html.j2",
-        arguments,
+        **arguments,
     )
     footer = render_template(
         filename = f"{SRC}/templates/footer.html.j2",
-        arguments,
+        **arguments,
     )
 
     # convert all /src markdowns to HTML files and populate /site
@@ -113,21 +113,21 @@ if __name__ == "__main__":
            file_arguments["in_post"] = True
            file_footer = render_template(
                filename=f"{SRC}/templates/footer.html.j2",
-               file_arguments,
+               **file_arguments,
            )
         
         if "<!-- NAV_MAIN -->" in content:
             file_arguments["in_index"] = True
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
-                file_arguments,
+                **file_arguments,
             )
 
         if "<!-- NO_PROGRESSBAR -->" in content:
             file_arguments["progressbar"] = False
             file_header = render_template(
                 filename = f"{SRC}/templates/header.html.j2",
-                file_arguments,
+                **file_arguments,
             )
 
         if "<!-- NO_RENDER -->" not in content:
@@ -161,11 +161,11 @@ if __name__ == "__main__":
     file_arguments["in_index"] = True
     index_header = render_template(
         filename=f"{SRC}/templates/header.html.j2",
-        file_arguments,
+        **file_arguments,
     )
     index_footer = render_template(
         filename=f"{SRC}/templates/footer.html.j2",
-        file_arguments,
+        **file_arguments,
     )
     year_indexes = build_year_index(
         src=SRC,

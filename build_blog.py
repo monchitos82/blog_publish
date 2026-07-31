@@ -125,6 +125,7 @@ if __name__ == "__main__":
         if "<!-- NAV_MAIN_ES -->" in content:
             file_arguments["in_index"] = True
             file_arguments["in_es"] = True
+            file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
                 **file_arguments,
             )

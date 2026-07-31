@@ -82,6 +82,8 @@ pipeline {
         stage('Publish Local') {
             steps {
                 sh """
+                mkdir -p /opt/deploy
+                cp -r /opt/deploy /opt/last
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
                 find /opt/deploy/site -type f -exec sed -i 's|${TRACKING}|#|g' {} +
@@ -121,6 +123,12 @@ pipeline {
         }
     }
     post {
+        aborted {
+            sh """
+            echo 'Rolling back local changes'
+            mv /opt/last /opt/deploy
+            """
+        }
         failure {
             echo 'Upon failure you should clean repositories for the next run!'
             cleanWs()

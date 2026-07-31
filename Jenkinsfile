@@ -4,7 +4,7 @@ pipeline {
         // site specifics
         AUTHOR = "Ramon Garcia"
         ACCOUNT = "monfg"
-        DOMAIN = "codeberg.org"
+        DOMAIN = "codeberg.page"
         SITE_NAME = "${ACCOUNT}.${DOMAIN}"
         SITE_TITLE = "${AUTHOR}'s blog"
 
@@ -201,6 +201,7 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
                     sh '''
+                        pwd
                         cd blog_builder
                         $HOME/.local/bin/uv run neocities_upload.py
                         cd ..

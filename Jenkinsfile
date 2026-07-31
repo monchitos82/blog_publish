@@ -5,9 +5,9 @@ pipeline {
         AUTHOR = "Ramon Garcia"
         ACCOUNT = "ramongamx"
         SITE_NAME = "${ACCOUNT}.neocities.org"
-        SOURCE = "blog"
 
-        //build specifics
+        // build specifics
+        SOURCE = "blog"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         BASE_URL = "https://${ACCOUNT}.neocities.org"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"

@@ -42,15 +42,20 @@ def find_last_post(src: str, year: str) -> str:
         if not last:
             last = filename
             last_ctime = os.stat(last).st_ctime
+            last_stamp = filename.split("/")[-1][:2]
         else:
             file_ctime = os.stat(filename).st_ctime
             if last_ctime < file_ctime:
                 last = filename
                 last_ctime = file_ctime
+                last_stamp = filename.split("/")[-1][:2]
             elif last_ctime == file_ctime:
                 log.warning(
                     f"Two files {last} | {filename} have the same creation timestamp"
                 )
+                # in the event metadata is inconclusive, use the stamp in the filename
+                if last_stamp < filename.split("/")[-1][:2]:
+                    last = filename
     log.info(f"Last file found: {last}")
     return last
 
@@ -107,7 +112,7 @@ def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
                     + f"{title}</a></h4></li>\n"
                 )
                 # making sure it's not appending twice the same line
-                if entry != year_index_data[1]:
+                if entry != year_index_data:
                     year_index_data.insert(1, entry)
         if year_index_data:
             try:
@@ -134,6 +139,7 @@ async def build_year_index(
         year_markdown = render_template(
             filename=f"{src}/templates/{year}.md.j2", **{"base_url": base_url}
         )
+
         try:
             filename = f"{src}/posts/{year}"
             async with aiofiles.open(f"{filename}.md", "w+") as f:

@@ -108,14 +108,6 @@ def render_annotations(
                 **file_arguments,
             )
 
-        if "<!-- NAV_MAIN_ES -->" in content:
-            file_arguments["in_index"] = True
-            file_arguments["in_es"] = True
-            file_footer = parse_template(
-                filename=f"{src}/templates/footer.html.j2",
-                **file_arguments,
-            )
-
         if "<!-- NO_PROGRESSBAR -->" in content:
             file_arguments["progressbar"] = False
             file_header = parse_template(

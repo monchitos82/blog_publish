@@ -1,14 +1,17 @@
 """Publishing script for my blog."""
 
-import argparse
 import asyncio
 import datetime
 import logging
 import os
 
-from files import clean_files, copy_dirs, copy_statics, list_of_files
-from operations import (append_last_title_to_index, build_year_index,
-                        find_last_post, has_broken_anchors)
+from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files
+from operations import (
+    append_last_title_to_index,
+    build_year_index,
+    find_last_post,
+    has_broken_anchors,
+)
 from transformations import parse_markdown_file, render_template, save_as_html
 
 log = logging.getLogger(__name__)
@@ -37,13 +40,14 @@ async def run_asynchronously(tasks: list) -> list:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--scan", "-s", help="scan for foul language", action="store_true"
-    )
-    arguments = parser.parse_args()
+
     file_errors = False
     base_dirname = SRC
+
+    clean_files(path=f"{DEST}", extension="html"),
+
+    # first step is to clean-up the page files
+
     if not copy_dirs(src=SRC, dest=DEST, depth=1):
         file_errors = True
     copy_statics(src=SRC, dest=DEST, statics=STATICS)
@@ -139,7 +143,9 @@ if __name__ == "__main__":
             run_asynchronously(
                 [
                     has_broken_anchors(dest=f"{DEST}"),
-                    clean_files(path=f"{SRC}/posts", extension="md", target=YEARS),
+                    async_clean_files(
+                        path=f"{SRC}/posts", extension="md", target=YEARS
+                    ),
                 ]
             )
         )

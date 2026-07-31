@@ -4,18 +4,20 @@ import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
 
+log = logging.getLogger(__name__)
+
 
 def render_template(filename: str, **kwargs) -> str:
     """Render a filename template using jinja2."""
     content = ""
     try:
-        with open(filename) as f:
-            template = Template(source=f.read())
+        with open(filename) as template_file:
+            template = Template(source=template_file.read())
             content = template.render(kwargs)
     except OSError as err:
-        logging.error(f"Could not open the template, error: {err}")
+        log.error(f"Could not open the template, error: {err}")
     except TemplateError as err:
-        logging.error(f"Failed to render the template, error: {err}")
+        log.error(f"Failed to render the template, error: {err}")
     return content
 
 
@@ -32,23 +34,23 @@ def parse_markdown(content: str) -> str:
             ],
         )
     except (OSError, TypeError, ValueError) as error:
-        logging.error(f"Failed to parse markdown content, {error}")
+        log.error(f"Failed to parse markdown content, {error}")
         content = ""
     return content
 
 
 def parse_markdown_file(filename: str) -> str:
     """Parse a markdown file into html content."""
-    markdown_file = f"{filename}.md"
+    markdown_filename = f"{filename}.md"
     content = None
     try:
-        with open(markdown_file, encoding="utf-8") as f:
-            md_content = f.read()
+        with open(markdown_filename, encoding="utf-8") as markdown_file:
+            md_content = markdown_file.read()
             if md_content:
                 content = parse_markdown(content=md_content)
     except OSError as error:
-        logging.error(
-            f"failed to generate content from {markdown_file}, error: {error}"
+        log.error(
+            f"failed to generate content from {markdown_filename}, error: {error}"
         )
     return content
 
@@ -57,20 +59,20 @@ def save_as_html(
     filename: str, header: str, footer: str, content: str, replace: dict
 ) -> bool:
     """Save content as html file."""
-    html_file = filename
+    html_filename = filename
     for item in replace:
-        html_file = f"{html_file.replace(item, replace[item])}"
-    html_file += ".html"
+        html_filename = f"{html_filename.replace(item, replace[item])}"
+    html_filename += ".html"
     save = False
     if content:
-        logging.info(f"Saving {filename} as {html_file}")
+        log.info(f"Saving {filename} as {html_filename}")
         try:
-            with open(html_file, "w+", encoding="utf-8") as f:
-                f.write(header)
-                f.write(f'\n    <main role="main">\n{content}\n    </main>\n')
-                f.write(footer)
+            with open(html_filename, "w+", encoding="utf-8") as html_file:
+                html_file.write(header)
+                html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
+                html_file.write(footer)
         except OSError as error:
-            logging.error(f"Failed to save {html_file}, error: {error}")
+            log.error(f"Failed to save {html_filename}, error: {error}")
         else:
             save = True
     return save

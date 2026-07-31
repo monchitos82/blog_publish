@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 from files import list_of_files
 from transformations import parse_markdown_file, render_template, save_as_html
 
+log = logging.getLogger(__name__)
+
 
 async def has_broken_anchors(dest: str) -> bool:
     """Find URLs in dest html files and make sure no URL is invalid."""
@@ -27,7 +29,7 @@ async def has_broken_anchors(dest: str) -> bool:
                     if not validators.url(href):
                         if href[:2] == "./" or href[:3] == "../":
                             continue
-                        logging.error(f"invalid anchor: {anchor} in file: {filename}")
+                        log.error(f"invalid anchor: {anchor} in file: {filename}")
                         return True
     return False
 
@@ -36,7 +38,6 @@ def find_last_post(src: str, year: str) -> str:
     """Find which file in the sources is the last one added."""
     existing_files = list_of_files(f"{src}/posts/{year}", clean_extension=False)
     last = None
-    last_time = None
     for filename in existing_files:
         if not last:
             last = filename
@@ -47,22 +48,22 @@ def find_last_post(src: str, year: str) -> str:
                 last = filename
                 last_ctime = file_ctime
             elif last_ctime == file_ctime:
-                logging.warning(
+                log.warning(
                     f"Two files {last} | {filename} have the same creation timestamp"
                 )
-    logging.info(f"Last file found: {last}")
+    log.info(f"Last file found: {last}")
     return last
 
 
 def extract_post_title(filename: str) -> str:
     """Extract the title of a post based on the H3 header for a markdown file"""
     try:
-        with open(filename) as f:
-            title = f.readline()
+        with open(filename) as post_file:
+            title = post_file.readline()
         if "###" in title:
             return title.replace("###", "").replace("\n", "").strip()
     except OSError as error:
-        logging.error(f"Failed to open post when looking for a title: {error}")
+        log.error(f"Failed to open post when looking for a title: {error}")
     return None
 
 
@@ -71,13 +72,13 @@ def get_index_titles(src: str, year: str) -> list:
     titles = []
     year_index = f"{src}/templates/{year}.md.j2"
     try:
-        with open(year_index) as f:
-            soup = BeautifulSoup(f, "html.parser")
+        with open(year_index) as year_index_file:
+            soup = BeautifulSoup(year_index_file, "html.parser")
             anchors = soup.find_all("a")
             for anchor in anchors:
                 titles.append(anchor.get_text(strip=True))
     except (OSError, AttributeError) as error:
-        logging.error(f"Failed to extract titles for index of year {year}: {error}")
+        log.error(f"Failed to extract titles for index of year {year}: {error}")
     return titles
 
 
@@ -88,13 +89,13 @@ def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
     try:
         shutil.copyfile(year_index, backup)
     except (OSError, FileNotFoundError) as error:
-        logging.error(f"Failed to create backup: {error}")
+        log.error(f"Failed to create backup: {error}")
         return False
     year_index_data = []
     try:
-        with open(year_index) as f:
+        with open(year_index) as year_index_file:
             # the index is a small file so reading it is safe
-            year_index_data = f.readlines()
+            year_index_data = year_index_file.readlines()
         if filename not in ",".join(year_index_data):
             title = extract_post_title(filename=filename)
             # check if the title is new, in case of an update, duplicates are avoided

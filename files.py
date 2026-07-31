@@ -2,6 +2,8 @@ import logging
 import os
 import shutil
 
+log = logging.getLogger(__name__)
+
 
 def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> list:
     """Generate a list of files having an [extension]."""
@@ -39,12 +41,10 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                     pass
                 except OSError as error:
                     # other errors should be addressed
-                    logging.error(
-                        f"Creation of directory {item} failed, error: {error}"
-                    )
+                    log.error(f"Creation of directory {item} failed, error: {error}")
                     return False
     except OSError as error:
-        logging.error(f"Access to {src} failed, error: {error}")
+        log.error(f"Access to {src} failed, error: {error}")
         return False
     return True
 
@@ -61,12 +61,10 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
                 try:
                     shutil.copy2(src=filename, dst=site)
                 except OSError as error:
-                    logging.error(
-                        f"Copy of static file {filename} failed, error: {error}"
-                    )
+                    log.error(f"Copy of static file {filename} failed, error: {error}")
 
 
-async def clean_files(path: str, extension: str, target: list | None = None) -> bool:
+def clean_files(path: str, extension: str, target: list | None = None) -> bool:
     """Delete files from [path] with an [extension]."""
     for filename in list_of_files(
         dirname=path, extension=extension, clean_extension=False
@@ -77,7 +75,7 @@ async def clean_files(path: str, extension: str, target: list | None = None) -> 
             found = False
             for target_file in target:
                 if filename.split("/")[-1] == f"{target_file}.{extension}":
-                    logging.info(f"found file: {filename} targetted for delete")
+                    log.info(f"found file: {filename} targeted for delete")
                     found = True
                     break
             if not found:
@@ -86,7 +84,13 @@ async def clean_files(path: str, extension: str, target: list | None = None) -> 
             if ".keep" not in filename:
                 os.remove(filename)
         except OSError:
-            logging.error("Site could not be cleaned", exc_info=True)
+            log.error("Site could not be cleaned", exc_info=True)
             return False
-    logging.info("Site clean!")
+    log.info("Site clean!")
     return True
+
+
+async def async_clean_files(
+    path: str, extension: str, target: list | None = None
+) -> bool:
+    return clean_files(path, extension, target)

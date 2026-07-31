@@ -11,7 +11,7 @@ pipeline {
         SOURCE = "blog"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         BASE_URL = "https://${ACCOUNT}.neocities.org"
-        TRACKING_URL = "https://${ACCOUNT}.goatcounter.org"
+        TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "./site"
         SRC = "./${SOURCE}"

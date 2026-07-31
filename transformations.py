@@ -2,7 +2,7 @@ import logging
 import urllib.parse
 
 import markdown
-from jinja2 import Context, Template, pass_context
+from jinja2 import runtime.Context, Template, pass_context
 from jinja2.exceptions import TemplateError
 
 log = logging.getLogger(__name__)

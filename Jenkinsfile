@@ -17,6 +17,10 @@ pipeline {
         DEST = "./site"
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1
+
+        //blog path specifics
+        STATICS_IMG = ".png,.svg,.ico"
+
     }
     parameters {
         booleanParam(

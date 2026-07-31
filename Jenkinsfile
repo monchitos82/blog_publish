@@ -19,7 +19,7 @@ pipeline {
         YEAR_LOOKBACK = 1
 
         //blog path specifics
-        STATICS_IMG = ".png,.svg,.ico"
+        STATICS_IMG = ".png,.svg,.ico,.webp"
 
     }
     parameters {

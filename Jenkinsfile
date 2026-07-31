@@ -185,7 +185,7 @@ pipeline {
                             } else {
                                 sh '''
                                 echo "Pages is already present"
-                                pwd
+                                cd ..
                                 cd ${SITE_PAGES}
                                 git pull
                                 cd ..

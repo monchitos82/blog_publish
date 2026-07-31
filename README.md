@@ -15,15 +15,15 @@ myblog/
 │   └── style.css
 ├── favicon.ico
 ├── img
-├── index.md
+├── index.md       # this is the landing page; this sets <in_main to true>
 ├── posts
-│   ├── 2024
-│   ├── 2025
+│   ├── ...
+│   ├── 2025       # markdown files in these directories are the content; these set <in_post to true>
 │   └── 2026
-├── robots.txt
+├── robots.txt     # you want this to toss away those pesky AI crawlers
 ├── snippets
 └── templates
-    ├── 2024.md.j2
+    ├── ...        # these jinja templates are the index pages; these set <in_index to true>
     ├── 2025.md.j2
     ├── 2026.md.j2
     ├── footer.html.j2

@@ -90,7 +90,7 @@ if __name__ == "__main__":
         with open(filename) as f:
             content = f.read()
             if content:
-                message = f"check in the git diff if this file {filename} changed, if it is a markdown and it changed, evaluate its content: {content}"
+                message = f"for the file {filename}, if it is a markdown, evaluate its content: {content}"
                 log.info(evaluate(msg=message))
     except IOError:
         log.error(f"File {filename} could not be read")

@@ -17,7 +17,7 @@ def echo(input: str) -> str | None:
     return input
 
 
-tools = [echo]
+tools = []
 
 
 def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
@@ -67,9 +67,9 @@ def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
                     if isinstance(messages[1], AIMessage):
                         output = messages[1].content
                     else:
-                        log.error("No AI message was received")
+                        log.error(f"No AI message was received: {result}")
                 else:
-                    log.error("Malformed response was received")
+                    log.error(f"Malformed response was received: {result}")
     return output
 
 

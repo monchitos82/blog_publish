@@ -69,17 +69,17 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
             files = list_of_files(
                 dirname=item, extension=extension, clean_extension=False
             )
-            for file_ in files:
+            for filename in files:
                 try:
-                    filename = file_.split("/")[-1]
-                    if f"{site}/{filename}" == f"{dest}/{filename}":
-                        shutil.copy2(src=file_, dst=site)
+                    split_filename = filename.split("/")
+                    if len(split_filename[:-1]) == len(site):
+                        shutil.copy2(src=filename, dst=site)
                     else:
-                        log.warning(f"Copying {file_} into {site} as {dest}/{filename} cannot be done")
-                    log.debug(f"Static file {file_} copied to {dest}")
+                        log.warning(f"Copying {filename} into {dest} as {site}/{split_filename[-1]} cannot be done")
+                    log.debug(f"Static file {filename} copied to {dest}")
 
                 except OSError as error:
-                    log.error(f"Copy of static file {file_} failed, error: {error}")
+                    log.error(f"Copy of static file {filename} failed, error: {error}")
                     return False
     return True
 

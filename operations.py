@@ -54,7 +54,8 @@ async def build_year_index(
         year_content = "<ul>\n"
         for post in sorted(
             list_of_files(f"{src}/posts/{year}", clean_extension=False),
-            key=lambda f: f.split("/")[-1][:5]
+            key=lambda f: f.split("/")[-1][:5],
+            reverse=True
         ):
             title = extract_post_title(filename=post)
             if title:

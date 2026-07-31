@@ -51,7 +51,7 @@ def setup_otel_logging(log: logging.Logger) -> None:
     set_logger_provider(logger_provider)
 
     exporter = OTLPLogExporter(
-        endpoint="host.containers.internal:6831", insecure=True
+        endpoint="host.containers.internal:4317", insecure=True
     )
 
     logger_provider.add_log_record_processor(BatchLogRecordProcessor(exporter))

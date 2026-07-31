@@ -176,15 +176,15 @@ pipeline {
             }
             steps {
                 sh '''
-                echo "---" > ${LOCAL_PATH_SITE}/llm_summary.md
+                echo "---" > ${LOCAL_PATH_SITE}/llm_summary.txt
                 cd ${SRC}
                 CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
                 cd -
                 for filename in ${CHANGED_FILES}; do
-                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/llm_summary.md
+                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/llm_summary.txt
                     PYTHONPATH=/home/jenkins/agent/workspace/blog_builder
-                    $HOME/.local/bin/uv run tools/llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.md
-                    echo "" >> ${LOCAL_PATH_SITE}/llm_summary.md
+                    $HOME/.local/bin/uv run tools/llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.txt
+                    echo "" >> ${LOCAL_PATH_SITE}/llm_summary.txt
                 done
                 '''
             }

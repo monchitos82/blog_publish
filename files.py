@@ -95,6 +95,7 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
             files = list_of_files(
                 dirname=item, extension=extension, clean_extension=False
             )
+            print(files, statics)
             for filename in files:
                 split_filename = filename.split("/")
                 if any([item.startswith(".") for item in split_filename[1:]]):

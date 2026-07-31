@@ -185,7 +185,7 @@ def test_title_h4_href_with_real_context(jinja_env):
     expect = """
     <h4>
       <a name="foo_bar_10_10_2026" href="https://example.com/foobar.html#foo_bar_10_10_2026">
-        Foo Bar (10/10/2026)
+        foo bar (10/10/2026)
       </a>
     </h4>
     """

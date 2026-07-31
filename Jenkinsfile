@@ -100,6 +100,13 @@ pipeline {
             }
 
         }
+        stage('Test') {
+          steps {
+            sh '''
+            $HOME/.local/bin/uv run pytest
+            '''
+          }
+        }
         stage('Local Publish') {
             steps {
                 sh """

@@ -17,7 +17,7 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
     return f"""
     <h4>
       <a name=\"{html_title}\" href=\"{base_url}/{path}#{html_title}\">
-        {title.title()} ({date})
+        {title} ({date})
       </a>
     </h4>
     """

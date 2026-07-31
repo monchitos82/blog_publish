@@ -35,19 +35,12 @@ YEARS = ["2024", "2025", "2026"]
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../pages")
 
+# These are directory and extensions that should be copied, the rest is ignored
 STATICS = {
     f"{SRC}": [".txt", ".ico"],
     f"{SRC}/assets": [".css", ".js"],
     f"{SRC}/img": [".png"],
 }
-
-@dataclass
-class Entry:
-    _id: str = None
-    title: str = None
-    link: str = None
-    pub: str = None
-
 
 def render_template(filename: str, **kwargs) -> str:
     """Render a filename template using jinja2."""

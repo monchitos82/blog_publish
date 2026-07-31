@@ -129,8 +129,6 @@ if __name__ == "__main__":
                     **file_arguments,
                 )
 
-            print(file_arguments)
-
             html_save = save_as_html(
                 filename=filename,
                 header=file_header,

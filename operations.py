@@ -102,9 +102,9 @@ def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
             if title and title not in get_index_titles(year=year, src=src):
                 formatted_filename = filename.split("/")[-1].split(".")[0]
                 entry = (
-                    '    <li><h3><a href="{{ base_url }}/posts/'
+                    '    <li><h4><a href="{{ base_url }}/posts/'
                     + f'{year}/{formatted_filename}.html">'
-                    + f"{title}</a></h3></li>\n"
+                    + f"{title}</a></h4></li>\n"
                 )
                 # making sure it's not appending twice the same line
                 if entry != year_index_data[1]:

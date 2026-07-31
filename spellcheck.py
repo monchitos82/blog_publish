@@ -45,17 +45,13 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
                 log.error(f"No response was given, error: {error}")
                 return
 
-            if result:
-                messages = result.get("messages", [])
-                if messages and len(messages) >= 1:
-                    for message_ in messages:
-                        if isinstance(message_, AIMessage):
-                            output = message_.content
-                            return output
-                    if not output:
-                        log.error(f"No AI message was received: {messages}")
-                else:
-                    log.error(f"Malformed response was received: {result}")
+            if result and isinstance(result, AIMessage):
+                try:
+                    output = result.content
+                except AttributeError as error:
+                    log.error(f"No AI message was received, error: {error}")
+            else:
+                log.error(f"Malformed response was received: {result}")
     return output
 
 

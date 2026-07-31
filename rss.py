@@ -10,11 +10,17 @@ log = logging.getLogger(__name__)
 def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> None: 
     """Generate a feed xml for an RSS feed."""
     try:
+        author = settings.get("author", "")
+        base_url = settings.get("base_url", "")
+        site_name = settings.get("site_name", "")
+        site_title = settings.get("title", "")
+        
+
         fg = FeedGenerator()
-        fg.id(settings.get("site_name", ""))
-        fg.title(settings.get("title", ""))
-        fg.author({"name": settings.get("author", "")})
-        fg.link(href=settings.get("base_url"), rel="alternate")
+        fg.id(site_name)
+        fg.title(site_title)
+        fg.author({"name": author})
+        fg.link(href=base_url, rel="alternate")
         fg.subtitle("Updates from my blog")
         fg.language("en")
 
@@ -31,7 +37,7 @@ def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> Non
                 title_date = title[-7:]
                 title_text = title[:-8]
                 filename = post.split("/")[-1].split(".")[0]
-                title_url = f"{settings.get('base_url')}/posts/{year}/{filename}.html"
+                title_url = f"{base_url}/posts/{year}/{filename}.html"
 
                 print(title_date, title_text, title_url)
 

@@ -102,7 +102,6 @@ pipeline {
                 mkdir -p /opt/deploy
                 rm -rf ./last
                 mkdir -p ./last
-                touch ./last/$(date +%d-%m-%Y_%H:%M:%S_%Z_%s)
                 cp -r /opt/deploy ./last
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +

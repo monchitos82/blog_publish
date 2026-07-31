@@ -42,7 +42,6 @@ def test_build_year_index_creates_index(tmp_path):
         years=["2026"],
         header="<header/>",
         footer="<footer/>",
-        tracking_url=None,
     )
     assert result is True
     index = dest / "posts" / "2026.html"
@@ -65,7 +64,6 @@ def test_build_year_index_empty_year(tmp_path):
         years=["2026"],
         header="",
         footer="",
-        tracking_url=None,
     )
     assert result is True
 
@@ -86,7 +84,6 @@ def test_build_year_index_skips_posts_without_h3_title(tmp_path):
         years=["2026"],
         header="",
         footer="",
-        tracking_url=None,
     )
     content = (dest / "posts" / "2026.html").read_text()
     assert "no-title" not in content

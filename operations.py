@@ -29,7 +29,6 @@ def build_year_index(
     years: list,
     header: str,
     footer: str,
-    tracking_url: str,
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
@@ -58,8 +57,6 @@ def build_year_index(
             footer=footer,
             content=year_content,
             replace={src: dest},
-            tracking_url=tracking_url,
-            title=f"{year} index",
         ):
             log.error(f"Failed to save index file for {year}")
             return False

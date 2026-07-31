@@ -64,8 +64,6 @@ def test_save_as_html_creates_file(tmp_path):
         footer="<footer/>",
         content="<p>hello</p>",
         replace={},
-        tracking_url=None,
-        title=None,
     )
     assert result is True
     assert (tmp_path / "page.html").exists()
@@ -83,8 +81,6 @@ def test_save_as_html_applies_replace(tmp_path):
         footer="",
         content="<p>hi</p>",
         replace={str(src): str(dest)},
-        tracking_url=None,
-        title=None,
     )
     assert (dest / "page.html").exists()
 
@@ -96,43 +92,8 @@ def test_save_as_html_empty_content_returns_false(tmp_path):
         footer="",
         content="",
         replace={},
-        tracking_url=None,
-        title=None,
     )
     assert result is False
-
-
-def test_save_as_html_tracking_url_no_title(tmp_path):
-    filename = str(tmp_path / "a" / "b" / "page")
-    os.makedirs(str(tmp_path / "a" / "b"))
-    save_as_html(
-        filename=filename,
-        header="",
-        footer="",
-        content="<p>x</p>",
-        replace={},
-        tracking_url="https://track.example.com",
-        title=None,
-    )
-    content = (tmp_path / "a" / "b" / "page.html").read_text()
-    assert "track.example.com/count?p=" in content
-    assert "&t=" not in content
-
-
-def test_save_as_html_tracking_url_with_title(tmp_path):
-    filename = str(tmp_path / "a" / "b" / "page")
-    os.makedirs(str(tmp_path / "a" / "b"))
-    save_as_html(
-        filename=filename,
-        header="",
-        footer="",
-        content="<p>x</p>",
-        replace={},
-        tracking_url="https://track.example.com",
-        title="My Post",
-    )
-    content = (tmp_path / "a" / "b" / "page.html").read_text()
-    assert "&t=My Post" in content
 
 
 def test_save_as_html_writes_header_and_footer(tmp_path):
@@ -143,8 +104,6 @@ def test_save_as_html_writes_header_and_footer(tmp_path):
         footer="<FOOTER>",
         content="<p>body</p>",
         replace={},
-        tracking_url=None,
-        title=None,
     )
     content = (tmp_path / "page.html").read_text()
     assert content.startswith("<HEADER>")

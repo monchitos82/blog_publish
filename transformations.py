@@ -139,8 +139,6 @@ def save_as_html(
     footer: str,
     content: str,
     replace: dict,
-    tracking_url: str | None,
-    title: str | None,
 ) -> bool:
     """Save content as html file."""
     html_filename = filename
@@ -154,13 +152,6 @@ def save_as_html(
             with open(html_filename, "w+", encoding="utf-8") as html_file:
                 html_file.write(header)
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
-                # on build this will have the ./src prefix, cleaning it up
-                if tracking_url:
-                    no_path_filename = ("/").join(html_filename.split("/")[2:])
-                    tracking_element = f'\n    <img style="display:none;" src="{tracking_url}/count?p=/{no_path_filename}">\n'
-                    if title is not None:
-                        tracking_element = f'\n    <img style="display:none;" src="{tracking_url}/count?p=/{no_path_filename}&t={title}">\n'
-                    html_file.write(tracking_element)
                 html_file.write(footer)
         except OSError as error:
             log.error(f"Failed to save {html_filename}, error: {error}")

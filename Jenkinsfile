@@ -4,8 +4,7 @@ pipeline {
         // site specifics
         AUTHOR = "Ramon Garcia"
         ACCOUNT = "ramongamx"
-        TITLE = "Ramon Garcia's blog"
-        SITE_NAME = "ramongamx"
+        SITE_NAME = "${ACCOUNT}.neocities.org"
         SOURCE = "blog"
 
         //build specifics

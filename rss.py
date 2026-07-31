@@ -21,7 +21,6 @@ def generate_rss_feed(
 ) -> bool:
     """Generate a feed xml for an RSS feed."""
     try:
-
         fg = FeedGenerator()
         fg.id(site_name)
         fg.title(site_title)
@@ -42,8 +41,10 @@ def generate_rss_feed(
                     continue
                 title = extract_post_title(filename=post)
                 # titles are in a format "title text (mm/yy)"
-                title_date = title[-7:]
-                title_text = title[:-8]
+                title_text, title_date = None, None
+                if title and len(title) > 8:
+                    title_date = title[-7:]
+                    title_text = title[:-8]
                 filename = post.split("/")[-1].split(".")[0]
                 title_url = f"{base_url}/posts/{year}/{filename}.html"
 

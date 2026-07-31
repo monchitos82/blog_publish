@@ -13,7 +13,7 @@ from files import (
     list_of_files,
     load_file_content,
 )
-from operations import build_year_index, extract_post_title
+from operations import build_year_index
 from rss import generate_rss_feed
 from transformations import (
     parse_markdown,
@@ -34,8 +34,6 @@ LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
-TRACKING = os.getenv("TRACKING", "")
-TITLE = os.getenv("TITLE", "")
 AUTHOR = os.getenv("AUTHOR", "")
 EMAIL = os.getenv("EMAIL", "")
 SITE_NAME = os.getenv("SITE_NAME", "")
@@ -73,8 +71,6 @@ if __name__ == "__main__":
         "in_post": False,
         "progressbar": True,
         "menu": None,
-        "title": TITLE,
-        "tracking_url": TRACKING,
         "year": None,
         "years": YEARS,
     }
@@ -130,8 +126,6 @@ if __name__ == "__main__":
             footer=file_footer,
             content=content,
             replace={SRC: DEST},
-            tracking_url=TRACKING,
-            title=extract_post_title(f"{filename}.md"),
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")
@@ -157,7 +151,6 @@ if __name__ == "__main__":
         years=YEARS,
         header=index_header,
         footer=index_footer,
-        tracking_url=TRACKING,
     )
 
     # if all year indexes are ready we can build the index from them
@@ -183,7 +176,7 @@ if __name__ == "__main__":
                 email=EMAIL,
                 base_url=BASE_URL,
                 site_name=SITE_NAME,
-                site_title=TITLE,
+                site_title=SITE_NAME,
             ):
                 log.warning("The RSS feed could not be generated")
 

@@ -1,20 +1,31 @@
 import logging
-
 from datetime import datetime
+
 from feedgen.feed import FeedGenerator
+
 from files import list_of_files
 from operations import extract_post_title
 
 log = logging.getLogger(__name__)
 
-def generate_rss_feed(src: str, dest: str, years: list, author: str, base_url: str, site_name: str, site_title: str) -> bool: 
+
+def generate_rss_feed(
+    src: str,
+    dest: str,
+    years: list,
+    author: str,
+    base_url: str,
+    email: str,
+    site_name: str,
+    site_title: str,
+) -> bool:
     """Generate a feed xml for an RSS feed."""
     try:
 
         fg = FeedGenerator()
         fg.id(site_name)
         fg.title(site_title)
-        fg.author(name=author)
+        fg.author(name=author, email=email)
         fg.logo(f"{base_url}/img/favicon.ico")
         fg.link(href=base_url, rel="alternate")
         fg.subtitle("Updates from my blog")
@@ -38,7 +49,11 @@ def generate_rss_feed(src: str, dest: str, years: list, author: str, base_url: s
                     fe.id(title)
                     fe.title(title_text)
                     fe.link(href=title_url)
-                    fe.pubDate(datetime.strptime(title_date, "(%m/%y)").strftime("%Y-%m-%dT%H:%M:%SZ"))
+                    fe.pubDate(
+                        datetime.strptime(title_date, "(%m/%y)").strftime(
+                            "%Y-%m-%dT%H:%M:%SZ"
+                        )
+                    )
 
         fg.rss_file(f"{dest}/feed.xml", pretty=True)
         fg.atom_file(f"{dest}/atom.xml", pretty=True)

@@ -26,6 +26,7 @@ DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
 TITLE = os.getenv("TITLE", None)
 AUTHOR = os.getenv("AUTHOR", None)
+EMAIL = os.getenv("EMAIL", None)
 ACCOUNT = os.getenv("ACCOUNT", None)
 
 
@@ -176,6 +177,7 @@ if __name__ == "__main__":
         rss_settings = {
             "site_name": ACCOUNT,
             "author": AUTHOR,
+            "email": EMAIL,
             "base_url": BASE_URL,
             "title": TITLE,
         }

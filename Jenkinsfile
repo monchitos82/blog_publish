@@ -6,6 +6,7 @@ pipeline {
         ACCOUNT = "ramongarciamx"
         SOURCE = "rgarciamx"
         AUTHOR = "Ramon Garcia"
+        EMAIL = "${ACCOUNT}@proton.me"
         TITLE = "Ramon's blog"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         TRACKING = "https://${ACCOUNT}.goatcounter.com"
@@ -15,6 +16,7 @@ pipeline {
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1
         INDEX_PAGES = "index, about, notes"
+
     }
     parameters {
         booleanParam(

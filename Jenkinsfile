@@ -169,6 +169,7 @@ pipeline {
                             sh '''
                             cd ..
                             git clone ${SITE_PAGES_URL}
+                            cd ..
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
                             find ${SITE_PAGES} -type f -exec sed -i 's|${BASE_URL}|${CODEBERG_PAGES_URL}|g' {} +
@@ -183,7 +184,7 @@ pipeline {
                             cd ${SITE_PAGES}
                             git pull
                             cd ..
-                            cp ${SITE_DIR} ${SITE_PAGES}
+                            cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
                             find ${SITE_PAGES} -type f -exec sed -i 's|${BASE_URL}|${CODEBERG_PAGES_URL}|g' {} +
                             git add -A

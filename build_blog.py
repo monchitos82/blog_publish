@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=SRC):
         split_filename = filename.split("/")
-        if "README" in filename or split_filename[-1].startswith("."):
+        if split_filename[-1] == 'README' or split_filename[-1].startswith("."):
             continue
 
         raw_content = load_file_content(filename, extension="md")

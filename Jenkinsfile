@@ -172,6 +172,7 @@ pipeline {
                             cd ..
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
+                            echo "${CODEBERG_PAGES_URL}"
                             find . -type f -exec sed -i 's|${BASE_URL}|${CODEBERG_PAGES_URL}|g' {} +
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"

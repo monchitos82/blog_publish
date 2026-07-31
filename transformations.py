@@ -1,5 +1,5 @@
-import sys
 import logging
+import sys
 import urllib.parse
 
 import markdown
@@ -41,7 +41,9 @@ def render_template(filename: str, **kwargs) -> str:
     return content
 
 
-def render_content_as_template(content: str, functions: list = JINJA_FUNCTIONS, **kwargs) -> str:
+def render_content_as_template(
+    content: str, functions: list = JINJA_FUNCTIONS, **kwargs
+) -> str:
     """Render content as a template using jinja2 (no file used here)."""
     try:
         template_as_content = Template(content)

@@ -12,6 +12,7 @@ def test_load_file_content(tmp_path):
     content = load_file_content(filename=src)
     assert content == "foo"
 
+
 def test_load_file_content_too_large(tmp_path):
     src = tmp_path / "a.md"
     src.write_text("foo bar")

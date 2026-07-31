@@ -42,8 +42,7 @@ In the following example, we can add the `/extras` directory, where only `.txt` 
 
 ```
     STATICS = {
-        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
-        f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
+        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt")),
         f"{SRC}/extras": (".txt",),
     }
 ```

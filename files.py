@@ -53,6 +53,7 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
             os.mkdir(dest)
         elif not os.path.isdir(dest):
             # if the destination is not a dir, backup and create a dir
+            log.warning(f"Copying directory to the destination {dest} a file with the same name was found")
             os.rename(src=dest, dst=f"{dest}.backup")
             os.mkdir(dest)
 

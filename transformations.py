@@ -2,18 +2,20 @@ import logging
 import urllib.parse
 
 import markdown
-from jinja2 import Template
+from jinja2 import Template, pass_context
 from jinja2.exceptions import TemplateError
 
 log = logging.getLogger(__name__)
 
 
-def title_h4_href(title: str, date: str, path: str = ".") -> str:
+@pass_context
+def title_h4_href(title: str, date: str, path: str, context) -> str:
     log.info(f"Title is: {title} and path is: {path}")
+    base_url = context.get("base_url")
     html_title = f"{urllib.parse.quote(title)}_{date.replace('/', '_')}"
     return f"""
       <h4>
-        <a name=\"{html_title}\" href=\"{path}#{html_title}\">
+        <a name=\"{html_title}\" href=\"{base_url}/{path}#{html_title}\">
           {title.replace("_", " ").title()} ({date})
         </a>
       </h4>

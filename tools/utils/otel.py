@@ -51,7 +51,8 @@ def setup_otel_logging(log: logging.Logger) -> None:
     set_logger_provider(logger_provider)
 
     exporter = OTLPLogExporter(
-        endpoint="host.containers.internal:4317", insecure=True
+        endpoint=f"{os.getenv("OTEL_HOST", "host.containers.internal")}:{os.getenv("OTEL_PORT", 4317)}",
+        insecure=True
     )
 
     logger_provider.add_log_record_processor(BatchLogRecordProcessor(exporter))
@@ -60,7 +61,7 @@ def setup_otel_logging(log: logging.Logger) -> None:
     log.addHandler(handler)
 
 
-def setup_otel_tracing() -> trace:
+def setup_otel_tracing() -> trace.Tracer:
     resource = Resource.create(
         {
             "service.name": "blog_builder",
@@ -80,11 +81,11 @@ def setup_otel_tracing() -> trace:
     trace.get_tracer_provider().add_span_processor(
         SimpleSpanProcessor(otlp_tracing_exporter)
     )
-    return trace
+    return trace.get_tracer("blog_builder")
 
 
 def setup_otel_metrics() -> tuple:
-    instance_id = os.getenv("POD_NAME", 1)
+    instance_id = os.getenv("POD_NAME", "Undefined")
     resource = Resource.create(
         {
             "service.name": "blog_builder",
@@ -92,7 +93,7 @@ def setup_otel_metrics() -> tuple:
         }
     )
     metric_exporter = OTLPMetricExporter(
-        endpoint="host.containers.internal:4317",
+        endpoint=f"{os.getenv("OTEL_HOST", "host.containers.internal")}:{os.getenv("OTEL_PORT", 4317)}",
         insecure=True,
     )
     reader = PeriodicExportingMetricReader(
@@ -106,4 +107,4 @@ def setup_otel_metrics() -> tuple:
     counter = meter.create_counter(
         name="requests", description="Number of requests", unit="1"
     )
-    return metrics, counter
+    return meter, counter

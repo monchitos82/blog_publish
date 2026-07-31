@@ -38,13 +38,15 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                sh '''
-                    . ${VENV_DIR}/bin/activate
-                    cd pages
-                    git add -A
-                    git commit -am \"Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)\"
-                    git push origin master
-                '''
+                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update pages'){
+                    sh '''
+                        . ${VENV_DIR}/bin/activate
+                        cd pages
+                        git add -A
+                        git commit -am \"Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)\"
+                        git push origin master
+                    '''
+                }
             }
         }
     }

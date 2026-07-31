@@ -1,28 +1,16 @@
 import logging
 import os
-import subprocess
 import sys
 
-from langchain.agents import create_agent
-from langchain.tools import tool
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
 log = logging.getLogger(__name__)
 
 
-@tool
-def echo(input: str) -> str | None:
-    """Will repeat back its input"""
-    return input
-
-
-tools = []
-
-
-def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
+def evaluate_prompt(message: str, system_prompt: str) -> str | None:
     model = None
-    agent = None
     result = {}
     output = None
     try:
@@ -39,24 +27,20 @@ def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
 
     if model:
         try:
-            agent = create_agent(
-                model=model,
-                tools=tools,
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    ("system", system_prompt),
+                    ("human", "{message}"),
+                ]
             )
+            chain = prompt | model
         except Exception as error:
             log.error(f"No agent was setup for the model, error: {error}")
             return
 
-        if agent:
+        if chain:
             try:
-                result = agent.invoke(
-                    {
-                        "messages": [
-                            SystemMessage(content=system_prompt),
-                            HumanMessage(content=msg),
-                        ]
-                    }
-                )
+                result = chain.invoke({"message": message})
             except Exception as error:
                 log.error(f"No response was given, error: {error}")
                 return
@@ -64,10 +48,12 @@ def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
             if result:
                 messages = result.get("messages", [])
                 if messages and len(messages) >= 1:
-                    if isinstance(messages[1], AIMessage):
-                        output = messages[1].content
-                    else:
-                        log.error(f"No AI message was received: {result}")
+                    for message_ in messages:
+                        if isinstance(message_, AIMessage):
+                            output = message_.content
+                            return output
+                    if not output:
+                        log.error(f"No AI message was received: {messages}")
                 else:
                     log.error(f"Malformed response was received: {result}")
     return output
@@ -76,7 +62,7 @@ def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
 if __name__ == "__main__":
     filename = sys.argv[1]
 
-    agent_prompt = """
+    action_prompt = """
     You are an assistant whose function is to validate content is grammatically correct"
     """
 
@@ -87,17 +73,16 @@ if __name__ == "__main__":
         log.error(f"Could not read base prompt, error: {error}")
         base_prompt = ""
 
-    system_prompt = base_prompt + "\n" + agent_prompt
+    system_prompt = base_prompt + "\n" + action_prompt
     try:
         with open(filename) as f:
             content = f.read()
             if content:
                 message = f"for the file {filename}, if it is a markdown, evaluate if it is grammatically correct: {content}"
                 print(
-                    evaluate(
-                        msg=message,
+                    evaluate_prompt(
+                        message=message,
                         system_prompt=system_prompt,
-                        tools=tools,
                     )
                 )
     except IOError:

@@ -157,7 +157,7 @@ pipeline {
                 cd -
                 for filename in ${CHANGED_FILES}; do
                     echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
-                    $HOME/.local/bin/uv run spellcheck_agent.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/spellcheck_.txt
+                    $HOME/.local/bin/uv run spellcheck.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/spellcheck_.txt
                     echo "" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
                 done
                 '''

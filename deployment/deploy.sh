@@ -12,7 +12,7 @@ find ./blog/ -name '.git' -delete
 
 # rename
 find ./blog/ -type f -exec sed -i "s|${BASE_URL}|${PAGES_URL}|g" {} +
-find ./blog/ -type f -exec sed -i "s|${TRACKING}|${PAGES_TRACKING}|g" {} +
+find ./blog/ -type f -exec sed -i "s|${TRACKING}|${PAGES_TRACKING}|g" {} +
 
 # upload
 ../.venv/bin/python neocities_upload.py

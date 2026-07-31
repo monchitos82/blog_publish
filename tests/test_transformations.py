@@ -26,7 +26,7 @@ def test_parse_template_renders_variables(tmp_path):
 
 
 def test_parse_template_missing_file_returns_empty():
-    assert parse_template("/nonexistent/template.j2") == None
+    assert parse_template("/nonexistent/template.j2") == ""
 
 
 def test_parse_template_no_variables(tmp_path):

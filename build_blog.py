@@ -120,7 +120,6 @@ if __name__ == "__main__":
 
         if "<!-- NO_RENDER -->" not in content:
             content = parse_template(
-                filename=None,
                 content=content,
                 **file_arguments,
             )

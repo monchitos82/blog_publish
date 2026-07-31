@@ -29,41 +29,50 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
 
 
 def parse_template(
-    filename: str | None = None,
-    content: str | None = None,
+    filename: str = "",
+    content: str = "",
     functions: list = JINJA_FUNCTIONS,
     **kwargs,
-) -> str | None:
+) -> str:
     """Render a filename template using jinja2."""
     try:
+        template = None
         if not content and not filename:
             log.error(
                 "Parse template requires either a filename (preferred) or content"
             )
-            return None
+            return ""
         elif filename:
             try:
                 with open(filename) as template_file:
                     template = Template(source=template_file.read())
             except OSError as err:
                 log.error(f"Could not open the template, error: {err}")
-                return None
+                return ""
         elif content:
             template = Template(content)
-        current_module = sys.modules[__name__]
-        for function in functions:
-            try:
-                template.globals[function] = getattr(current_module, function)
-            except AttributeError:
-                log.warning(f"Function: {function} has not been declared in the module")
-        content = template.render(kwargs)
+        if template:
+            current_module = sys.modules[__name__]
+            for function in functions:
+                try:
+                    template.globals[function] = getattr(current_module, function)
+                except AttributeError:
+                    log.warning(
+                        f"Function: {function} has not been declared in the module"
+                    )
+            content = template.render(kwargs)
     except TemplateError as err:
         log.error(f"Failed to render the template, error: {err}")
     return content
 
 
 def render_annotations(
-    src: str, filename: str, header: str, footer: str, content: str, **kwargs
+    src: str,
+    filename: str,
+    header: str,
+    footer: str,
+    content: str,
+    **kwargs,
 ) -> tuple:
     """Render annotations and transformation for specific filename cases"""
     file_header = header
@@ -91,27 +100,28 @@ def render_annotations(
             **file_arguments,
         )
 
-    if "<!-- NAV_MAIN -->" in content:
-        file_arguments["in_index"] = True
-        file_footer = parse_template(
-            filename=f"{src}/templates/footer.html.j2",
-            **file_arguments,
-        )
+    if content:
+        if "<!-- NAV_MAIN -->" in content:
+            file_arguments["in_index"] = True
+            file_footer = parse_template(
+                filename=f"{src}/templates/footer.html.j2",
+                **file_arguments,
+            )
 
-    if "<!-- NAV_MAIN_ES -->" in content:
-        file_arguments["in_index"] = True
-        file_arguments["in_es"] = True
-        file_footer = parse_template(
-            filename=f"{src}/templates/footer.html.j2",
-            **file_arguments,
-        )
+        if "<!-- NAV_MAIN_ES -->" in content:
+            file_arguments["in_index"] = True
+            file_arguments["in_es"] = True
+            file_footer = parse_template(
+                filename=f"{src}/templates/footer.html.j2",
+                **file_arguments,
+            )
 
-    if "<!-- NO_PROGRESSBAR -->" in content:
-        file_arguments["progressbar"] = False
-        file_header = parse_template(
-            filename=f"{src}/templates/header.html.j2",
-            **file_arguments,
-        )
+        if "<!-- NO_PROGRESSBAR -->" in content:
+            file_arguments["progressbar"] = False
+            file_header = parse_template(
+                filename=f"{src}/templates/header.html.j2",
+                **file_arguments,
+            )
     return (file_header, file_footer)
 
 
@@ -133,9 +143,9 @@ def parse_markdown(content: str) -> str:
 
 def save_as_html(
     filename: str,
-    header: str | None,
-    footer: str | None,
-    content: str | None,
+    header: str,
+    footer: str,
+    content: str,
     replace: dict,
     tracking_url: str | None,
     title: str | None,

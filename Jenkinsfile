@@ -4,7 +4,7 @@ pipeline {
         // site specifics
         AUTHOR = "Ramon Garcia"
         ACCOUNT = "ramongamx"
-        EMAIL = "${ACCOUNT}@proton.me"
+        EMAIL = "UNDEFINED@"
         TITLE = "Ramon G"
         SITE_NAME = "ramongamx"
         SOURCE = "ramongamx"

@@ -45,19 +45,32 @@ pipeline {
                         dir("${SOURCE}") { deleteDir() }
                         dir("pages") { deleteDir() }
                         sh '''
-                            # clone my sources
                             git clone ${GIT_URL}/${SOURCE}
                             git clone ${GIT_URL}/pages
                         '''
-                    } else {
-                        sh '''
-                            # update my sources
+                    else {
+                        if (fileExists '/home/jenkins/agent/workspace/blog/${SOURCE}') {
+                            sh '''
                             cd ${SOURCE}
-                            git pull ${GIT_URL}
+                            git pull
                             cd ..
+                            '''
+                        else {
+                            sh '''
+                            git clone ${GIT_URL}/${SOURCE}
+                            '''
+                        }
+                        if (fileExists '/home/jenkins/agent/workspace/blog/pages') {
+                            sh '''
                             cd pages
                             git pull
-                        '''
+                            cd ..
+                            '''
+                        else {
+                            sh '''
+                            git clone ${GIT_URL}/pages
+                            '''
+                        }
                     }
                 }
             }

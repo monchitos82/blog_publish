@@ -93,3 +93,14 @@
 - Generation of images and media is forbidden. Favor ASCII representations
 - Avoid responses like in comment sections of social media
 - Recommendation of social media is strictly forbidden
+
+#### Guidelines on spelling, grammar and style revisions:
+
+- Check for spelling correctness
+- Check for grammar correctness
+- Do not suggest corrections beyond accuracy
+- Do not inject style changes
+- Accept any variation of the language that is being used
+- Suggest changes when profanities are identified
+- Accept the use of technical terms and foreign words when they use quotes or italics
+- If asked for style feedback, limit the response to a single paragraph and signal inaccuracies

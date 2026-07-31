@@ -6,7 +6,7 @@ I am publishing this independently because I want it to be useful beyond my own 
 To trigger the build we just need:
 a) A source with all the markdown files. In this case, my blog has a simple structure:
 ```
-rgarciamx/
+myblog/
 ├── archive
 ├── assets
 │   ├── index.md
@@ -31,12 +31,13 @@ rgarciamx/
     ├── header.html.j2
     └── menu.html.j2
 ```
-The templates (`j2`) are autopopulated with the contents of `/posts/<<year>>/` so pretty much all I have to do is write my posts as markdown and let the build script take care of the rest.
+The templates (`j2`) are auto-populated with the contents of `/posts/<<year>>/` so pretty much all I have to do is write my posts as markdown and let the build script take care of the rest. Within the Python file there is a list of years, ideally, every new year we add a directory to `posts/` and a `<<year>>.md.j2` template so the new files are detected and the indexes populated.
+
 The publishing process relies on Codeberg Pages, so a `pages` repository is needed.
 
 There are some variables needed to run the script:
 
-`BASE_URL` This is the codeberg pages URL for my user
+`BASE_URL` This is the Codeberg pages URL for my user
 `SRC`      This is the path to my source repository
 `DEST`     This is the path to my pages repository, defaults to "../pages"
 

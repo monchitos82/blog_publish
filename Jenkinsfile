@@ -81,8 +81,7 @@ pipeline {
         stage('Publish Local') {
             steps {
                 sh """
-                mkdir -p /opt/deploy/site
-                cp -r ./site/* /opt/deploy/site/
+                cp -r site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
                 """
             }

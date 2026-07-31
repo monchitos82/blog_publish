@@ -4,8 +4,7 @@ pipeline {
         // site specifics
         AUTHOR = "Ramon Garcia"
         ACCOUNT = "ramongamx"
-        EMAIL = "UNDEFINED@"
-        TITLE = "Ramon G"
+        TITLE = "Ramon Garcia's blog"
         SITE_NAME = "ramongamx"
         SOURCE = "ramongamx"
 

@@ -82,13 +82,13 @@ if __name__ == "__main__":
     for filename in list_of_files(dirname=base_dirname):
         file_footer = footer
         split_filename = filename.split("/")
-        scrollbar = False
+        progressbar = False
         if "README" in filename or split_filename[-1].startswith("."):
             continue
 
         content = parse_markdown_file(filename=filename)
         if "<!-- SCROLLABLE -->" in content:
-            scrollbar = True
+            progressbar = True
 
         if filename == f"{SRC}/index":
             # base, index.md at root
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                     "base_url": BASE_URL,
                     "tracking_url": TRACKING,
                     "in_main": True,
-                    "scrollbar": scrollbar,
+                    "progressbar": progressbar,
                 },
             )
         if "<!-- NAV_MAIN -->" in content:
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                 **{
                     "base_url": BASE_URL,
                     "in_index": True,
-                    "scrollbar": scrollbar,
+                    "progressbar": progressbar,
                 },
             )
         else:
@@ -123,7 +123,7 @@ if __name__ == "__main__":
                         "year": year,
                         "in_post": True,
                         "page_name": f"{page}",
-                        "scrollbar": scrollbar,
+                        "progressbar": progressbar,
                     },
                 )
 

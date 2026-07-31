@@ -4,6 +4,7 @@ import sys
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
+from otel import setup_otel_instrumentation
 
 log = logging.getLogger(__name__)
 
@@ -25,6 +26,7 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
         return
 
     if model:
+        setup_otel_instrumentation()
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=message)]
         try:
             result = model.invoke(messages)

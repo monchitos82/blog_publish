@@ -102,7 +102,7 @@ if __name__ == "__main__":
             file_errors = True
             break
 
-    last_file = find_last_post(year=LAST_YEAR, src=SRC)
+    last_file = find_last_post(src=SRC, year=LAST_YEAR)
     if not last_file:
         log.error(
             "There is a conflict in post creation timestamps, the process will stop"
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     year_indexes = None
     YEARS = [LAST_YEAR]
 
-    if append_last_title_to_index(filename=last_file, year=LAST_YEAR, src=SRC):
+    if append_last_title_to_index(src=SRC, filename=last_file, year=LAST_YEAR):
         last_year = int(LAST_YEAR)
         first_year = last_year - int(YEAR_LOOKBACK)
         YEARS = [str(year) for year in range(first_year, last_year + 1)]
@@ -124,12 +124,12 @@ if __name__ == "__main__":
         )
         year_indexes = asyncio.run(
             build_year_index(
-                years=YEARS,
-                header=header,
-                footer=index_footer,
                 src=SRC,
                 dest=DEST,
                 base_url=BASE_URL,
+                years=YEARS,
+                header=header,
+                footer=index_footer,
             )
         )
 

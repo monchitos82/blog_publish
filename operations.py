@@ -32,7 +32,7 @@ async def has_broken_anchors(dest: str) -> bool:
     return False
 
 
-def find_last_post(year: str, src: str) -> str:
+def find_last_post(src: str, year: str) -> str:
     """Find which file in the sources is the last one added."""
     existing_files = list_of_files(f"{src}/posts/{year}", clean_extension=False)
     last = None
@@ -66,7 +66,7 @@ def extract_post_title(filename: str) -> str:
     return None
 
 
-def get_index_titles(year: str, src: str) -> list:
+def get_index_titles(src: str, year: str) -> list:
     """Extract the titles for a year's index"""
     titles = []
     year_index = f"{src}/templates/{year}.md.j2"
@@ -81,7 +81,7 @@ def get_index_titles(year: str, src: str) -> list:
     return titles
 
 
-def append_last_title_to_index(filename: str, year: str, src: str) -> bool:
+def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
     """Append the last title to year index"""
     year_index = f"{src}/templates/{year}.md.j2"
     backup = f"{year_index}.backup"
@@ -126,7 +126,7 @@ def append_last_title_to_index(filename: str, year: str, src: str) -> bool:
 
 
 async def build_year_index(
-    years: list, header: str, footer: str, src: str, dest: str, base_url: str
+    src: str, dest: str, base_url: str, years: list, header: str, footer: str
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:

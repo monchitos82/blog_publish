@@ -23,7 +23,7 @@ pipeline {
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "../${SITE_DIR}"
-        SRC = "./${SOURCE}"
+        SRC = "../${SOURCE}"
         LOCAL_PATH_ROOT = "/opt/deploy"
         LOCAL_PATH = "${LOCAL_PATH_ROOT}/site"
         STABLE = "../last"
@@ -164,6 +164,7 @@ pipeline {
                     script {
                         if (fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                             sh '''
+                            pwd
                             echo "Pages is already present"
                             cd ..
                             git clone ${SITE_PAGES_URL}
@@ -176,6 +177,7 @@ pipeline {
                             '''
                         } else {
                             sh '''
+                            pwd
                             cd ${SITE_PAGES}
                             git pull
                             cp -r ${SOURCE}/${SITE_DIR} ${SITE_PAGES}

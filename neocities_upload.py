@@ -8,7 +8,7 @@ from neocitizen.errors import ApiError
 log = logging.getLogger(__name__)
 
 
-def upload_site(api_key: str = "", dest: str = "./site") -> bool:
+def upload_site(api_key: str = "", dest: str = "../site") -> bool:
     """Upload the site to neocities."""
     result = False
     try:

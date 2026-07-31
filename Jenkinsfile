@@ -146,7 +146,7 @@ pipeline {
         stage('Spell Check Content') {
             when {
                 expression {
-                    params.SPELL_CHECK == true
+                    params.SPELL_CHECK == true && params.LOCAL_VALIDATION == true
                 }
             }
             steps {

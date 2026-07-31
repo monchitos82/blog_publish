@@ -38,13 +38,14 @@ def generate_rss_feed(
                 list_of_files(f"{src}/posts/{year}", clean_extension=False),
                 key=lambda f: f.split("/")[-1][:5],
             ):
-                if "index." not in filename:
-                    title = extract_post_title(filename=post)
-                    # titles are in a format "title text (mm/yy)"
-                    title_date = title[-7:]
-                    title_text = title[:-8]
-                    filename = post.split("/")[-1].split(".")[0]
-                    title_url = f"{base_url}/posts/{year}/{filename}.html"
+                if "index" in post:
+                    continue
+                title = extract_post_title(filename=post)
+                # titles are in a format "title text (mm/yy)"
+                title_date = title[-7:]
+                title_text = title[:-8]
+                filename = post.split("/")[-1].split(".")[0]
+                title_url = f"{base_url}/posts/{year}/{filename}.html"
 
                 if title_text and title_date and title_url:
                     fe = fg.add_entry()

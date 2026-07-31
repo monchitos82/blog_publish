@@ -1,7 +1,6 @@
+import logging
 import os
 import sys
-
-import logging
 
 from neocitizen import NeocitiesApi
 from neocitizen.errors import ApiError
@@ -20,6 +19,7 @@ def upload_site(api_key: str = "", dest: str = "./site") -> bool:
     else:
         result = True
     return result
+
 
 if __name__ == "__main__":
     api_key = os.getenv("NEOCITIES_API_KEY", None)

@@ -30,7 +30,7 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
             os.mkdir(dest)
         elif not os.path.isdir(dest):
             # if the destination is not a dir, backup and create a dir
-            os.rename(src=dest, dst=f'{dest}.backup')
+            os.rename(src=dest, dst=f"{dest}.backup")
             os.mkdir(dest)
 
         for item in os.listdir(src):
@@ -73,15 +73,22 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
                 try:
                     shutil.copy2(src=filename, dst=site)
                     log.debug(f"Static file {filename} copied to {dest}")
-                    
+
                 except OSError as error:
                     log.error(f"Copy of static file {filename} failed, error: {error}")
 
 
-def clean_files(path: str, extension: str, target: list | None = None, keep_prefix: str | None = None ) -> bool:
+def clean_files(
+    path: str,
+    extension: str,
+    target: list | None = None,
+    keep_prefix: str | None = None,
+) -> bool:
     """Delete files from [path] with an [extension]."""
     for filename in list_of_files(
-        dirname=path, extension=extension, clean_extension=False,
+        dirname=path,
+        extension=extension,
+        clean_extension=False,
     ):
         if (
             target
@@ -97,7 +104,9 @@ def clean_files(path: str, extension: str, target: list | None = None, keep_pref
         try:
             if ".keep" not in filename:
                 if keep_prefix is not None and filename.startswith(keep_prefix):
-                    log.info(f"{filename} will be preserved, prefix matched {keep_prefix}")
+                    log.info(
+                        f"{filename} will be preserved, prefix matched {keep_prefix}"
+                    )
                     continue
                 os.remove(filename)
         except OSError:

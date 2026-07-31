@@ -56,7 +56,13 @@ def parse_markdown_file(filename: str) -> str:
 
 
 def save_as_html(
-    filename: str, header: str, footer: str, content: str, replace: dict, tracking_url: str, title: str|None
+    filename: str,
+    header: str,
+    footer: str,
+    content: str,
+    replace: dict,
+    tracking_url: str,
+    title: str | None,
 ) -> bool:
     """Save content as html file."""
     html_filename = filename

@@ -31,7 +31,7 @@ async def has_broken_anchors(dest: str) -> bool:
     return False
 
 
-def extract_post_title(filename: str) -> str|None:
+def extract_post_title(filename: str) -> str | None:
     """Extract the title of a post based on the H3 header for a markdown file"""
     try:
         with open(filename) as post_file:

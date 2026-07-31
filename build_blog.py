@@ -9,7 +9,7 @@ from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
                    list_of_files)
 from operations import build_year_index
 from transformations import parse_markdown_file, render_template, save_as_html
-from validations import has_broken_anchors, extract_post_title
+from validations import extract_post_title, has_broken_anchors
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         },
     )
 
-    index_pages = ('index', 'about', 'notes')
+    index_pages = ("index", "about", "notes")
 
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=base_dirname):
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
         content = parse_markdown_file(filename=filename)
 
-        if filename == f'{SRC}/index':
+        if filename == f"{SRC}/index":
             # base, index.md at root
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
@@ -116,10 +116,10 @@ if __name__ == "__main__":
                         "base_url": BASE_URL,
                         "year": year,
                         "in_post": True,
-                        "page_name": f"{page}"
+                        "page_name": f"{page}",
                     },
                 )
-                
+
         html_save = save_as_html(
             filename=filename,
             header=header,

@@ -90,15 +90,15 @@ if __name__ == "__main__":
     )
 
     # convert all /src markdowns to HTML files and populate /site
-    markdown_files = list_of_files(dirname=SRC, clean_extension=False)
+    markdown_files = list_of_files(dirname=SRC)
     if markdown_files:
         for filename in markdown_files:
             split_filename = filename.split("/")
-            trimmed_filename = ".".join(split_filename[-1].split(".")[:-1])
-            if split_filename[-1] == "README.md" or split_filename[-1].startswith("."):
+            file_name = split_filename[-1]
+            if file_name == "README" or file_name.startswith("."):
                 continue
 
-            raw_content = load_file_content(filename)
+            raw_content = load_file_content(filename, extension="md")
             if not raw_content:
                 continue
 
@@ -107,11 +107,11 @@ if __name__ == "__main__":
                 continue
 
             file_arguments = dict(arguments)
-            file_title = extract_post_title(filename=filename)
+            file_title = extract_post_title(filename=f"{filename}.md")
             if file_title:
                 file_arguments["file_title"] = file_title
-            if trimmed_filename:
-                file_arguments["file_name"] = trimmed_filename
+            if file_name:
+                file_arguments["file_name"] = file_name
 
             file_header, file_footer = render_annotations(
                 src=SRC,

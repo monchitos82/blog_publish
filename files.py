@@ -5,12 +5,8 @@ import shutil
 log = logging.getLogger(__name__)
 
 
-def load_file_content(
-    filename: str, extension: str | None = None, limit: int = 262100
-) -> str | None:
+def load_file_content(filename: str, limit: int = 262100) -> str | None:
     content = None
-    if extension:
-        filename = f"{filename}.{extension}"
     try:
         if os.path.getsize(filename) <= limit:
             with open(filename, encoding="utf-8") as f:

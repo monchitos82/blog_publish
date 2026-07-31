@@ -164,9 +164,6 @@ if __name__ == "__main__":
                     async_clean_files(
                         path=f"{SRC}/posts", extension="md", target=YEARS
                     ),
-                    async_clean_files(
-                        path=f"{SRC}", extension="html"
-                    ),
                 ]
             )
         )

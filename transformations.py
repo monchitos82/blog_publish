@@ -117,22 +117,6 @@ def parse_markdown(content: str) -> str:
     return content
 
 
-def parse_markdown_file(filename: str) -> str:
-    """Parse a markdown file into html content."""
-    markdown_filename = f"{filename}.md"
-    content = None
-    try:
-        with open(markdown_filename, encoding="utf-8") as markdown_file:
-            md_content = markdown_file.read()
-            if md_content:
-                content = parse_markdown(content=md_content)
-    except OSError as error:
-        log.error(
-            f"failed to generate content from {markdown_filename}, error: {error}"
-        )
-    return content
-
-
 def save_as_html(
     filename: str,
     header: str,

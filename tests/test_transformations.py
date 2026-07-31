@@ -5,7 +5,6 @@ from jinja2 import Environment, FunctionLoader
 
 from transformations import (
     parse_markdown,
-    parse_markdown_file,
     render_annotations,
     render_content_as_template,
     render_template,
@@ -56,25 +55,6 @@ def test_parse_markdown_table():
 def test_parse_markdown_empty_string():
     result = parse_markdown("")
     assert result == ""
-
-
-def test_parse_markdown_file_reads_and_parses(tmp_path):
-    f = tmp_path / "post.md"
-    f.write_text("### My Post\nHello world")
-    result = parse_markdown_file(str(tmp_path / "post"))
-    assert "<h3>" in result
-
-
-def test_parse_markdown_file_missing_returns_none(tmp_path):
-    result = parse_markdown_file(str(tmp_path / "nonexistent"))
-    assert result is None
-
-
-def test_parse_markdown_file_empty_returns_none(tmp_path):
-    f = tmp_path / "empty.md"
-    f.write_text("")
-    result = parse_markdown_file(str(tmp_path / "empty"))
-    assert result is None
 
 
 def test_save_as_html_creates_file(tmp_path):

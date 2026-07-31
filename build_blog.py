@@ -5,11 +5,11 @@ import datetime
 import logging
 import os
 
-from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files
+from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files, load_file_content
 from operations import build_year_index, extract_post_title
 from rss import generate_rss_feed
 from transformations import (
-    parse_markdown_file,
+    parse_markdown,
     render_annotations,
     render_content_as_template,
     render_template,
@@ -94,7 +94,10 @@ if __name__ == "__main__":
         if "README" in filename or split_filename[-1].startswith("."):
             continue
 
-        content = parse_markdown_file(filename=filename)
+        content = load_file_content(filename)
+        if not content:
+            continue
+
         file_arguments = dict(arguments)
         file_header, file_footer = render_annotations(
             src=SRC,
@@ -112,6 +115,8 @@ if __name__ == "__main__":
                     "base_url": BASE_URL,
                 },
             )
+
+        content = parse_markdown(content=content)
 
         html_save = save_as_html(
             filename=filename,

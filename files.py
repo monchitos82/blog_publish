@@ -5,6 +5,19 @@ import shutil
 log = logging.getLogger(__name__)
 
 
+def load_file_content(filename: str, extension: str = ".md", limit: int = 262100) -> str | None:
+    content = None
+    try:
+        if os.path.getsize(filename) <= limit:
+            with open(filename, encoding="utf-8") as f:
+                content = f.read()
+        else:
+            log.error(f"The file size exceeds the limit of {limit} bytes, content will not be loaded")
+    except (IOError, OSError) as error:
+        log.error(f"Failed to access the file {filename}, error {error}")
+    return content
+
+
 def list_of_files(
     dirname: str, extension: str = "md", clean_extension=True, invert=False
 ) -> list:

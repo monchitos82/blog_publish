@@ -1,3 +1,4 @@
+import sys
 import logging
 import urllib.parse
 
@@ -7,6 +8,9 @@ from jinja2.exceptions import TemplateError
 from jinja2.runtime import Context
 
 log = logging.getLogger(__name__)
+
+
+JINJA_FUNCTIONS = ["title_h4_href"]
 
 
 @pass_context
@@ -37,11 +41,13 @@ def render_template(filename: str, **kwargs) -> str:
     return content
 
 
-def render_content_as_template(content: str, **kwargs) -> str:
+def render_content_as_template(content: str, functions: list = JINJA_FUNCTIONS, **kwargs) -> str:
     """Render content as a template using jinja2 (no file used here)."""
     try:
         template_as_content = Template(content)
-        template_as_content.globals["title_h4_href"] = title_h4_href
+        current_module = sys.modules[__name__]
+        for function in functions:
+            template_as_content.globals[function] = getattr(current_module, function)
         content = template_as_content.render(kwargs)
     except TemplateError as err:
         log.error(f"Failed to render the content as template, error: {err}")

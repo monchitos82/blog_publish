@@ -61,7 +61,7 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
     return True
 
 
-def copy_statics(src: str, dest: str, statics: list) -> bool:
+def copy_statics(src: str, dest: str, statics: dict) -> bool:
     """Copy any static files, this runs independently of markdown rendering."""
     for item in statics:
         site = item.replace(src, dest)

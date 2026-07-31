@@ -12,17 +12,23 @@ pipeline {
         YEAR_LOOKBACK = 2
     }
     stages {
-        stage('Setup Environment') {
+stage('Setup Environment') {
             steps {
-                def uv_installed = fileExists '$HOME/.local/bin/uv'
-                if (!uv_installed || env.FORCE_SETUP) {
-                    sh '''
-                    curl -LsSf https://astral.sh/uv/install.sh | sh
-                    export PATH="$HOME/.local/bin:$PATH"
-                    $HOME/.local/bin/uv sync --frozen
-                    '''
-                } else {
-                    echo "UV is already installed"
+                script {
+                    def uvExists = sh(script: "command -v uv", returnStatus: true) == 0
+                    def forceSetup = env.FORCE_SETUP?.toBoolean()
+
+                    if (!uvExists || forceSetup) {
+                        echo "Installing or updating uv..."
+                        sh '''
+                            curl -LsSf https://astral.sh/uv/install.sh | sh
+                            # Ensure the local bin is available for the rest of this block
+                            export PATH="$HOME/.local/bin:$PATH"
+                            uv sync --frozen
+                        '''
+                    } else {
+                        echo "uv is already installed, skipping setup."
+                    }
                 }
             }
         }

@@ -65,7 +65,7 @@ if __name__ == "__main__":
             "menu": menu,
             "title": TITLE,
             "author": AUTHOR,
-            "progressbar": False,
+            "progressbar": True,
         },
     )
     footer = render_template(
@@ -80,24 +80,13 @@ if __name__ == "__main__":
 
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=base_dirname):
+        file_header = header
         file_footer = footer
         split_filename = filename.split("/")
         if "README" in filename or split_filename[-1].startswith("."):
             continue
 
         content = parse_markdown_file(filename=filename)
-
-        if "<!-- PROGRESSBAR -->" in content:
-            header = render_template(
-                filename=f"{SRC}/templates/header.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "menu": menu,
-                    "title": TITLE,
-                    "author": AUTHOR,
-                    "progressbar": True,
-                },
-            )
 
         if filename == f"{SRC}/index":
             # base, index.md at root
@@ -107,6 +96,17 @@ if __name__ == "__main__":
                     "base_url": BASE_URL,
                     "tracking_url": TRACKING,
                     "in_main": True,
+                },
+            )
+
+            file_header = render_template(
+                filename=f"{SRC}/templates/header.html.j2",
+                **{
+                    "base_url": BASE_URL,
+                    "menu": menu,
+                    "title": TITLE,
+                    "author": AUTHOR,
+                    "progressbar": False,
                 },
             )
 
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
         html_save = save_as_html(
             filename=filename,
-            header=header,
+            header=file_header,
             footer=file_footer,
             content=content,
             replace={SRC: DEST},

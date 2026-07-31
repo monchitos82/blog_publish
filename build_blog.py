@@ -112,7 +112,7 @@ if __name__ == "__main__":
                 filename=f"{SRC}/templates/footer.html.j2",
                 **{
                     "base_url": BASE_URL,
-                    "tracking": TRACKING,
+                    "tracking_url": TRACKING,
                     "in_main": True,
                 },
             )

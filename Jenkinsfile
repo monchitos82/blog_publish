@@ -12,7 +12,14 @@ pipeline {
         SOURCE = "blog"
         SITE_DIR = "site"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
-        BASE_URL = "https://${ACCOUNT}.${DOMAIN}"
+
+        // Codeberg pages specifics
+        SITE_PAGES = "page"
+        SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
+        BASE_URL = "https://${ACCOUNT}.${DOMAIN}/${SITE_PAGES}/${SITE_DIR}"
+
+        // neocities base url:  BASE_URL = "https://${ACCOUNT}.${DOMAIN}/${SITE_PAGES}
+
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "./${SITE_DIR}"
@@ -25,9 +32,6 @@ pipeline {
         STATICS_IMG = ".ico,.webp"
         STATICS_ASSETS = ".css"
 
-        // Codeberg pages specifics
-        SITE_PAGES = "page"
-        SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
     }
     parameters {
         booleanParam(

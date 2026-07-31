@@ -1,7 +1,7 @@
 import logging
 
 from feedgen.feed import FeedGenerator
-from file import list_of_files
+from files import list_of_files
 from operations import extract_post_title
 
 log = logging.getLogger(__name__)

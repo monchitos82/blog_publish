@@ -2,9 +2,9 @@ import logging
 import os
 import sys
 
-from requests.exceptions import ConnectionError, HTTPError
 from neocitizen import NeocitiesApi
 from neocitizen.errors import ApiError
+from requests.exceptions import ConnectionError, HTTPError
 
 log = logging.getLogger(__name__)
 
@@ -17,17 +17,23 @@ def upload_site(api_key: str = "", dest: str = "../site") -> bool:
         api.upload_dir(dest)
     except (ApiError, ConnectionError, HTTPError):
         log.error(f"Failed to upload site {dest}", exc_info=True)
+    except Exception:
+        log.error(f"Failed to upload site {dest} for unexpected reasons", exc_info=True)
     else:
         result = True
     return result
 
 
 if __name__ == "__main__":
-    api_key = os.getenv("NEOCITIES_API_KEY", None)
-    if api_key:
-        if upload_site(api_key=api_key):
-            log.info("Upload complete!")
-    else:
-        log.error("No API key has been defined")
+    try:
+        api_key = os.getenv("NEOCITIES_API_KEY", None)
+        if api_key:
+            if upload_site(api_key=api_key):
+                log.info("Upload complete!")
+        else:
+            log.error("No API key has been defined")
+            sys.exit(1)
+    except OSError:
+        log.error("Failed to run the upload script", exc_info=True)
         sys.exit(1)
     sys.exit(0)

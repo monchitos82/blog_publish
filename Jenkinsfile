@@ -17,7 +17,7 @@ pipeline {
         SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
 
         // Base URL definitions
-        BASE_URL = "https://${ACCOUNT}.codeberg.page/${SITE_DIR}"
+        BASE_URL = "https://${ACCOUNT}.codeberg.page"
         LOCAL_BASE_URL = "http://127.0.0.1:2080/${SITE_DIR}"
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
 
@@ -170,11 +170,11 @@ pipeline {
                             sh '''
                             cd ..
                             git clone ${SITE_PAGES_URL}
-                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cp -r ${SITE_DIR}/* ${SITE_PAGES}
                             cd  ${SITE_PAGES}
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push origin pages
+                            git push origin
                             '''
                         } else {
                             sh '''
@@ -183,11 +183,11 @@ pipeline {
                             cd ${SITE_PAGES}
                             git pull
                             cd ..
-                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cp -r ${SITE_DIR}/* ${SITE_PAGES}
                             cd  ${SITE_PAGES}
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push origin pages
+                            git push origin
                             '''
                         }
                     }
@@ -217,4 +217,4 @@ pipeline {
             }
         }
     }
-}                                
+}

@@ -25,7 +25,7 @@ def generate_rss_feed(
         fg = FeedGenerator()
         fg.id(site_name)
         fg.title(site_title)
-        fg.author(name=author, email=email)
+        fg.author({"name": author, "email": email})
         fg.logo(f"{base_url}/img/favicon.ico")
         fg.link(href=base_url, rel="alternate")
         fg.subtitle("Updates from my blog")
@@ -54,8 +54,7 @@ def generate_rss_feed(
                         )
                     )
 
-        fg.rss_file(f"{dest}/feed.xml", pretty=True)
-        fg.atom_file(f"{dest}/atom.xml", pretty=True)
+        fg.rss_file(f"{dest}/feed.xml")
     except (OSError, AttributeError) as error:
         log.error(f"Failed to generate RSS feed: {error}")
         return False

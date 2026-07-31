@@ -1,7 +1,11 @@
 import os
 import sys
 
-from neocitizen import NeocitiesApi
+import logging
+
+from neocitizen import NeocitiesApi, ApiError
+
+log = logging.getLogger(__name__)
 
 
 def upload_site(api_key: str = "", dest: str = "./site") -> bool:

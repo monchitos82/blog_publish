@@ -82,4 +82,5 @@ def save_as_html(
             log.error(f"Failed to save {html_filename}, error: {error}")
         else:
             save = True
+    print(f"Saving filename: {save}")
     return save

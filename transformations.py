@@ -4,8 +4,6 @@ import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
 
-from validations import extract_post_title
-
 log = logging.getLogger(__name__)
 
 
@@ -58,7 +56,7 @@ def parse_markdown_file(filename: str) -> str:
 
 
 def save_as_html(
-    filename: str, header: str, footer: str, content: str, replace: dict, tracking_url: str, extension: str = "md"
+    filename: str, header: str, footer: str, content: str, replace: dict, tracking_url: str, title: str|None
 ) -> bool:
     """Save content as html file."""
     html_filename = filename
@@ -74,7 +72,6 @@ def save_as_html(
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
                 # on build this will have the ./src prefix, cleaning it up
                 if tracking_url:
-                    title = extract_post_title(f"{filename}.{extension}")
                     no_path_filename = ("/").join(html_filename.split("/")[2:])
                     tracking_element = f'\n    <img src="{tracking_url}/count?p=/{no_path_filename}">\n'
                     if title is not None:

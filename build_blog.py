@@ -9,7 +9,7 @@ from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
                    list_of_files)
 from operations import build_year_index
 from transformations import parse_markdown_file, render_template, save_as_html
-from validations import has_broken_anchors
+from validations import has_broken_anchors, extract_post_title
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -124,6 +124,7 @@ if __name__ == "__main__":
             content=content,
             replace={SRC: DEST},
             tracking_url=TRACKING,
+            title=extract_post_title(f"{filename}.md")
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")

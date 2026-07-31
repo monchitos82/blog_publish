@@ -112,6 +112,12 @@ if __name__ == "__main__":
                 content=content,
                 **file_arguments,
             )
+            if not file_header or not file_footer:
+                if not file_header:
+                    log.error(f"Document {filename} structure failed to render at header transformation")
+                if not file_footer:
+                    log.error(f"Document {filename} structure failed to render at footer transformation")
+                continue
 
             # using NO_RENDER bypasses the jinja rendering on the content
             if "<!-- NO_RENDER -->" not in content:

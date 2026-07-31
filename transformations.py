@@ -9,7 +9,7 @@ from jinja_functions import JinjaFunctions
 log = logging.getLogger(__name__)
 
 
-def parse_markdown(content: str) -> str:
+def parse_markdown(content: str) -> str|None:
     """Parse a markdown string into HTML."""
     try:
         content = markdown.markdown(
@@ -20,9 +20,8 @@ def parse_markdown(content: str) -> str:
             ],
         )
     except (OSError, TypeError, ValueError):
-        log.error("Failed to parse markdown content", exc_info=True)
-        content = ""
-
+        log.critical("Failed to parse markdown content", exc_info=True)
+        return None
     return content
 
 
@@ -30,7 +29,7 @@ def parse_template(
     filename: str | None = None,
     content: str | None = None,
     **kwargs,
-) -> str:
+) -> str|None:
     """Render a filename template using jinja2."""
     template = None
     rendered_content = ""
@@ -56,9 +55,10 @@ def parse_template(
                 template.globals.update(JinjaFunctions.functions)
             except (AttributeError, ValueError):
                 log.error("There are no available jinja functions", exc_info=True)
-            rendered_content = template.render(kwargs)
+            else:
+                rendered_content = template.render(kwargs)
     except TemplateError:
-        log.error(f"Failed to render the template {filename}", exc_info=True)
+        log.critical(f"Failed to render the template {filename}", exc_info=True)
     return rendered_content
 
 

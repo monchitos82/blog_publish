@@ -175,7 +175,7 @@ if __name__ == "__main__":
                 path=f"{SRC}/posts", extension="html", target=YEARS
             ),
         ]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        results = asyncio.run(asyncio.gather(*tasks, return_exceptions=True))
         for result in results:
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")

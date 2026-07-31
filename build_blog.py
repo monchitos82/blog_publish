@@ -99,11 +99,11 @@ if __name__ == "__main__":
             file_arguments["progressbar"] = False
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
-                file_arguments,
+                **file_arguments,
             )
             file_header = render_template(
                 filename=f"{SRC}/templates/header.html.j2",
-                file_arguments,
+                **file_arguments,
             )
         if len(split_filename) == 5:
            year = split_filename[-2]

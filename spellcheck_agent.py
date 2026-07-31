@@ -25,7 +25,7 @@ def git_diff() -> str | None:
     return result
 
 
-tools = ["git_diff"]
+tools = [git_diff]
 agent_prompt = """
 You are an assistant whose function is to validate content is grammatically correct"
 """

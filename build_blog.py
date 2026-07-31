@@ -111,7 +111,7 @@ if __name__ == "__main__":
             if file_title:
                 file_arguments["file_title"] = file_title
             file_arguments["file_name"] = trimmed_filename
-            print(file_arguments)
+
             file_header, file_footer = render_annotations(
                 src=SRC,
                 filename=filename,
@@ -120,6 +120,9 @@ if __name__ == "__main__":
                 content=content,
                 **file_arguments,
             )
+
+            print(file_arguments)
+            print(file_footer)
 
             # using NO_RENDER bypasses the jinja rendering on the content
             if "<!-- NO_RENDER -->" not in content:
@@ -144,21 +147,15 @@ if __name__ == "__main__":
     index_arguments = dict(arguments)
     index_arguments["progressbar"] = False
     index_arguments["in_index"] = True
-    index_header = parse_template(
-        filename=f"{SRC}/templates/header.html.j2",
-        **index_arguments,
-    )
-    index_footer = parse_template(
-        filename=f"{SRC}/templates/footer.html.j2",
-        **index_arguments,
-    )
+    index_arguments["file_title"] = ""
+    index_arguments["file_name"] = ""
+
     year_indexes = build_year_index(
         src=SRC,
         dest=DEST,
         base_url=BASE_URL,
         years=YEARS,
-        header=index_header,
-        footer=index_footer,
+        **index_arguments,
     )
 
     # if all year indexes are ready we can build the index from them

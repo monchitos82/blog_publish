@@ -1,6 +1,7 @@
 import logging
 
 from files import list_of_files
+from transformations import parse_template
 
 log = logging.getLogger(__name__)
 
@@ -53,8 +54,7 @@ def build_year_index(
     dest: str,
     base_url: str,
     years: list,
-    header: str,
-    footer: str,
+    **kwargs,
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
@@ -79,6 +79,19 @@ def build_year_index(
         year_content += "</ul><br/>"
 
         filename = f"{src}/posts/{year}"
+        file_arguments = kwargs
+        file_arguments["file_title"] = f"{year}_index"
+        file_arguments["file_name"] = f"{year}_index"
+
+        header = parse_template(
+            filename=f"{src}/templates/header.html.j2",
+            **file_arguments,
+        )
+        footer = parse_template(
+            filename=f"{src}/templates/footer.html.j2",
+            **file_arguments,
+        )
+
         if not save_as_html(
             filename=filename,
             header=header,

@@ -185,8 +185,6 @@ pipeline {
                     $HOME/.local/bin/uv run ./tools/llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.md
                     echo "" >> ${LOCAL_PATH_SITE}/llm_summary.md
                 done
-                pandoc -f markdown ${LOCAL_PATH_SITE}/llm_summary.md --ascii=true > ${LOCAL_PATH_SITE}/llm_summary.html
-                rm ${LOCAL_PATH_SITE}/llm_summary.md
                 '''
             }
         }

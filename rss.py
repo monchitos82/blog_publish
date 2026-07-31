@@ -25,7 +25,6 @@ def generate_rss_feed(src: str, dest: str, years: list, author: str, base_url: s
             for post in sorted(
                 list_of_files(f"{src}/posts/{year}", clean_extension=False),
                 key=lambda f: f.split("/")[-1][:5],
-                reverse=True,
             ):
                 title = extract_post_title(filename=post)
                 # titles are in a format "title text (mm/yy)"

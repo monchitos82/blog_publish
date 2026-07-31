@@ -74,6 +74,7 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
                     split_filename = filename.split("/")
                     split_site = site.split("/")
                     if len(split_filename[:-1]) == len(split_site):
+                        log.warning(f"I copy {filename} to {site}")
                         shutil.copy2(src=filename, dst=site)
                     else:
                         log.warning(

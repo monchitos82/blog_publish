@@ -164,11 +164,11 @@ pipeline {
                 }
             }
         }
-        stage('Go Live in Codeberg') {
+        stage('Go Live') {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        if ( USE_CODEBERG == true ) {
+                        if ( USE_CODEBERG ) {
                             if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                                 sh '''
                                 cd ..
@@ -195,7 +195,8 @@ pipeline {
                                 git push
                                 '''
                             }
-                        } else if ( USE_NEOCITIES == true ) {
+                        }
+                        if ( USE_NEOCITIES ) {
                             sh '''
                             $HOME/.local/bin/uv run neocities_upload.py
                             '''

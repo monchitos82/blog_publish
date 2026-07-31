@@ -28,7 +28,8 @@ STATICS = {
     f"{SRC}": [".txt", ".ico"],
     f"{SRC}/assets": [".css", ".js"],
     f"{SRC}/img": [".png", ".jpeg", ".svg"],
-    f"{SRC}/archive": [".json", ".yaml", ".py", ".js", ".log", ".txt"],
+    f"{SRC}/archive": [".json", ".yaml", ".py", ".rb", ".go", ".js", ".log", ".txt"],
+    f"{SRC}/experients": [".html", ".svg"]
 }
 
 

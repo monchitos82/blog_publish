@@ -78,6 +78,7 @@ pipeline {
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/${SOURCE}")) {
                             sh '''
+                            echo "Source is already present"
                             cd ${SOURCE}
                             git pull
                             cd ..
@@ -157,14 +158,15 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     sh '''
-                        cd
+                        pwd
+                        cd ..
                         git clone ${SITE_PAGES_URL}
                         cp -r ${SOURCE}/${SITE_DIR} ${SITE_PAGES}
                         cd  ${SITE_PAGES}
                         git add -A
                         git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                         git push origin master
-                        cd
+                        cd ..
                     '''
                 }
             }
@@ -173,10 +175,10 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
                     sh '''
-                        cd
+                        cd ..
                         cd ${SOURCE}
                         $HOME/.local/bin/uv run neocities_upload.py
-                        cd
+                        cd ..
                     '''
                 }
             }

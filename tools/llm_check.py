@@ -4,7 +4,7 @@ import sys
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
-from .otel import setup_otel_instrumentation
+from otel import setup_otel_instrumentation
 
 log = logging.getLogger(__name__)
 

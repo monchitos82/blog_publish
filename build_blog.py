@@ -75,6 +75,8 @@ if __name__ == "__main__":
         },
     )
 
+    indexes = ('index', 'about', 'notes') # make sure index is always 0 here
+
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=base_dirname):
         file_footer = footer
@@ -87,7 +89,7 @@ if __name__ == "__main__":
 
         # adding a different footer in the event of creating a post:
         split_filename = filename.split("/")
-        if split_filename[-1] not in ("index", "about"):
+        if split_filename[-1] not in indexes:
             if len(split_filename) == 5:
                 year = split_filename[-2]
                 page = split_filename[-1]
@@ -100,7 +102,7 @@ if __name__ == "__main__":
                         "page_name": f"{page}"
                     },
                 )
-        elif split_filename[-1] == "about": # abusing the in_index flag to treat about as index menu
+        elif split_filename[-1] in indexes[1:]: # abusing the in_index flag
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
                 **{

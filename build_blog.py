@@ -17,15 +17,17 @@ log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
 
 # These are env variables needed for this script to work properly
-BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
+BASE_URL = os.getenv("BASE_URL", None)
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../pages")
-TRACKING = os.getenv("TRACKING", "")
+TRACKING = os.getenv("TRACKING", None)
+TRACKING_ELEMENT = None
+
 if TRACKING:
     # tracking exists, use the count endpoint
-    TRACKING += "/count?p="
+    TRACKING_ELEMENT = f"{TRACKING}/count?p="
 
 # These are directory and extensions that should be copied
 STATICS = {
@@ -123,7 +125,7 @@ if __name__ == "__main__":
             footer=file_footer,
             content=parse_markdown_file(filename=filename),
             replace={SRC: DEST},
-            tracking_element=TRACKING,
+            tracking_element=TRACKING_ELEMENT,
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")
@@ -149,7 +151,7 @@ if __name__ == "__main__":
             years=YEARS,
             header=header,
             footer=index_footer,
-            tracking_element=TRACKING,
+            tracking_element=TRACKING_ELEMENT,
         )
     )
 

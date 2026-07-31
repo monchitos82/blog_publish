@@ -1,6 +1,5 @@
 import logging
 
-
 from files import list_of_files
 from transformations import save_as_html
 from validations import extract_post_title

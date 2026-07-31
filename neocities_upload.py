@@ -1,6 +1,8 @@
 import os
 import sys
+
 from neocitizen import NeocitiesApi
+
 
 def upload_site(api_key: str = "", dest: str = "./site") -> bool:
     """Upload the site to neocities."""

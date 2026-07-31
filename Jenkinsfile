@@ -2,15 +2,16 @@ pipeline {
     agent { label 'python' }
     environment {
         // build specifics
-        VENV_DIR = ".venv"
-        PYTHON = "python3"
-        SOURCE = "rgarciamx"
+        AUTO = "True"
         GIT_ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${GIT_ACCOUNT}"
+        PYTHON = "python3"
+        SOURCE = "rgarciamx"
+        VENV_DIR = ".venv"
         // project specifics
         BASE_URL = "https://${GIT_ACCOUNT}.codeberg.page"
-        SRC = "./${SOURCE}"
         DEST = "./pages"
+        SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 2
     }
     stages {
@@ -30,20 +31,10 @@ pipeline {
                     . ${VENV_DIR}/bin/activate
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
-                    python build_blog.py
+                    python build_blog.py -s # s flag so we scan for foul language
                 '''
             }
-        }
-        stage('Scan Foul Language') {
-            steps {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    sh '''
-                        export AUTO="true"
-                        . ${VENV_DIR}/bin/activate
-                        python build_blog.py -s
-                    '''
-                }
-            }
+
         }
         stage('Publish') {
             steps {
@@ -61,7 +52,7 @@ pipeline {
         failure {
             cleanWs()
         }
-        success {
+        cleanup {
             dir("${SOURCE}") { deleteDir() }
             dir("pages") { deleteDir() }
         }

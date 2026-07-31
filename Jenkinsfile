@@ -18,9 +18,9 @@ pipeline {
 
         // Base URL definitions
         BASE_URL = "https://${ACCOUNT}.neocities.org"
-        CODEBERG_PAGES_URL = "https://monfg.codeberg.page/${SITE_PAGES}/${SITE_DIR}"
+        CODEBERG_PAGES_URL = "https://${ACCOUNT}.codeberg.page/${SITE_PAGES}/${SITE_DIR}"
         LOCAL_BASE_URL = "http://127.0.0.1:2080/${SITE_DIR}"
-        TRACKING_URL = "https://ramongmx.goatcounter.com"
+        TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
 
         DEST = "../${SITE_DIR}"
         SRC = "../${SOURCE}"

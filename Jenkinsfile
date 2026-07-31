@@ -172,10 +172,6 @@ pipeline {
                             git clone ${SITE_PAGES_URL}
                             cd ..
                             cp -r ${SITE_DIR} ${SITE_PAGES}
-                            cd  ${SITE_PAGES}
-                            git add -A
-                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                            git push
                             """
                         } else {
                             sh """

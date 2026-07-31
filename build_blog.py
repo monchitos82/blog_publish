@@ -23,7 +23,6 @@ console_handler.setFormatter(
 log.setLevel(logging.DEBUG)
 log.addHandler(console_handler)
 
-AUTO = os.getenv("AUTO", False)
 BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
 
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
@@ -192,32 +191,6 @@ async def build_year_index(
             log.error(f"Failed to save index file for {year}, {error}")
             return False
     return True
-
-
-async def has_foul_language(dest: str = DEST, extension: str = "html") -> bool|None:
-    """Scan the rendered docs looking for foul language."""
-    clean = True
-    try:
-        with open('foul.txt', 'r') as f:
-            foul_language_content = [word for word in f]
-    except OSError:
-        log.warning('No list of bad words found, the scan for foul language will not continue')
-        return None
-    else:
-        foul_language = []
-        # in case the foul language words are comma separated
-        for word in foul_language_content:
-            split_word = word.split(',')
-            foul_language += [word_.strip() for word_ in split_word]
-    files = list_of_files(dirname=dest, extension=extension, clean_extension=False)
-    for filename in files:
-        async with aiofiles.open(filename) as f:
-            content = await f.read()
-            for word in foul_language:
-                if word.lower() in str(content).lower():
-                    log.warning(f"'{word}' found in {filename}")
-                    clean = False
-    return clean
 
 
 async def has_broken_anchors(dest: str = DEST) -> bool:
@@ -459,22 +432,11 @@ if __name__ == "__main__":
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:
-        foul_language, broken_anchors, _ = asyncio.run(
+        broken_anchors, _ = asyncio.run(
             run_asynchronously(
                 [
-                    has_foul_language(),
                     has_broken_anchors(dest=f"{DEST}"),
                     clean_files(path=f"{SRC}/posts", extension="md", target=YEARS)
                 ]
             )
         )
-
-        if arguments.scan and not foul_language:
-            log.info("Foul language was found in the results, do you want to continue? [Y/n]")
-            response = "N"
-            if not AUTO:
-                response = input()
-            if not response:
-                response = "y"
-            if response.lower() != "y":
-                sys.exit(1)

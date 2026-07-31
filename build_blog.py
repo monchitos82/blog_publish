@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
         content = parse_markdown_file(filename=filename)
 
-        if "posts" in split_filename[2] or "<!-- PROGRESSBAR -->" in content:
+        if "<!-- PROGRESSBAR -->" in content:
             header = render_template(
                 filename=f"{SRC}/templates/header.html.j2",
                 **{

@@ -166,7 +166,7 @@ pipeline {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
                         if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
-                            sh '''
+                            sh """
                             cd ..
                             git clone ${SITE_PAGES_URL}
                             cd ..
@@ -176,9 +176,9 @@ pipeline {
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
-                            '''
+                            """
                         } else {
-                            sh '''
+                            sh """
                             echo "Pages is already present"
                             cd ..
                             cd ${SITE_PAGES}
@@ -190,7 +190,7 @@ pipeline {
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
-                            '''
+                            """
                         }
                     }
                 }

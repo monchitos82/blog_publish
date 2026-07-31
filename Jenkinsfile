@@ -55,7 +55,7 @@ pipeline {
                             git pull
                             cd ..
                             '''
-                        else {
+                        } else {
                             sh '''
                             git clone ${GIT_URL}/${SOURCE}
                             '''
@@ -66,7 +66,7 @@ pipeline {
                             git pull
                             cd ..
                             '''
-                        else {
+                        } else {
                             sh '''
                             git clone ${GIT_URL}/pages
                             '''

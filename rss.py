@@ -31,7 +31,6 @@ def generate_rss_feed(
         fg.subtitle("Personal blog updates")
         fg.link(href=f"{base_url}/atom.xml", rel="self")
         fg.language("en")
-        fg.pubDate(datetime)
         fg.generator(generator="blog generator", version="0.1", uri="undefined")
 
         for year in years:

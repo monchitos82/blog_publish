@@ -7,14 +7,9 @@ from operations import extract_post_title
 
 log = logging.getLogger(__name__)
 
-def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> None: 
+def generate_rss_feed(src: str, dest: str, years: list, author: str, base_url: str, site_name: str, site_title: str) -> None: 
     """Generate a feed xml for an RSS feed."""
     try:
-        author = settings.get("author", "")
-        base_url = settings.get("base_url", "")
-        site_name = settings.get("site_name", "")
-        site_title = settings.get("title", "")
-        
 
         fg = FeedGenerator()
         fg.id(site_name)
@@ -23,8 +18,6 @@ def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> Non
         fg.link(href=base_url, rel="alternate")
         fg.subtitle("Updates from my blog")
         fg.language("en")
-
-        print(settings)
 
         for year in years:
             for post in sorted(
@@ -39,14 +32,12 @@ def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> Non
                 filename = post.split("/")[-1].split(".")[0]
                 title_url = f"{base_url}/posts/{year}/{filename}.html"
 
-                print(title_date, title_text, title_url)
-
-                fe = fg.add_entry()
-                fe.id(title)
-                fe.title(title_text)
-                fe.link(href=title_url)
-                fe.pubDate(datetime.strptime(title_date, "(%m/%y)").strftime("%Y-%m-%dT%H:%M:%SZ"))
-
+                if title_text and title_date and title_url:
+                    fe = fg.add_entry()
+                    fe.id(title)
+                    fe.title(title_text)
+                    fe.link(href=title_url)
+                    fe.pubDate(datetime.strptime(title_date, "(%m/%y)").strftime("%Y-%m-%dT%H:%M:%SZ"))
 
         fg.rss_file(f"{dest}/feed.xml", pretty=True)
     except (OSError, AttributeError) as error:

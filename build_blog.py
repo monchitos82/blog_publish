@@ -180,7 +180,15 @@ if __name__ == "__main__":
             "title": TITLE,
         }
 
-        generate_rss_feed(src=SRC, dest=DEST, years=YEARS, settings=rss_settings)
+        generate_rss_feed(
+            src=SRC,
+            dest=DEST,
+            years=YEARS,
+            author=AUTHOR,
+            base_url=BASE_URL,
+            site_name=ACCOUNT,
+            site_title=TITLE,
+        )
 
     elif file_errors:
         log.critical("The build cannot continue, there are file errors making the build inconsistent")

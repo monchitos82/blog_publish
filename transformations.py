@@ -36,7 +36,7 @@ def parse_template(
 
         if template:
             try:
-                template.globals.extend(JinjaFunctions.functions)
+                template.globals.update(JinjaFunctions.functions)
             except (AttributeError, ValueError) as err:
                 log.warning(f"There are no available jinja functions, error: {err}")
             rendered_content = template.render(kwargs)

@@ -56,7 +56,7 @@ def parse_markdown_file(filename: str) -> str:
 
 
 def save_as_html(
-    filename: str, header: str, footer: str, content: str, replace: dict
+    filename: str, header: str, footer: str, content: str, replace: dict, tracking_element: str,
 ) -> bool:
     """Save content as html file."""
     html_filename = filename
@@ -70,6 +70,8 @@ def save_as_html(
             with open(html_filename, "w+", encoding="utf-8") as html_file:
                 html_file.write(header)
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
+                if tracking_element:
+                    html_file.write(f'\n    <img src="{tracking_element}/{html_filename}">\n')
                 html_file.write(footer)
         except OSError as error:
             log.error(f"Failed to save {html_filename}, error: {error}")

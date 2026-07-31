@@ -24,6 +24,7 @@ LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../pages")
+TRACKING = os.getenv("TRACKING", "")
 
 # These are directory and extensions that should be copied
 STATICS = {
@@ -87,12 +88,14 @@ if __name__ == "__main__":
         if split_filename[-1] != "index":
             if len(split_filename) == 5:
                 year = split_filename[-2]
+                page = split_filename[-1]
                 file_footer = render_template(
                     filename=f"{SRC}/templates/footer.html.j2",
                     **{
                         "base_url": BASE_URL,
                         "year": year,
                         "in_post": True,
+                        "page_name": f"{page}"
                     },
                 )
         else: # if index.md (aka main)
@@ -110,6 +113,7 @@ if __name__ == "__main__":
             footer=file_footer,
             content=parse_markdown_file(filename=filename),
             replace={SRC: DEST},
+            tracking_element=TRACKING,
         )
         if not html_save:
             log.error(f"File {filename} failed to be generated!")

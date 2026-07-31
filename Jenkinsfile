@@ -2,11 +2,12 @@ pipeline {
     agent { label 'python' }
     environment {
         // build specifics
-        GIT_ACCOUNT = "ramongarciamx"
-        GIT_URL = "ssh://git@codeberg.org/${GIT_ACCOUNT}"
+        ACCOUNT = "ramongarciamx"
+        GIT_URL = "ssh://git@codeberg.org/${ACCOUNT}"
         SOURCE = "rgarciamx"
+        TRACKING = "yes"
         // project specifics
-        BASE_URL = "https://${GIT_ACCOUNT}.codeberg.page"
+        BASE_URL = "https://${ACCOUNT}.codeberg.page"
         DEST = "./pages"
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1

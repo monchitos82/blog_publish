@@ -56,7 +56,12 @@ pipeline {
         booleanParam(
             name: 'SPELL_CHECK',
             defaultValue: false,
-            description: 'Use LLM for content spellcheck'
+            description: 'Use neuspell for content spellcheck'
+        )
+        booleanParam(
+            name: 'LLM_REVIEW',
+            defaultValue: false,
+            description: 'Use LLM for content summarization'
         )
     }
     stages {
@@ -151,14 +156,34 @@ pipeline {
             }
             steps {
                 sh '''
-                echo "---" > ${LOCAL_PATH_SITE}/spellcheck_.txt
+                echo "---" > ${LOCAL_PATH_SITE}/spellcheck_results.txt
                 cd ${SRC}
                 CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
                 cd -
                 for filename in ${CHANGED_FILES}; do
-                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
-                    $HOME/.local/bin/uv run spellcheck.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/spellcheck_.txt
-                    echo "" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
+                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
+                    $HOME/.local/bin/uv run spellcheck.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
+                    echo "" >> ${LOCAL_PATH_SITE}/spellcheck_results.txt
+                done
+                '''
+            }
+        }
+        stage('LLM Sumarize Content') {
+            when {
+                expression {
+                    params.LLM_REVIEW == true && params.LOCAL_VALIDATION == true
+                }
+            }
+            steps {
+                sh '''
+                echo "---" > ${LOCAL_PATH_SITE}/llm_summary.txt
+                cd ${SRC}
+                CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+                cd -
+                for filename in ${CHANGED_FILES}; do
+                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/llm_summary.txt
+                    $HOME/.local/bin/uv run llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.txt
+                    echo "" >> ${LOCAL_PATH_SITE}/llm_summary.txt
                 done
                 '''
             }

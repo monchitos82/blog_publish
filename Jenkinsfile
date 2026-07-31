@@ -3,7 +3,7 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "ramongamx"
+        ACCOUNT = "ramongmx"
         SITE_NAME = "${ACCOUNT}.neocities.org"
 
         // build specifics

@@ -100,7 +100,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        input message: 'Promote the latest update?', ok: 'Publish'
+                        input message: 'Promote the latest update?', ok: 'Publish', cancel: 'Reject'
                     } catch (err) {
                         currentBuild.result = 'ABORTED'
                         error('Publish was rejected')

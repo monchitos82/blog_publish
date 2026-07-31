@@ -79,16 +79,6 @@ if __name__ == "__main__":
         **arguments,
     )
 
-    header = parse_template(
-        filename=f"{SRC}/templates/header.html.j2",
-        **arguments,
-    )
-
-    footer = parse_template(
-        filename=f"{SRC}/templates/footer.html.j2",
-        **arguments,
-    )
-
     # convert all /src markdowns to HTML files and populate /site
     markdown_files = list_of_files(dirname=SRC)
     if markdown_files:
@@ -116,13 +106,9 @@ if __name__ == "__main__":
             file_header, file_footer = render_annotations(
                 src=SRC,
                 filename=filename,
-                header=header,
-                footer=footer,
                 content=content,
                 **file_arguments,
             )
-            if "snippets" in filename:
-                print(file_footer, file_arguments)
 
             # using NO_RENDER bypasses the jinja rendering on the content
             if "<!-- NO_RENDER -->" not in content:

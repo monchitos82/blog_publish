@@ -18,7 +18,6 @@ def save_as_html(
     for item in replace:
         html_filename = f"{html_filename.replace(item, replace[item])}"
     html_filename += ".html"
-    print(html_filename)
     save = False
     if content:
         log.info(f"Saving {filename} as {html_filename}")

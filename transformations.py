@@ -65,15 +65,20 @@ def parse_template(
 def render_annotations(
     src: str,
     filename: str,
-    header: str,
-    footer: str,
     content: str,
     **kwargs,
 ) -> tuple:
     """Render annotations and transformation for specific filename cases"""
-    file_header = header
-    file_footer = footer
     file_arguments = kwargs
+    file_header = parse_template(
+        filename=f"{SRC}/templates/header.html.j2",
+        **file_arguments,
+    )
+
+    file_footer = parse_template(
+        filename=f"{SRC}/templates/footer.html.j2",
+        **file_arguments,
+    )
     split_filename = filename.split("/")
 
     if filename == f"{src}/index":

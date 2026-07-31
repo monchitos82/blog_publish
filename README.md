@@ -5,7 +5,9 @@ This script and Jenkins pipeline are built separately from my blog source, but i
 I am publishing this independently because I want it to be useful beyond my own blog and because my blog sources are private since I like to edit and change my project structure constantly.
 
 To trigger the build we just need:
+
 a) A source with all the markdown files. In this case, my blog has a simple structure:
+
 ```
 myblog/
 ├── archive

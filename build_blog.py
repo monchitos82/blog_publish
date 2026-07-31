@@ -65,7 +65,7 @@ if __name__ == "__main__":
         "progressbar": True,
         "menu": None,
         "title": TITLE,
-        "tracking_url": None,
+        "tracking_url": TRACKING,
         "year" : None,
         "years" : YEARS,
     }

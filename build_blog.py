@@ -42,7 +42,7 @@ if __name__ == "__main__":
         INDEX_PAGES = ["index", "about"]
 
     STATICS = {
-        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".ico", ".css")),
+        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
         f"{SRC}/misc": env_list_as_tuple("STATICS_MISC", (".html", ".json")),
         f"{SRC}/static": env_list_as_tuple("STATICS_STATIC", (".txt")),

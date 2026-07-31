@@ -11,6 +11,7 @@ pipeline {
         DEST = "./site"
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1
+        INDEX_PAGES = "index, about, notes"
     }
     parameters {
         booleanParam(

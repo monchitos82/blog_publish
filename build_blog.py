@@ -22,6 +22,12 @@ YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
+INDEX_PAGES = os.getenv("INDEX_PAGES", None)
+
+if not INDEX_PAGES:
+    INDEX_PAGES = ["index", "about"]
+INDEX_PAGES = tuple(INDEX_PAGES.replace(" ", "").split(","))
+
 
 # These are directory and extensions that should be copied
 STATICS = {
@@ -74,8 +80,6 @@ if __name__ == "__main__":
             "in_main": False,
         },
     )
-
-    index_pages = ("index", "about", "notes")
 
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=base_dirname):

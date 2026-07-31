@@ -67,7 +67,7 @@ def test_title_h4_href_with_real_context(jinja_env):
     result = template.render(render_context)
     expected = (
         '<a name="foo_bar_10_10_2026"',
-        '<a href="https://example.com/foobar.html#foo_bar_10_10_2026">',
+        '<a href="https://example.com/foobar.html#foo_bar_10_10_2026"',
         "foo bar (10/10/2026)",
     )
     for expected_line in expected:

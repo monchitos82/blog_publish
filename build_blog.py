@@ -52,30 +52,34 @@ if __name__ == "__main__":
         file_errors = True
 
     # get the base of every page ready by setting header, menu and footer
+    
+    arguments = {
+        "author": AUTHOR,
+        "base_url": BASE_URL,
+        "in_index": False,
+        "in_main": False,
+        "in_post": False,
+        "page_name": None,
+        "progressbar": True,
+        "menu": None,
+        "title": TITLE,
+        "tracking_url": None,
+        "year" : None,
+    }
+    
     menu = render_template(
         filename=f"{SRC}/templates/menu.html.j2",
-        **{
-            "base_url": BASE_URL,
-        },
+        arguments,
     )
+    arguments["menu"] = menu
+    
     header = render_template(
         filename=f"{SRC}/templates/header.html.j2",
-        **{
-            "base_url": BASE_URL,
-            "menu": menu,
-            "title": TITLE,
-            "author": AUTHOR,
-            "progressbar": True,
-        },
+        arguments,
     )
     footer = render_template(
         filename=f"{SRC}/templates/footer.html.j2",
-        **{
-            "base_url": BASE_URL,
-            "in_post": False,
-            "in_index": False,
-            "in_main": False,
-        },
+        arguments,
     )
 
     # convert all /src markdowns to HTML files and populate /site
@@ -87,52 +91,44 @@ if __name__ == "__main__":
             continue
 
         content = parse_markdown_file(filename=filename)
+        file_arguments = dict(arguments)
 
         if filename == f"{SRC}/index":
             # base, index.md at root
+            file_arguments["in_main"] = True
+            file_arguments["progressbar"] = False
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "tracking_url": TRACKING,
-                    "in_main": True,
-                },
+                file_arguments,
             )
-
             file_header = render_template(
                 filename=f"{SRC}/templates/header.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "menu": menu,
-                    "title": TITLE,
-                    "author": AUTHOR,
-                    "progressbar": False,
-                },
+                file_arguments,
             )
-
+        if len(split_filename) == 5:
+           year = split_filename[-2]
+           page = split_filename[-1]
+           file_arguments["year"] = year
+           file_arguments["page_name"] = page
+           file_arguments["in_post"] = True
+           file_footer = render_template(
+               filename=f"{SRC}/templates/footer.html.j2",
+               file_arguments,
+           )
+        
         if "<!-- NAV_MAIN -->" in content:
-            log.warning(f"{filename} is in index")
+            file_arguments["in_index"] = True
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "in_index": True,
-                },
+                file_arguments,
             )
-        else:
-            # posts will point back to their year index in the footer
-            if len(split_filename) == 5:
-                year = split_filename[-2]
-                page = split_filename[-1]
-                file_footer = render_template(
-                    filename=f"{SRC}/templates/footer.html.j2",
-                    **{
-                        "base_url": BASE_URL,
-                        "year": year,
-                        "in_post": True,
-                        "page_name": f"{page}",
-                    },
-                )
+
+        if "<!-- NO_PROGRESSBAR -->" in content:
+            file_arguments["progressbar"] = False
+            file_header = render_template(
+                filename = f"{SRC}/templates/header.html.j2",
+                file_arguments,
+            )
 
         if "<!-- NO_RENDER -->" not in content:
             content = render_content_as_template(
@@ -160,22 +156,16 @@ if __name__ == "__main__":
     last_year = int(LAST_YEAR)
     first_year = last_year - int(YEAR_LOOKBACK)
     YEARS = [str(year) for year in range(first_year, last_year + 1)]
+    file_arguments = dict(arguments)
+    file_arguments["progressbar"] = False
+    file_arguments["in_index"] = True
     index_header = render_template(
         filename=f"{SRC}/templates/header.html.j2",
-        **{
-            "base_url": BASE_URL,
-            "menu": menu,
-            "title": TITLE,
-            "author": AUTHOR,
-            "progressbar": False,
-        },
+        file_arguments,
     )
     index_footer = render_template(
         filename=f"{SRC}/templates/footer.html.j2",
-        **{
-            "base_url": BASE_URL,
-            "in_index": True,
-        },
+        file_arguments,
     )
     year_indexes = build_year_index(
         src=SRC,

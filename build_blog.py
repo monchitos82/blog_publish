@@ -176,6 +176,7 @@ if __name__ == "__main__":
         
         update_rss = os.getenv('UPDATE_RSS', None)
         if update_rss:
+            log.info("RSS updates enabled")
             if not generate_rss_feed(
                 src=SRC,
                 dest=DEST,

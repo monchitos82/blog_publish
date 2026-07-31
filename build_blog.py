@@ -72,6 +72,7 @@ if __name__ == "__main__":
         "in_post": False,
         "progressbar": True,
         "menu": None,
+        "post_year": None,
         "years": YEARS,
         "title": SITE_TITLE,
     }

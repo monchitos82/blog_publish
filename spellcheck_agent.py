@@ -12,20 +12,12 @@ log = logging.getLogger(__name__)
 
 
 @tool
-def git_diff() -> str | None:
-    """Will get the git diff result for the current dir"""
-    result = None
-    try:
-        with subprocess.Popen(
-            ["git", "diff", "HEAD~1", "HEAD"], stdout=subprocess.PIPE
-        ) as git_diff_process:
-            result = git_diff_process.stdout.read()
-    except subprocess.SubprocessError as error:
-        log.error(f"Failed to execute git diff on local files, error: {error}")
-    return result
+def echo(input: str) -> str | None:
+    """Will repeat back its input"""
+    return input
 
 
-tools = [git_diff]
+tools = [echo]
 agent_prompt = """
 You are an assistant whose function is to validate content is grammatically correct"
 """

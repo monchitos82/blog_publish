@@ -15,6 +15,7 @@ dependencies = [
     "Jinja2==3.1.6",
     "langchain>=1.3.11",
     "langchain-ollama>=1.1.0",
+    "language-tool-python>=3.4.0",
     "Markdown==3.10.2",
     "MarkupSafe==3.0.3",
     "neocitizen>=1.0.0",

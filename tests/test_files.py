@@ -131,16 +131,16 @@ def test_copy_statics_copies_matching_files(tmp_path):
 
 def test_copy_statics_wildcard(tmp_path):
     src = tmp_path / "src"
-    experiments = src / "experiments"
-    experiments.mkdir(parents=True)
-    (experiments / "demo.html").write_text("<html/>")
+    temporary = src / "temporary"
+    temporary.mkdir(parents=True)
+    (temporary / "demo.html").write_text("<html/>")
     dest = tmp_path / "dest"
-    dest_experiments = dest / "experiments"
-    dest_experiments.mkdir(parents=True)
-    statics = {str(experiments): ["*"]}
+    dest_temporary = dest / "temporary"
+    dest_temporary.mkdir(parents=True)
+    statics = {str(temporary): ["*"]}
     result = copy_statics(str(src), str(dest), statics)
     assert result is True
-    assert (dest_experiments / "demo.html").exists()
+    assert (dest_temporary / "demo.html").exists()
 
 
 def test_clean_files_deletes_by_extension(tmp_path):

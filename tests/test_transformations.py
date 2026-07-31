@@ -1,6 +1,6 @@
 import os
 
-from transformations import render_template, parse_markdown, parse_markdown_file, save_as_html
+from transformations import render_template, render_content_as_template, parse_markdown, parse_markdown_file, save_as_html
 
 
 def test_render_template_renders_variables(tmp_path):
@@ -17,6 +17,11 @@ def test_render_template_no_variables(tmp_path):
     t = tmp_path / "tmpl.j2"
     t.write_text("<html/>")
     assert render_template(str(t)) == "<html/>"
+
+
+def test_render_content_as_template():
+    content = "{{ foo }}"
+    assert render_content_as_template(content, foo="var") == "var"
 
 
 def test_parse_markdown_basic():

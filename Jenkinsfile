@@ -61,5 +61,9 @@ pipeline {
         failure {
             cleanWs()
         }
+        success {
+            dir("${SOURCE}") { deleteDir() }
+            dir("pages") { deleteDir() }
+        }
     }
 }

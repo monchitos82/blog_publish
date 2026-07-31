@@ -43,7 +43,7 @@ def render_template(filename: str, **kwargs) -> str:
 
 def render_content_as_template(
     content: str, functions: list = JINJA_FUNCTIONS, **kwargs
-) -> str:
+) -> str | None:
     """Render content as a template using jinja2 (no file used here)."""
     try:
         template_as_content = Template(content)
@@ -53,7 +53,7 @@ def render_content_as_template(
         content = template_as_content.render(kwargs)
     except TemplateError as err:
         log.error(f"Failed to render the content as template, error: {err}")
-        content = None
+        return None
     return content
 
 
@@ -130,9 +130,9 @@ def save_as_html(
     filename: str,
     header: str,
     footer: str,
-    content: str,
+    content: str | None,
     replace: dict,
-    tracking_url: str,
+    tracking_url: str | None,
     title: str | None,
 ) -> bool:
     """Save content as html file."""

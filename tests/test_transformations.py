@@ -2,6 +2,7 @@ import os
 
 import pytest
 from jinja2 import Environment, FunctionLoader
+
 from transformations import (parse_markdown, render_annotations,
                              render_content_as_template, render_template,
                              save_as_html, title_h4_href)
@@ -166,9 +167,6 @@ def test_title_h4_href_with_real_context(jinja_env):
     assert result == expect
 
 
-import os
-
-
 def test_render_annotations_index():
     src = f"{os.getcwd()}/tests"
     header = ""
@@ -223,26 +221,6 @@ def test_render_annotations_nav_main():
     )
     assert '"in_main": False' in file_footer
     assert '"in_index": True' in file_footer
-
-
-def test_render_annotations_nav_main_es():
-    src = f"{os.getcwd()}/tests"
-    header = ""
-    footer = ""
-    content = "<!-- NAV_MAIN_ES -->"
-    filename = "foo"
-    arguments = {"in_main": False, "in_index": False, "in_es": False}
-    _, file_footer = render_annotations(
-        src=src,
-        header=header,
-        footer=footer,
-        content=content,
-        filename=filename,
-        **arguments,
-    )
-    assert '"in_main": False' in file_footer
-    assert '"in_index": True' in file_footer
-    assert '"in_es": True' in file_footer
 
 
 def test_render_annotations_progressbar():

@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     # this is used to signal where to copy files and which extensions to use
     STATICS = {
-        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt")),
+        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt",)),
     }
 
     STATICS.update(load_static_env(src=SRC))
@@ -112,9 +112,7 @@ if __name__ == "__main__":
         if "<!-- NO_RENDER -->" not in content:
             content = render_content_as_template(
                 content=content,
-                **{
-                    "base_url": BASE_URL,
-                },
+                **file_arguments,
             )
 
         html_save = save_as_html(

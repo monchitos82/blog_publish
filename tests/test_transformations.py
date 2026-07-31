@@ -2,14 +2,22 @@ import os
 
 import pytest
 from jinja2 import Environment, FunctionLoader
-from transformations import (parse_markdown, parse_template,
-                             render_annotations, save_as_html, title_h4_href)
+
+from jinja_functions import JinjaFunctions
+from transformations import (
+    parse_markdown,
+    parse_template,
+    render_annotations,
+    save_as_html,
+)
 
 
 @pytest.fixture
 def jinja_env():
     env = Environment(loader=FunctionLoader(lambda name: ""))
-    env.globals["title_h4_href"] = title_h4_href
+    functions = JinjaFunctions.functions
+    for function in functions:
+        env.globals[function] = functions[function]
     return env
 
 

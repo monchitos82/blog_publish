@@ -1,37 +1,17 @@
 import logging
-import sys
-import urllib.parse
 
 import markdown
-from jinja2 import Template, pass_context
+from jinja2 import Template
 from jinja2.exceptions import TemplateError
-from jinja2.runtime import Context
+
+from jinja_functions import JinjaFunctions
 
 log = logging.getLogger(__name__)
-
-
-# functions available inside jinja should be included here before their declaration
-JINJA_FUNCTIONS = ["title_h4_href"]
-
-
-@pass_context
-def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
-    """Render a header using an anchor quick reference format"""
-    base_url = context.get("base_url", "")
-    html_title = f"{urllib.parse.quote(title.lower().replace(' ', '_'))}_{date.replace('/', '_')}"
-    return f"""
-    <h4>
-      <a name=\"{html_title}\" href=\"{base_url}/{path}#{html_title}\">
-        {title} ({date})
-      </a>
-    </h4>
-    """
 
 
 def parse_template(
     filename: str | None = None,
     content: str | None = None,
-    functions: list = JINJA_FUNCTIONS,
     **kwargs,
 ) -> str:
     """Render a filename template using jinja2."""
@@ -55,14 +35,15 @@ def parse_template(
             template = Template(content)
 
         if template:
-            current_module = sys.modules[__name__]
-            for function in functions:
-                try:
-                    template.globals[function] = getattr(current_module, function)
-                except AttributeError:
-                    log.warning(
-                        f"Function: {function} has not been declared in the module"
-                    )
+            try:
+                functions = JinjaFunctions.functions
+                for function in functions:
+                    try:
+                        template.globals[function] = functions[function]
+                    except KeyError:
+                        log.warning(f"Function: {function} has not been declared")
+            except AttributeError:
+                log.warning("There are no available jinja functions")
             rendered_content = template.render(kwargs)
     except TemplateError as err:
         log.error(f"Failed to render the template {filename}, error: {err}")

@@ -5,12 +5,15 @@ import datetime
 import logging
 import os
 
-from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
-                   list_of_files)
+from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files
 from operations import build_year_index, extract_post_title
 from rss import generate_rss_feed
-from transformations import (parse_markdown_file, render_content_as_template,
-                             render_template, save_as_html)
+from transformations import (
+    parse_markdown_file,
+    render_content_as_template,
+    render_template,
+    save_as_html,
+)
 from utils import env_list_as_tuple, run_async
 from validations import has_broken_anchors
 
@@ -31,7 +34,6 @@ EMAIL = os.getenv("EMAIL", None)
 ACCOUNT = os.getenv("ACCOUNT", None)
 
 if __name__ == "__main__":
-
     file_errors = False
     base_dirname = SRC
 
@@ -39,10 +41,10 @@ if __name__ == "__main__":
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
         f"{SRC}/misc": env_list_as_tuple("STATICS_MISC", (".html", ".json")),
-        f"{SRC}/static": env_list_as_tuple("STATICS_STATIC", (".txt")),
+        f"{SRC}/static": env_list_as_tuple("STATICS_STATIC", (".txt",)),
     }
 
-    clean_files(path=f"{DEST}", extension="html"),
+    (clean_files(path=f"{DEST}", extension="html"),)
 
     # first step is to clean-up the page files
 
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     last_year = int(LAST_YEAR)
     first_year = last_year - int(YEAR_LOOKBACK)
     YEARS = [str(year) for year in range(first_year, last_year + 1)]
-    
+
     arguments = {
         "author": AUTHOR,
         "base_url": BASE_URL,
@@ -66,22 +68,22 @@ if __name__ == "__main__":
         "menu": None,
         "title": TITLE,
         "tracking_url": TRACKING,
-        "year" : None,
-        "years" : YEARS,
+        "year": None,
+        "years": YEARS,
     }
-    
+
     menu = render_template(
-        filename = f"{SRC}/templates/menu.html.j2",
+        filename=f"{SRC}/templates/menu.html.j2",
         **arguments,
     )
     arguments["menu"] = menu
-    
+
     header = render_template(
-        filename = f"{SRC}/templates/header.html.j2",
+        filename=f"{SRC}/templates/header.html.j2",
         **arguments,
     )
     footer = render_template(
-        filename = f"{SRC}/templates/footer.html.j2",
+        filename=f"{SRC}/templates/footer.html.j2",
         **arguments,
     )
 
@@ -108,14 +110,14 @@ if __name__ == "__main__":
                 **file_arguments,
             )
         if len(split_filename) == 5:
-           year = split_filename[-2]
-           file_arguments["year"] = year
-           file_arguments["in_post"] = True
-           file_footer = render_template(
-               filename=f"{SRC}/templates/footer.html.j2",
-               **file_arguments,
-           )
-        
+            year = split_filename[-2]
+            file_arguments["year"] = year
+            file_arguments["in_post"] = True
+            file_footer = render_template(
+                filename=f"{SRC}/templates/footer.html.j2",
+                **file_arguments,
+            )
+
         if "<!-- NAV_MAIN -->" in content:
             file_arguments["in_index"] = True
             file_footer = render_template(
@@ -126,7 +128,7 @@ if __name__ == "__main__":
         if "<!-- NO_PROGRESSBAR -->" in content:
             file_arguments["progressbar"] = False
             file_header = render_template(
-                filename = f"{SRC}/templates/header.html.j2",
+                filename=f"{SRC}/templates/header.html.j2",
                 **file_arguments,
             )
 

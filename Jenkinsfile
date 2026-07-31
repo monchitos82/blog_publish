@@ -27,8 +27,7 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 script {
-                    def uvExists = fileExists '/home/jenkins/.local/bin/uv'
-                    if (!uvExists || params.FORCE_SETUP) {
+                    if (!fileExists('/home/jenkins/.local/bin/uv') || params.FORCE_SETUP) {
                         sh '''
                             curl -LsSf https://astral.sh/uv/install.sh | sh
                             export PATH="$HOME/.local/bin:$PATH"

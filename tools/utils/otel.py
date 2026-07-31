@@ -74,7 +74,7 @@ def setup_otel_tracing() -> trace:
     trace.set_tracer_provider(TracerProvider(resource=resource))
 
     otlp_tracing_exporter = OTLPSpanExporter(
-        endpoint="host.containers.internal:6831",
+        endpoint="host.containers.internal:4317",
         insecure=True,
     )
     trace.get_tracer_provider().add_span_processor(
@@ -92,7 +92,7 @@ def setup_otel_metrics() -> tuple:
         }
     )
     metric_exporter = OTLPMetricExporter(
-        endpoint="host.containers.internal:6831",
+        endpoint="host.containers.internal:4317",
         insecure=True,
     )
     reader = PeriodicExportingMetricReader(

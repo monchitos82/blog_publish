@@ -71,6 +71,7 @@ def copy_statics(src: str, dest: str, statics: list) -> bool:
             )
             for filename in files:
                 try:
+                    log.warning(f"copying {filename} with extension {extension} into {site}, on {site} scan")
                     shutil.copy2(src=filename, dst=site)
                     log.debug(f"Static file {filename} copied to {dest}")
 

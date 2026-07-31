@@ -1,4 +1,3 @@
-import logging
 import os
 import shutil
 
@@ -9,13 +8,8 @@ from bs4 import BeautifulSoup
 from files import list_of_files
 from transformations import parse_markdown_file, render_template, save_as_html
 
-log = logging.getLogger(__name__)
-BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
-SRC = os.getenv("SRC", "../source")
-DEST = os.getenv("DEST", "../pages")
 
-
-async def has_broken_anchors(dest: str = DEST) -> bool:
+async def has_broken_anchors(dest: str) -> bool:
     """Find URLs in dest html files and make sure no URL is invalid."""
     for filename in list_of_files(
         dirname=dest, extension="html", clean_extension=False
@@ -37,7 +31,7 @@ async def has_broken_anchors(dest: str = DEST) -> bool:
     return False
 
 
-def find_last_post(year: str, src: str = SRC) -> str:
+def find_last_post(year: str, src: str) -> str:
     """Find which file in the sources is the last one added."""
     existing_files = list_of_files(f"{src}/posts/{year}", clean_extension=False)
     last = None
@@ -71,7 +65,7 @@ def extract_post_title(filename: str) -> str:
     return None
 
 
-def get_index_titles(year: str, src: str = SRC) -> list:
+def get_index_titles(year: str, src: str) -> list:
     """Extract the titles for a year's index"""
     titles = []
     year_index = f"{src}/templates/{year}.md.j2"
@@ -86,7 +80,7 @@ def get_index_titles(year: str, src: str = SRC) -> list:
     return titles
 
 
-def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool:
+def append_last_title_to_index(filename: str, year: str, src: str) -> bool:
     """Append the last title to year index"""
     year_index = f"{src}/templates/{year}.md.j2"
     backup = f"{year_index}.backup"
@@ -131,12 +125,12 @@ def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool
 
 
 async def build_year_index(
-    years: list, header: str, footer: str, src: str = SRC, dest: str = DEST
+    years: list, header: str, footer: str, src: str, dest: str, base_url: str
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
         year_markdown = render_template(
-            filename=f"{src}/templates/{year}.md.j2", **{"base_url": BASE_URL}
+            filename=f"{src}/templates/{year}.md.j2", **{"base_url": base_url}
         )
         try:
             filename = f"{src}/posts/{year}"

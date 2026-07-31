@@ -7,12 +7,8 @@ import logging
 import os
 
 from files import clean_files, copy_dirs, copy_statics, list_of_files
-from operations import (
-    append_last_title_to_index,
-    build_year_index,
-    find_last_post,
-    has_broken_anchors,
-)
+from operations import (append_last_title_to_index, build_year_index,
+                        find_last_post, has_broken_anchors)
 from transformations import parse_markdown_file, render_template, save_as_html
 
 log = logging.getLogger(__name__)
@@ -127,7 +123,9 @@ if __name__ == "__main__":
             },
         )
         year_indexes = asyncio.run(
-            build_year_index(years=YEARS, header=header, footer=index_footer)
+            build_year_index(
+                years=YEARS, header=header, footer=index_footer, base_url=BASE_URL
+            )
         )
 
     # if all year indexes are ready we can build the index from them

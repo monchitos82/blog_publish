@@ -1,10 +1,6 @@
-import logging
-
 import markdown
 from jinja2 import Template
 from jinja2.exceptions import TemplateError
-
-log = logging.getLogger(__name__)
 
 
 def render_template(filename: str, **kwargs) -> str:

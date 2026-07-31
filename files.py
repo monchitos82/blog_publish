@@ -1,10 +1,5 @@
-import logging
 import os
 import shutil
-
-log = logging.getLogger(__name__)
-SRC = os.getenv("SRC", "../source")
-DEST = os.getenv("DEST", "../pages")
 
 
 def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> list:
@@ -24,7 +19,7 @@ def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> 
     return files_list
 
 
-def copy_dirs(src: str = SRC, dest: str = DEST, depth=0) -> bool:
+def copy_dirs(src: str, dest: str, depth=0) -> bool:
     """Mirror the structure of directories within a src path (1 level non-recursive)."""
     try:
         for item in os.listdir(src):
@@ -51,7 +46,7 @@ def copy_dirs(src: str = SRC, dest: str = DEST, depth=0) -> bool:
     return True
 
 
-def copy_statics(statics: list, src: str = SRC, dest: str = DEST) -> None:
+def copy_statics(statics: list, src: str, dest: str) -> None:
     """Copy any static files, this runs independently of markdown rendering."""
     for item in statics:
         site = item.replace(src, dest)

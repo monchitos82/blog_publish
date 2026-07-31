@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     # this is used to signal where to copy files and which extensions to use
     STATICS = {
-        f"{SRC}": (".txt",)),
+        f"{SRC}": (".txt",),
     }
 
     STATICS.update(load_static_env(src=SRC))

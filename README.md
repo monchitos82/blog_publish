@@ -43,7 +43,7 @@ In the following example, we can add the `/extras` directory, where only `.txt` 
 
 ```
     STATICS = {
-        f"{SRC}": (".txt",)),
+        f"{SRC}": (".txt",),
         f"{SRC}/extras": (".txt",),
     }
 ```

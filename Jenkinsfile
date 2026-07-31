@@ -14,14 +14,19 @@ pipeline {
     stages {
         stage('Setup Environment') {
             steps {
-                sh '''
+                def uv_installed = fileExists '$HOME/.local/bin/uv'
+                if (!uv_installed || env.FORCE_SETUP) {
+                    sh '''
                     curl -LsSf https://astral.sh/uv/install.sh | sh
                     export PATH="$HOME/.local/bin:$PATH"
                     $HOME/.local/bin/uv sync --frozen
-                '''
+                    '''
+                } else {
+                    echo "UV is already installed"
+                }
             }
         }
-        stage('Cleanup') {
+        stage('Setup Sources') {
             steps {
                 sh '''
                     git clone ${GIT_URL}/${SOURCE} # clone my sources

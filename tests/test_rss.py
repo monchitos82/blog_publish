@@ -26,5 +26,4 @@ def test_generate_rss(tmp_path):
     feed = dest / "feed.xml"
     assert feed.exists()
     content = feed.read_text()
-    print(content)
     assert "My Post" in content

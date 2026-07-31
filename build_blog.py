@@ -111,6 +111,7 @@ if __name__ == "__main__":
             if file_title:
                 file_arguments["file_title"] = file_title
             file_arguments["file_name"] = trimmed_filename
+            print(file_arguments)
             file_header, file_footer = render_annotations(
                 src=SRC,
                 filename=filename,

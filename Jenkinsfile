@@ -193,15 +193,15 @@ pipeline {
                 }
             }
         }
-        stage('Go Live in Neocities') {
-            steps {
-                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
-                    sh '''
-                        $HOME/.local/bin/uv run neocities_upload.py
-                    '''
-                }
-            }
-        }
+        //stage('Go Live in Neocities') {
+        //    steps {
+        //        catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
+        //            sh '''
+        //                $HOME/.local/bin/uv run neocities_upload.py
+        //            '''
+        //        }
+        //    }
+        //}
     }
     post {
         aborted {

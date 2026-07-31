@@ -18,6 +18,8 @@ def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> Non
         fg.subtitle("Updates from my blog")
         fg.language("en")
 
+        print(settings)
+
         for year in years:
             for post in sorted(
                 list_of_files(f"{src}/posts/{year}", clean_extension=False),
@@ -28,7 +30,8 @@ def generate_rss_feed(src: str, dest: str, years: list, **settings: dict) -> Non
                 # titles are in a format "title text (mm/yy)"
                 title_date = title[-7:]
                 title_text = title[:-8]
-                title_url = f"{settings.get('base_url')}/posts/{year}/{title}"
+                filename = post.split("/")[-1].split(".")[0]
+                title_url = f"{settings.get('base_url')}/posts/{year}/{filename}.html"
 
                 print(title_date, title_text, title_url)
 

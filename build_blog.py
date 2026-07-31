@@ -96,7 +96,6 @@ if __name__ == "__main__":
         if filename == f"{SRC}/index":
             # base, index.md at root
             file_arguments["in_main"] = True
-            file_arguments["progressbar"] = False
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
                 **file_arguments,

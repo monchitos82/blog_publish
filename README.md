@@ -32,7 +32,7 @@ b) There are some environment variables needed to run the script:
 * `SRC`           This is the path to my source repository
 * `DEST`          This is the path to my pages repository, defaults to "../pages"
 * `YEAR`          This is the current year, defaults to the Year (yyyy) in the machine
-* `YEAR_LOOKBACK` Years to look back, for my blog, it should be 2, so it builds from 2024 until 2026. Defaults to 1
+* `YEAR_LOOKBACK` Years to look back, for my blog, it should be 1, so it builds from 2025 until 2026. Defaults to 1
 
 These are defined in the Jenkinsfile as well, so pretty much all that I need to publish, it is controlled by these variables.
 

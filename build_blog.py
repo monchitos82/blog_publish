@@ -36,6 +36,7 @@ DEST = os.getenv("DEST", "../site")
 AUTHOR = os.getenv("AUTHOR", "")
 EMAIL = os.getenv("EMAIL", "")
 SITE_NAME = os.getenv("SITE_NAME", "")
+SITE_TITLE = os.getenv("SITE_TITLE", "")
 
 if __name__ == "__main__":
     file_errors = False
@@ -68,7 +69,7 @@ if __name__ == "__main__":
         "progressbar": True,
         "menu": None,
         "years": YEARS,
-        "title": TITLE,
+        "title": SITE_TITLE,
     }
 
     arguments["menu"] = parse_template(

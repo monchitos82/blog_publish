@@ -1,0 +1,14 @@
+aiofiles
+bs4
+certifi
+charset-normalizer
+click
+feedgen
+idna
+Jinja2
+Markdown
+MarkupSafe
+requests
+toolz
+urllib3
+validators

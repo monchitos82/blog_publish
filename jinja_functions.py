@@ -15,7 +15,9 @@ class JinjaFunctions:
 
 @JinjaFunctions.jinja_function
 @pass_context
-def title_h4_href(context: Context, title: str, date: str, path: str | None) -> str:
+def title_h4_href(
+    context: Context, title: str, date: str, path: str | None = None
+) -> str:
     """
     Render a header using an anchor quick reference format, this generates an h4 header
     with a NAME anchor and an HREF anchor.

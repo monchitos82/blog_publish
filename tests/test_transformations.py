@@ -177,7 +177,7 @@ def test_title_h4_href_with_real_context(jinja_env):
     context_data = {"base_url": "https://example.com"}
     render_context = {
         **context_data,
-        "title": "foo_bar",
+        "title": "foo bar",
         "date": "10/10/2026",
         "path": "foobar.html",
     }

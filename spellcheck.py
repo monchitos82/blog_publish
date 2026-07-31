@@ -1,7 +1,7 @@
 import logging
 import sys
-import language_tool_python
 
+import language_tool_python
 
 log = logging.getLogger(__name__)
 

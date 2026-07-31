@@ -57,6 +57,7 @@ if __name__ == "__main__":
     arguments = {
         "author": AUTHOR,
         "base_url": BASE_URL,
+        "in_es": False,
         "in_index": False,
         "in_main": False,
         "in_post": False,
@@ -117,6 +118,13 @@ if __name__ == "__main__":
         if "<!-- NAV_MAIN -->" in content:
             file_arguments["in_index"] = True
             file_footer = render_template(
+                filename=f"{SRC}/templates/footer.html.j2",
+                **file_arguments,
+            )
+        
+        if "<!-- NAV_MAIN_ES -->" in content:
+            file_arguments["in_index"] = True
+            file_arguments["in_es"] = True
                 filename=f"{SRC}/templates/footer.html.j2",
                 **file_arguments,
             )

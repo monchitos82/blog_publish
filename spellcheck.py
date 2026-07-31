@@ -15,8 +15,8 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
     output = None
     try:
         model = ChatOllama(model=os.getenv("OLLAMA_MODEL", "granite4.1:8b"))
-    except Exception:
-        print("No model was created")
+    except Exception as error:
+        print(f"No model was created, error: {error}")
         return
 
     if model:
@@ -26,8 +26,8 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                 tools=tools,
                 system_prompt="You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion",
             )
-        except Exception:
-            print("No agent was setup for the model")
+        except Exception as error:
+            print(f"No agent was setup for the model, error: {error}")
             return
 
         if agent:
@@ -41,8 +41,8 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                         ]
                     }
                 )
-            except Exception:
-                print("No response was given")
+            except Exception as error:
+                print(f"No response was given, error: {error}")
                 return
 
             if result:

@@ -45,7 +45,7 @@ def render_content_as_template(content: str, **kwargs) -> str:
 
 
 def render_annotations(
-    filename: str, header: str, footer: str, content: str, **kwargs
+    src: str, filename: str, header: str, footer: str, content: str, **kwargs
 ) -> tuple:
     """Render annotations and transformation for specific filename cases"""
     file_header = header
@@ -53,15 +53,15 @@ def render_annotations(
     file_arguments = kwargs
     split_filename = filename.split("/")
 
-    if filename == f"{SRC}/index":
+    if filename == f"{src}/index":
         # base, index.md at root
         file_arguments["in_main"] = True
         file_footer = render_template(
-            filename=f"{SRC}/templates/footer.html.j2",
+            filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
         file_header = render_template(
-            filename=f"{SRC}/templates/header.html.j2",
+            filename=f"{src}/templates/header.html.j2",
             **file_arguments,
         )
     if len(split_filename) == 5:
@@ -69,14 +69,14 @@ def render_annotations(
         file_arguments["year"] = year
         file_arguments["in_post"] = True
         file_footer = render_template(
-            filename=f"{SRC}/templates/footer.html.j2",
+            filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
 
     if "<!-- NAV_MAIN -->" in content:
         file_arguments["in_index"] = True
         file_footer = render_template(
-            filename=f"{SRC}/templates/footer.html.j2",
+            filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
 
@@ -84,14 +84,14 @@ def render_annotations(
         file_arguments["in_index"] = True
         file_arguments["in_es"] = True
         file_footer = render_template(
-            filename=f"{SRC}/templates/footer.html.j2",
+            filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
 
     if "<!-- NO_PROGRESSBAR -->" in content:
         file_arguments["progressbar"] = False
         file_header = render_template(
-            filename=f"{SRC}/templates/header.html.j2",
+            filename=f"{src}/templates/header.html.j2",
             **file_arguments,
         )
     return (file_header, file_footer)

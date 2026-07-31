@@ -97,6 +97,7 @@ if __name__ == "__main__":
         content = parse_markdown_file(filename=filename)
         file_arguments = dict(arguments)
         file_header, file_footer = render_annotations(
+            src=SRC,
             filename=filename,
             header=header,
             footer=footer,

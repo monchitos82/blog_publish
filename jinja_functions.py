@@ -35,7 +35,6 @@ def title_h4_href(
     if path and base_url:
         decorated_url = f'<a href="{base_url}/{path}#{html_title}" class="decorated">'
 
-    print(path, base_url, decorated_url)
     return (
         f'<span><a name="{html_title}"/></a></span>'
         + '<br class="short"/>'

@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
             file_arguments = dict(arguments)
             print(filename)
-            file_title = extract_post_title(filename=filename)
+            file_title = extract_post_title(filename=f"{filename}.md")
             if file_title:
                 file_arguments["file_title"] = file_title
             file_arguments["file_name"] = filename

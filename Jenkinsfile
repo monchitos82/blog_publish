@@ -152,9 +152,12 @@ pipeline {
             steps {
                 sh '''
                 echo "---" > ${LOCAL_PATH_SITE}/spellcheck_.txt
-                for html_file in $(find ${SRC} -name '*.md' | grep -v 'snippets'); do
+                cd ${SRC}
+                CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+                cd -
+                for html_file ${CHANGED_FILES}; do
                     echo "## ${html_file} ##" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
-                    $HOME/.local/bin/uv run spellcheck_agent.py ${html_file} >> ${LOCAL_PATH_SITE}/spellcheck_.txt
+                    $HOME/.local/bin/uv run spellcheck_agent.py ${SRC}/${html_file} >> ${LOCAL_PATH_SITE}/spellcheck_.txt
                     echo "" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
                 done
                 '''

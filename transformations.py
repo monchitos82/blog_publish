@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 
 def title_h4_href(title: str, date: str, path: str = ".") -> str:
-    log.error(f"Title is: {title} and path is: {path}")
+    log.info(f"Title is: {title} and path is: {path}")
     html_title = f"{urllib.parse.quote(title)}_{date.replace('/', '_')}"
     return f"""
       <h4>
@@ -41,7 +41,7 @@ def render_content_as_template(content: str, **kwargs) -> str:
         template_as_content.globals["title_h4_href"] = title_h4_href
         content = template_as_content.render(kwargs)
     except TemplateError as err:
-        log.error(f"Failed to render the content {content} as template, error: {err}")
+        log.error(f"Failed to render the content as template, error: {err}")
     return content
 
 

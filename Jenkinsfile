@@ -8,7 +8,6 @@ pipeline {
         TITLE = "Ramon G"
         SITE_NAME = "ramongamx"
         SOURCE = "ramongamx"
-        TRACKING = ""
 
         //build specifics
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
@@ -117,9 +116,6 @@ pipeline {
                 cp -r /opt/deploy/site ./last/
                 cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
-                if [[ "${TRACKING}" != "" ]]; then
-                  find /opt/deploy/site -type f -exec sed -i 's|.*${TRACKING}.*|    <!-- no tracking -->|g' {} +
-                fi
                 """
             }
         }

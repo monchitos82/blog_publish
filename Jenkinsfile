@@ -197,7 +197,7 @@ pipeline {
                 }
             }
             options {
-                timeout time: 5, unit: 'MINUTES'
+                timeout time: 7, unit: 'MINUTES'
             }
             steps {
                 script {

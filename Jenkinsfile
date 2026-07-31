@@ -84,6 +84,18 @@ pipeline {
             }
 
         }
+        stage('Publish Local') {
+            steps {
+                sh 'ls; pwd;'
+                //sh 'cp -r ./build/* /opt/deploy/'
+            }
+        }
+        stage('Publish to the public') {
+            steps {
+                input message: 'Are you ready to publish?', ok: 'Publish'
+            }
+        }
+
         stage('Publish') {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update pages'){

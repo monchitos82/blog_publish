@@ -175,7 +175,7 @@ pipeline {
                             """
                         } else {
                             sh """
-                            echo "Pages is already present"
+                            echo 'Pages is already present'
                             cd ..
                             cd ${SITE_PAGES}
                             git pull
@@ -183,7 +183,7 @@ pipeline {
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
                             git add -A
-                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git commit -am \"$(date +'%Y-%m-%d %H:%M:%S')\"
                             git push
                             """
                         }

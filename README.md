@@ -32,7 +32,6 @@ b) There are some environment variables needed to run the script:
 * `BASE_URL`      This is the landing URL for my blog
 * `SRC`           This is the path to my source repository, defaults to "../source"
 * `DEST`          This is the path to my pages repository, defaults to "../pages"
-* `YEAR`          This is the current year, defaults to the Year (yyyy) in the machine
 * `FIRST_YEAR`    This is the year when the blog starts. Formerly set as year lookback, but this requires no update. It defaults to YEAR - 1
 
 These are defined in the Jenkinsfile as well, so pretty much all that I need to publish, it is controlled by these variables.
@@ -73,9 +72,17 @@ This may not be the most elegant solution (Not a fan of using code as "configura
 
 Files may contain some comments that will alter their behavior. In a similar manner all files (markdown) are parsed twice unless explicitly avoided, this, to allow injecting tags and `jinja` logic. This way the parsing workflow is as follows:
 
-```
-markdown file --> html file with jinja tags --> html static file
-```
+<pre><code>
+
+.---------------.                       
+| markdown file | --> << Markdown Parsing >> 
+'---------------'                 |    .---------------------------.        
+                                  -->  | html file with jinja tags | --> << Jinja Parsing >>
+                                       '---------------------------'              |    .------------------.
+                                                                                  -->  | html static file |
+                                                                                       '------------------'
+
+</code></pre>
 
 The available annotations at this time are:
 

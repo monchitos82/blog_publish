@@ -94,7 +94,7 @@ if __name__ == "__main__":
     if markdown_files:
         for filename in markdown_files:
             split_filename = filename.split("/")
-            trimmed_filename = split_filename[-1].split(".")[:-1]
+            trimmed_filename = ".".join(split_filename[-1].split(".")[:-1])
             if split_filename[-1] == "README.md" or split_filename[-1].startswith("."):
                 continue
 

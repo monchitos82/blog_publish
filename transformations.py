@@ -29,28 +29,31 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
 
 
 def parse_template(
-    filename: str = "",
-    content: str = "",
+    filename: str | None = None,
+    content: str | None = None,
     functions: list = JINJA_FUNCTIONS,
     **kwargs,
 ) -> str:
     """Render a filename template using jinja2."""
+    template = None
+    rendered_content = ""
+
     try:
-        template = None
-        if not content and not filename:
-            log.error(
-                "Parse template requires either a filename (preferred) or content"
-            )
-            return ""
-        elif filename:
+        if filename is not None:
             try:
                 with open(filename) as template_file:
                     template = Template(source=template_file.read())
             except OSError as err:
                 log.error(f"Could not open the template, error: {err}")
                 return ""
-        elif content:
+        else:
+            if not content:
+                log.error(
+                    "Parse template requires either a filename (preferred) or content"
+                )
+                return ""
             template = Template(content)
+
         if template:
             current_module = sys.modules[__name__]
             for function in functions:
@@ -60,12 +63,10 @@ def parse_template(
                     log.warning(
                         f"Function: {function} has not been declared in the module"
                     )
-            content = template.render(kwargs)
+            rendered_content = template.render(kwargs)
     except TemplateError as err:
-        if not filename:
-            filename = "raw content"
         log.error(f"Failed to render the template {filename}, error: {err}")
-    return content
+    return rendered_content
 
 
 def render_annotations(

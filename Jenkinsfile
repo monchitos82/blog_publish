@@ -10,11 +10,12 @@ pipeline {
 
         // build specifics
         SOURCE = "blog"
+        SITE_DIR = "site"
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         BASE_URL = "https://${ACCOUNT}.${DOMAIN}"
         TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
-        DEST = "./site"
+        DEST = "./${SITE_DIR}"
         SRC = "./${SOURCE}"
         LOCAL_PATH_ROOT = "/opt/deploy"
         LOCAL_PATH = "${LOCAL_PATH_ROOT}/site"
@@ -69,12 +70,13 @@ pipeline {
                 script {
                     if (params.CLEAN_REPOSITORIES) {
                         dir("${SOURCE}") { deleteDir() }
-                        dir("site") { deleteDir() }
+                        dir("${SITE_PAGES}") { deleteDir() }
+                        dir("${SITE_DIR}") { deleteDir() }
                         sh '''
                             git clone ${GIT_URL}
                         '''
                     } else {
-                        if (fileExists("/home/jenkins/agent/workspace/blog/${SOURCE}")) {
+                        if (fileExists("/home/jenkins/agent/workspace/${SOURCE}")) {
                             sh '''
                             cd ${SOURCE}
                             git pull
@@ -108,7 +110,7 @@ pipeline {
                       }
                     }
                     sh '''
-                    mkdir -p ./site
+                    mkdir -p ${DEST}
                     $HOME/.local/bin/uv run build_blog.py
                     '''
                 }
@@ -119,10 +121,10 @@ pipeline {
             steps {
                 sh """
                 mkdir -p ${LOCAL_PATH}
-                mkdir -p ${STABLE}/site
+                mkdir -p ${STABLE}/${SITE_DIR}
                 cp -r ${LOCAL_PATH} ${STABLE}/
                 cp -r ${DEST} ${LOCAL_PATH_ROOT}
-                find ${LOCAL_PATH} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
+                find ${LOCAL_PATH} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/${SITE_DIR}|g' {} +
                 if [ ! -z "${TRACKING_URL}" ]; then
                   find ${LOCAL_PATH} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
                 fi
@@ -151,17 +153,30 @@ pipeline {
             }
         }
 
-        stage('Go Live') {
+        stage('Go Live in Codeberg') {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     sh '''
+                        cd
                         git clone ${SITE_PAGES_URL}
-                        cp -r ${DEST} ${SITE_PAGES}
+                        cp -r ${SOURCE}/${SITE_DIR} ${SITE_PAGES}
                         cd  ${SITE_PAGES}
                         git add -A
                         git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                         git push origin master
+                        cd
+                    '''
+                }
+            }
+        }
+        stage('Go Live in Neocities') {
+            steps {
+                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
+                    sh '''
+                        cd
+                        cd ${SOURCE}
                         $HOME/.local/bin/uv run neocities_upload.py
+                        cd
                     '''
                 }
             }
@@ -171,7 +186,7 @@ pipeline {
         aborted {
             sh """
             echo 'Rolling back local changes'
-            cp -r ${STABLE}/site ${LOCAL_PATH_ROOT}
+            cp -r ${STABLE}/${SITE_DIR} ${LOCAL_PATH_ROOT}
             """
         }
         failure {
@@ -182,7 +197,7 @@ pipeline {
             script {
                 if (params.CLEAN_REPOSITORIES) {
                     dir("${SOURCE}") { deleteDir() }
-                    dir("site") { deleteDir() }
+                    dir("${SITE_PAGES}") { deleteDir() }
                 }
             }
         }

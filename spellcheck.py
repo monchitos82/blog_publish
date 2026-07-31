@@ -36,7 +36,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                     {
                         "messages": [
                             HumanMessage(
-                                content=f"please analyze the following text and find spelling and grammar errors: {msg}"
+                                content=f"please analyze the following text and find spelling and grammar errors: {msg}, make your response formatted in HTML"
                             )
                         ]
                     }

@@ -2,7 +2,6 @@ pipeline {
     agent { label 'python' }
     environment {
         // build specifics
-        AUTO = "True"
         GIT_ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${GIT_ACCOUNT}"
         PYTHON = "python3"
@@ -31,7 +30,7 @@ pipeline {
                     . ${VENV_DIR}/bin/activate
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
-                    python build_blog.py -s # s flag so we scan for foul language
+                    python build_blog.py
                 '''
             }
 

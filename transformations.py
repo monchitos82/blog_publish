@@ -10,15 +10,15 @@ log = logging.getLogger(__name__)
 
 @pass_context
 def title_h4_href(context: dict, title: str, date: str, path: str) -> str:
-    log.info(f"Title is: {title} and path is: {path}")
+    log.info(f"Title is: {title} and path is: {path}, {type(context)}")
     base_url = context.get("base_url")
     html_title = f"{urllib.parse.quote(title)}_{date.replace('/', '_')}"
     return f"""
-      <h4>
-        <a name=\"{html_title}\" href=\"{base_url}/{path}#{html_title}\">
-          {title.replace("_", " ").title()} ({date})
-        </a>
-      </h4>
+    <h4>
+      <a name=\"{html_title}\" href=\"{base_url}/{path}#{html_title}\">
+        {title.replace("_", " ").title()} ({date})
+      </a>
+    </h4>
     """
 
 

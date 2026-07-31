@@ -86,6 +86,8 @@ def build_year_index(
         file_arguments["file_title"] = f"{year}_index"
         file_arguments["file_name"] = f"{year}_index"
 
+        print(file_arguments)
+
         header = parse_template(
             filename=f"{src}/templates/header.html.j2",
             **file_arguments,

@@ -113,6 +113,7 @@ if __name__ == "__main__":
             if trimmed_filename:
                 file_arguments["file_name"] = trimmed_filename
 
+            print(file_arguments)
             file_header, file_footer = render_annotations(
                 src=SRC,
                 filename=filename,
@@ -148,7 +149,6 @@ if __name__ == "__main__":
     index_arguments["file_title"] = ""
     index_arguments["file_name"] = ""
 
-    print(BASE_URL, index_arguments)
     year_indexes = build_year_index(
         src=SRC,
         dest=DEST,

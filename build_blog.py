@@ -26,14 +26,14 @@ log.setLevel(logging.DEBUG)
 log.addHandler(console_handler)
 
 AUTO = os.getenv("AUTO", False)
-BASE_URL = os.getenv("BASE_URL", "https://ramongarciamx.codeberg.page")
+BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
 
 LOCATIONS = {"posts": True, "landing": False}
 CURSING = ["fuck", "asshole"]
 YEARS = ["2024", "2025", "2026"]
 
-SRC = "../rgarciamx"
-DEST = "../pages"
+SRC = os.getenv("SRC", "../source")
+DEST = os.getenv("DEST", "../pages")
 
 STATICS = {
     f"{SRC}": [".txt", ".ico"],

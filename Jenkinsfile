@@ -3,6 +3,10 @@ pipeline {
     environment {
         VENV_DIR = ".venv"
         PYTHON = "python3"
+        SOURCE = "rgarciamx"
+        BASE_URL = "https://rgarciamx.codeberg.page"
+        SRC = "../rgarciamx"
+        DEST = "../pages"
     }
     stages {
         stage('Setup Environment') {
@@ -19,7 +23,7 @@ pipeline {
             steps {
                 sh '''
                     . $VENV_DIR/bin/activate
-                    git clone rgarciamx # clone my sources
+                    git clone $SOURCE # clone my sources
                     git clone pages # clone the destination repository
                     python build_blog.py
                     cd -

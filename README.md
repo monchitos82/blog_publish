@@ -1,0 +1,42 @@
+# Blog builder
+
+This script and Jenkins pipeline are built separately from my blog source, but ideally should just be copied to it so it triggers the build and publishing process.
+I am publishing this independently because I want it to be useful beyond my own blog and because my blog sources are private since I like to edit and change my project structure constantly.
+
+To trigger the build we just need:
+a) A source with all the markdown files. In this case, my blog has a simple structure:
+```
+rgarciamx/
+├── archive
+├── assets
+│   ├── index.md
+│   └── style.css
+├── favicon.ico
+├── img
+├── index.md
+├── posts
+│   ├── 2024
+│   ├── 2024.md
+│   ├── 2025
+│   ├── 2025.md
+│   ├── 2026
+│   └── 2026.md
+├── robots.txt
+├── snippets
+└── templates
+    ├── 2024.md.j2
+    ├── 2025.md.j2
+    ├── 2026.md.j2
+    ├── footer.html.j2
+    ├── header.html.j2
+    └── menu.html.j2
+```
+The templates (`j2`) are autopopulated with the contents of `/posts/<<year>>/` so pretty much all I have to do is write my posts as markdown and let the build script take care of the rest.
+The publishing process relies on Codeberg Pages, so a `pages` repository is needed.
+
+There are some variables needed to run the script:
+
+`BASE_URL` This is the codeberg pages URL for my user
+`SRC`      This is the path to my source repository
+`DEST`     This is the path to my pages repository, defaults to "../pages"
+

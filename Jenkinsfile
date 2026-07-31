@@ -19,7 +19,7 @@ pipeline {
         // Base URL definitions
         BASE_URL = "https://${ACCOUNT}.codeberg.page"
         LOCAL_BASE_URL = "http://127.0.0.1:2080/${SITE_DIR}"
-        TRACKING_URL = "https://${ACCOUNT}.goatcounter.com"
+        TRACKING_URL = ""
 
         DEST = "../${SITE_DIR}"
         SRC = "../${SOURCE}"

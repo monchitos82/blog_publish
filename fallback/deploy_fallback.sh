@@ -3,7 +3,8 @@ set -e -x
 
 # copy
 mkdir -p ./blog
-cp -r ../../pages/* ./blog/
+pwd
+cp -r ../pages/* ./blog/
 
 # cleanup
 find ./blog/ -name '.keep' -delete

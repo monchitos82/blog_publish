@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import markdown
 from jinja2 import Template
@@ -9,7 +10,7 @@ from jinja_functions import JinjaFunctions
 log = logging.getLogger(__name__)
 
 
-def parse_markdown(content: str) -> str|None:
+def parse_markdown(content: str) -> str | None:
     """Parse a markdown string into HTML."""
     try:
         content = markdown.markdown(
@@ -29,7 +30,7 @@ def parse_template(
     filename: str | None = None,
     content: str | None = None,
     **kwargs,
-) -> str|None:
+) -> str | None:
     """Render a filename template using jinja2."""
     template = None
     rendered_content = ""
@@ -58,7 +59,11 @@ def parse_template(
             else:
                 rendered_content = template.render(kwargs)
     except TemplateError:
-        log.critical(f"Failed to render the template {filename}", exc_info=True)
+        if not filename:
+            log.critical("Failed to render content passed from markdown", exc_info=True)
+        else:
+            log.critical(f"Failed to render the template {filename}", exc_info=True)
+        sys.exit(1)
     return rendered_content
 
 

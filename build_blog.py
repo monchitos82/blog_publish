@@ -23,6 +23,8 @@ YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
+TITLE = os.getenv("TITLE", None)
+AUTHOR = os.getenv("AUTHOR", None)
 
 
 if __name__ == "__main__":
@@ -62,6 +64,8 @@ if __name__ == "__main__":
         **{
             "base_url": BASE_URL,
             "menu": menu,
+            "title": TITLE,
+            "author": AUTHOR,
         },
     )
     footer = render_template(

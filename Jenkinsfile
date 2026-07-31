@@ -6,7 +6,7 @@ pipeline {
         ACCOUNT = "ramongamx"
         TITLE = "Ramon Garcia's blog"
         SITE_NAME = "ramongamx"
-        SOURCE = "ramongamx"
+        SOURCE = "blog"
 
         //build specifics
         GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"

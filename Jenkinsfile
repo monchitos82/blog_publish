@@ -3,7 +3,7 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "mongmx"
+        ACCOUNT = "rgarciamx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
         USE_CODEBERG = "${params.USE_FALLBACK ? 'true' : ''}"

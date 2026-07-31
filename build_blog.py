@@ -98,7 +98,7 @@ if __name__ == "__main__":
                         "page_name": f"{page}"
                     },
                 )
-        else if split_filename[-1] == "about": # abusing the in_index flag to treat about as index menu
+        elif split_filename[-1] == "about": # abusing the in_index flag to treat about as index menu
             file_footer = render_template(
                 filename=f"{SRC}/tempaltes/footer.html.j2",
                 **{

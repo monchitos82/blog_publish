@@ -89,7 +89,7 @@ pipeline {
                 sh """
                 mkdir -p /opt/deploy/blog
                 cp -r ./pages/* /opt/deploy/blog/
-                find /opt/deploy/blog -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080|g' {} +
+                find /opt/deploy/blog -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/blog|g' {} +
                 """
             }
         }

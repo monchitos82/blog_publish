@@ -98,7 +98,7 @@ if __name__ == "__main__":
             if file_name == "README" or file_name.startswith("."):
                 continue
 
-            raw_content = load_file_content(filename, extension="md")
+            raw_content = load_file_content(filename=f"{filename}.md")
             if not raw_content:
                 continue
 

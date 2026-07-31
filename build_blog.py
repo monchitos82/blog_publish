@@ -14,9 +14,9 @@ from operations import (
 )
 from transformations import parse_markdown_file, render_template, save_as_html
 
-log = logging #.getLogger(__name__)
-#log.setLevel(logging.DEBUG)
-#log.addHandler(logging.StreamHandler())
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+log.addHandler(logging.StreamHandler())
 
 # These are env variables needed for this script to work properly
 BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
@@ -133,6 +133,8 @@ if __name__ == "__main__":
         log.error(
             "There is a conflict in post creation timestamps, the post will not be inserted"
         )
+    else:
+        log.info(f"Last file found for year {year}: {last_file}")
 
     year_indexes = None
     YEARS = [LAST_YEAR]

@@ -36,6 +36,11 @@ def env_list_as_tuple(var_name: str, default: tuple | None = None) -> tuple | No
     return tuple(split_var)
 
 
+async def run_async(tasks: list) -> list:
+    # this avoids making main explicitly create an event loop
+    return await asyncio.gather(*tasks, return_exceptions=True)
+
+
 if __name__ == "__main__":
 
     file_errors = False
@@ -175,8 +180,7 @@ if __name__ == "__main__":
                 path=f"{SRC}/posts", extension="html", target=YEARS
             ),
         ]
-        results = asyncio.run(asyncio.gather(*tasks, return_exceptions=True))
-        for result in results:
+        for result in asyncio.run(run_async(tasks)):
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")
         if not results[0]:

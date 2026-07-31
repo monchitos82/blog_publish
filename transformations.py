@@ -36,13 +36,8 @@ def parse_template(
 
         if template:
             try:
-                functions = JinjaFunctions.functions
-                for function in functions:
-                    try:
-                        template.globals[function] = functions[function]
-                    except KeyError:
-                        log.warning(f"Function: {function} has not been declared")
-            except AttributeError:
+                template.globals.extend(JinjaFunctions.functions)
+            except (AttributeError, ValueError):
                 log.warning("There are no available jinja functions")
             rendered_content = template.render(kwargs)
     except TemplateError as err:

@@ -41,9 +41,9 @@ if __name__ == "__main__":
     
     STATICS = {
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".ico")),
-        f"{SRC}/assets": env_list_as_tuple("STATICS_ASSETS", (".css",)),
+        f"{SRC}/style": env_list_as_tuple("STATICS_STYLE", (".css",)),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
-        f"{SRC}/archive": env_list_as_tuple("STATICS_ARCHIVE", (".html", ".json", ".txt")),
+        f"{SRC}/misc": env_list_as_tuple("STATICS_MISC", (".html", ".json", ".txt")),
     }
 
     clean_files(path=f"{DEST}", extension="html"),

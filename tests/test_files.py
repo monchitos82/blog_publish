@@ -61,10 +61,10 @@ def test_copy_dirs_mirrors_structure(tmp_path):
     src.mkdir()
     dest.mkdir()
     (src / "posts").mkdir()
-    (src / "assets").mkdir()
+    (src / "style").mkdir()
     assert copy_dirs(str(src), str(dest)) is True
     assert (dest / "posts").is_dir()
-    assert (dest / "assets").is_dir()
+    assert (dest / "style").is_dir()
 
 
 def test_copy_dirs_skips_dotfiles(tmp_path):
@@ -115,18 +115,18 @@ def test_copy_dirs_tolerates_existing_dir(tmp_path):
 
 def test_copy_statics_copies_matching_files(tmp_path):
     src = tmp_path / "src"
-    assets = src / "assets"
-    assets.mkdir(parents=True)
-    (assets / "style.css").write_text("body{}")
-    (assets / "app.js").write_text("var x;")
+    style = src / "style"
+    style.mkdir(parents=True)
+    (style / "main.css").write_text("body{}")
+    (style / "main.txt").write_text("foo")
     dest = tmp_path / "dest"
-    dest_assets = dest / "assets"
-    dest_assets.mkdir(parents=True)
-    statics = {str(assets): [".css"]}
+    dest_ = dest / "style"
+    dest_.mkdir(parents=True)
+    statics = {str(style): [".css"]}
     result = copy_statics(str(src), str(dest), statics)
     assert result is True
-    assert (dest_assets / "style.css").exists()
-    assert not (dest_assets / "app.js").exists()
+    assert (dest_ / "style.css").exists()
+    assert not (dest_ / "main.txt").exists()
 
 
 def test_copy_statics_wildcard(tmp_path):

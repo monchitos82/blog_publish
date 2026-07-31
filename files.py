@@ -95,8 +95,8 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
             )
             for filename in files:
                 split_filename = filename.split("/")
-                if any([item.startswith(".") for item in split_filename]):
-                    # no dotfiles
+                if any([item.startswith(".") for item in split_filename[1:]]):
+                    # no dotfiles except for ",/"
                     log.warning(f"{filename} is a hidden file and will not be copied")
                     continue
                 try:

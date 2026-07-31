@@ -68,17 +68,17 @@ if __name__ == "__main__":
     }
     
     menu = render_template(
-        filename=f"{SRC}/templates/menu.html.j2",
+        filename = f"{SRC}/templates/menu.html.j2",
         arguments,
     )
     arguments["menu"] = menu
     
     header = render_template(
-        filename=f"{SRC}/templates/header.html.j2",
+        filename = f"{SRC}/templates/header.html.j2",
         arguments,
     )
     footer = render_template(
-        filename=f"{SRC}/templates/footer.html.j2",
+        filename = f"{SRC}/templates/footer.html.j2",
         arguments,
     )
 

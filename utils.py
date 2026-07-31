@@ -28,6 +28,7 @@ PATH_CLEAR_TERMS = (
 
 
 def env_list_as_tuple(var_name: str, default: tuple | None = None) -> tuple | None:
+    """Create a tuple of values from an environment vairable passed as a list of comma separated values"""
     env_var = os.getenv(var_name, None)
     if not env_var:
         return default
@@ -45,6 +46,7 @@ async def run_async(tasks: list) -> list:
 
 
 def clean_terms(word: str, terms: tuple | None) -> str:
+    """Remove char sequences that can help malicious instructions"""
     if terms:
         for term in terms:
             word = word.replace(term, "")
@@ -52,6 +54,7 @@ def clean_terms(word: str, terms: tuple | None) -> str:
 
 
 def load_static_env(src: str, prefix: str = "STATIC") -> dict:
+    """load environment variables content based on a prefix"""
     static = {}
     env_vars = os.environ
     for var in env_vars:

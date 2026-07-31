@@ -2,7 +2,6 @@ import asyncio
 import os
 
 import pytest
-
 from utils import (PATH_CLEAR_TERMS, clean_terms, env_list_as_tuple,
                    load_static_env, run_async)
 
@@ -29,7 +28,7 @@ async def task_a():
 
 async def task_b():
     await asyncio.sleep(0.01)
-    raise "failure"
+    raise Exception("failure")
 
 
 async def task_c():

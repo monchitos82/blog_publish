@@ -2,14 +2,8 @@ import os
 
 import pytest
 from jinja2 import Environment, FunctionLoader
-
-from transformations import (
-    parse_markdown,
-    parse_template,
-    render_annotations,
-    save_as_html,
-    title_h4_href,
-)
+from transformations import (parse_markdown, parse_template,
+                             render_annotations, save_as_html, title_h4_href)
 
 
 @pytest.fixture

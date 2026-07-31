@@ -158,4 +158,5 @@ def clean_files(
 async def async_clean_files(
     path: str, extension: str, target: list | None = None
 ) -> bool:
+    """Wrapper to clean files asynchronously"""
     return clean_files(path, extension, target)

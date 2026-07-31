@@ -80,7 +80,7 @@ pipeline {
                         sh '''
                             cd ..
                             git clone ${GIT_URL}
-\                        '''
+                        '''
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/${SOURCE}")) {
                             sh '''
@@ -187,7 +187,7 @@ pipeline {
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
-\                            '''
+                            '''
                         }
                     }
                 }

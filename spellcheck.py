@@ -1,12 +1,9 @@
 import logging
 import sys
 
-from neuspell import BertChecker
 
 log = logging.getLogger(__name__)
 
-checker = BertChecker()
-checker.from_pretrained()
 
 if __name__ == "__main__":
     filename = sys.argv[1]
@@ -15,6 +12,6 @@ if __name__ == "__main__":
         with open(filename) as f:
             content = f.read()
             if content:
-                print(checker.correct(content))
+                print((content))
     except IOError:
         log.error(f"File {filename} could not be read")

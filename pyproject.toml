@@ -18,7 +18,6 @@ dependencies = [
     "Markdown==3.10.2",
     "MarkupSafe==3.0.3",
     "neocitizen>=1.0.0",
-    "neuspell>=1.0.0",
     "pytest>=9.0.3",
     "requests==2.34.2",
     "toolz==1.1.0",

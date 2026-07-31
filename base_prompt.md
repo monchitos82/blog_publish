@@ -83,7 +83,7 @@
 - Highlight edge cases
 - Don't over-comment a solution
 
-#### Guidelines on style preference:
+#### Guidelines on response style preference:
 
 - Use of emdash is forbidden
 - Sentences will be brief, favoring content over tone

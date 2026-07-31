@@ -119,18 +119,16 @@ pipeline {
         }
         stage('Build') {
             steps {
-                catchError (buildResult: 'FAILURE', stageResult: 'FAILURE', message: 'Failed to build the project'){
-                    script {
-                        if (params.UPDATE_RSS) {
-                        environment {
-                            UPDATE_RSS = true
-                        }
-                        }
-                        sh '''
-                        mkdir -p ${DEST}
-                        $HOME/.local/bin/uv run build_blog.py
-                        '''
+                script {
+                    if (params.UPDATE_RSS) {
+                    environment {
+                        UPDATE_RSS = true
                     }
+                    }
+                    sh '''
+                    mkdir -p ${DEST}
+                    $HOME/.local/bin/uv run build_blog.py
+                    '''
                 }
             }
 

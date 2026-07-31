@@ -122,6 +122,8 @@ if __name__ == "__main__":
                 **file_arguments,
             )
 
+            print(file_arguments)
+
             # using NO_RENDER bypasses the jinja rendering on the content
             if "<!-- NO_RENDER -->" not in content:
                 content = parse_template(

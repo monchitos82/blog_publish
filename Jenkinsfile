@@ -169,7 +169,7 @@ pipeline {
                         cd  ${SITE_PAGES}
                         git add -A
                         git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
-                        git push origin master
+                        git push
                         cd ..
                     '''
                 }

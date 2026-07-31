@@ -32,9 +32,9 @@ INDEX_PAGES = tuple(INDEX_PAGES.replace(" ", "").split(","))
 # These are directory and extensions that should be copied
 STATICS = {
     f"{SRC}": [".txt", ".ico"],
-    f"{SRC}/assets": [".css", ".js"],
-    f"{SRC}/img": [".png", ".jpeg", ".svg"],
-    f"{SRC}/archive": [".json", ".yaml", ".py", ".rb", ".go", ".js", ".log", ".txt"],
+    f"{SRC}/assets": [".css"],
+    f"{SRC}/img": [".png", ".jpeg", ".jpg", ".gif", ".svg"],
+    f"{SRC}/archive": [".json", ".yaml", ".py", ".rb", ".go", ".js", ".log", ".txt", ".pdf"],
     f"{SRC}/experiments": ["*"],
 }
 

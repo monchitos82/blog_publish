@@ -70,8 +70,10 @@ def save_as_html(
             with open(html_filename, "w+", encoding="utf-8") as html_file:
                 html_file.write(header)
                 html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
+                # on build this will have the ./src prefix, cleaning it up
                 if tracking_element:
-                    html_file.write(f'\n    <img src="{tracking_element}/{html_filename}">\n')
+                    no_path_filename = ("/").join(html_filename.split("/")[2:])
+                    html_file.write(f'\n    <img src="{tracking_element}/{no_path_filename}">\n')
                 html_file.write(footer)
         except OSError as error:
             log.error(f"Failed to save {html_filename}, error: {error}")

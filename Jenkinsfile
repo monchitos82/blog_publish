@@ -45,13 +45,18 @@ pipeline {
                         dir("${SOURCE}") { deleteDir() }
                         dir("pages") { deleteDir() }
                         sh '''
-                            git clone ${GIT_URL}/${SOURCE} # clone my sources
-                            git clone ${GIT_URL}/pages # clone the destination repository
+                            # clone my sources
+                            git clone ${GIT_URL}/${SOURCE}
+                            git clone ${GIT_URL}/pages
                         '''
                     } else {
                         sh '''
-                            git pull ${GIT_URL}/${SOURCE} # clone my sources
-                            git pull ${GIT_URL}/pages # clone the destination repository
+                            # update my sources
+                            cd ${SOURCE}
+                            git pull ${GIT_URL}
+                            cd ..
+                            cd pages
+                            git pull
                         '''
                     }
                 }
@@ -81,15 +86,14 @@ pipeline {
     }
     post {
         failure {
-            echo "CleanWS"
-            //cleanWs()
+            echo 'Upon failure you should clean repositories for the next run!'
+            cleanWs()
         }
         cleanup {
             script {
                 if (params.CLEAN_REPOSITORIES) {
-                    echo 'clean dirs'
-                    //dir("${SOURCE}") { deleteDir() }
-                    //dir("pages") { deleteDir() }
+                    dir("${SOURCE}") { deleteDir() }
+                    dir("pages") { deleteDir() }
                 }
             }
         }

@@ -71,16 +71,16 @@ if __name__ == "__main__":
         "years": YEARS,
     }
 
-    menu = parse_template(
+    arguments["menu"] = parse_template(
         filename=f"{SRC}/templates/menu.html.j2",
         **arguments,
     )
-    arguments["menu"] = menu
 
     header = parse_template(
         filename=f"{SRC}/templates/header.html.j2",
         **arguments,
     )
+
     footer = parse_template(
         filename=f"{SRC}/templates/footer.html.j2",
         **arguments,

@@ -35,7 +35,6 @@ def parse_template(
     **kwargs,
 ) -> str:
     """Render a filename template using jinja2."""
-    print(filename, content, kwargs)
     try:
         template = None
         if not content and not filename:
@@ -63,7 +62,9 @@ def parse_template(
                     )
             content = template.render(kwargs)
     except TemplateError as err:
-        log.error(f"Failed to render the template, error: {err}")
+        if not filename:
+            filename = "raw content"
+        log.error(f"Failed to render the template {filename}, error: {err}")
     return content
 
 

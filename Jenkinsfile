@@ -81,7 +81,8 @@ pipeline {
     }
     post {
         failure {
-            cleanWs()
+            echo "CleanWS"
+            //cleanWs()
         }
         cleanup {
             script {

@@ -14,10 +14,11 @@ if __name__ == "__main__":
             content = f.read()
             if content:
                 tool = language_tool_python.LanguageTool("en-US")
-                matches = tool.check(content)
-                for m in matches:
-                    print(m.rule_id)
-                    print(m.message)
-                    print(m.replacements)
+                results = tool.check(content)
+                for match in results:
+                    log.warning(match.rule_id)
+                    print(match.message)
+                    print(match.replacements)
+                    print("")
     except IOError:
         log.error(f"File {filename} could not be read")

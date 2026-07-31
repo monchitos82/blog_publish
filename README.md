@@ -29,7 +29,7 @@ myblog/
 
 b) There are some environment variables needed to run the script:
 
-* `BASE_URL`      This is the Codeberg pages URL for my user
+* `BASE_URL`      This is the landing URL for my blog
 * `SRC`           This is the path to my source repository
 * `DEST`          This is the path to my pages repository, defaults to "../pages"
 * `YEAR`          This is the current year, defaults to the Year (yyyy) in the machine

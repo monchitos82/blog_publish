@@ -183,8 +183,6 @@ if __name__ == "__main__":
         for result in asyncio.run(run_async(tasks)):
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")
-        if not results[0]:
-            log.warning("The build has broken anchors")
     elif file_errors:
         log.critical("The build cannot continue, there are file errors making the build inconsistent")
     elif not year_indexes:

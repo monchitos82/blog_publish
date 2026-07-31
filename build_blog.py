@@ -4,6 +4,7 @@ import asyncio
 import datetime
 import logging
 import os
+import sys
 
 from files import (
     async_clean_files,
@@ -114,9 +115,13 @@ if __name__ == "__main__":
             )
             if not file_header or not file_footer:
                 if not file_header:
-                    log.error(f"Document {filename} structure failed to render at header transformation")
+                    log.error(
+                        f"Document {filename} structure failed to render at header transformation"
+                    )
                 if not file_footer:
-                    log.error(f"Document {filename} structure failed to render at footer transformation")
+                    log.error(
+                        f"Document {filename} structure failed to render at footer transformation"
+                    )
                 continue
 
             # using NO_RENDER bypasses the jinja rendering on the content
@@ -125,6 +130,8 @@ if __name__ == "__main__":
                     content=content,
                     **file_arguments,
                 )
+                if not content:
+                    continue
 
             html_save = save_as_html(
                 filename=filename,
@@ -182,5 +189,7 @@ if __name__ == "__main__":
         log.critical(
             "The build process cannot continue, there are file errors making the site inconsistent"
         )
+        sys.exit(1)
     elif not year_indexes:
         log.critical("Year indexes were not built, the site navigation will be broken")
+        sys.exit(1)

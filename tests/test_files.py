@@ -6,10 +6,10 @@ from files import list_of_files, copy_dirs, copy_statics, clean_files, async_cle
 
 def test_list_of_files_finds_by_extension(tmp_path):
     (tmp_path / "post.md").write_text("hello")
-    (tmp_path / "style.css").write_text("body{}")
+    (tmp_path / "main.css").write_text("body{}")
     result = list_of_files(str(tmp_path), extension="md", clean_extension=False)
     assert any("post.md" in f for f in result)
-    assert not any("style.css" in f for f in result)
+    assert not any("main.css" in f for f in result)
 
 
 def test_list_of_files_clean_extension_strips_suffix(tmp_path):
@@ -125,7 +125,7 @@ def test_copy_statics_copies_matching_files(tmp_path):
     statics = {str(style): [".css"]}
     result = copy_statics(str(src), str(dest), statics)
     assert result is True
-    assert (dest_ / "style.css").exists()
+    assert (dest_ / "main.css").exists()
     assert not (dest_ / "main.txt").exists()
 
 

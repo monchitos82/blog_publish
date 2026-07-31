@@ -171,7 +171,7 @@ pipeline {
                         if ( USE_CODEBERG ) {
                             if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                                 sh '''
-                                cd ..
+                                pwd
                                 git clone ${SITE_PAGES_URL}
                                 cd ..
                                 pwd
@@ -185,7 +185,7 @@ pipeline {
                             } else {
                                 sh '''
                                 echo "Pages is already present"
-                                cd ..
+                                pwd
                                 cd ${SITE_PAGES}
                                 git pull
                                 cd ..

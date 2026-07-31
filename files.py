@@ -58,7 +58,7 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
             os.mkdir(dest)
 
         for item in os.listdir(src):
-            if item.startswith(".") or ".git" in item:
+            if item.startswith("."):
                 # no dotfiles
                 continue
             if os.path.isdir(os.path.join(src, item)):
@@ -93,10 +93,13 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
             files = list_of_files(
                 dirname=item, extension=extension, clean_extension=False
             )
-            print(files)
             for filename in files:
+                split_filename = filename.split("/")
+                if any([items.starswith(".") for item in split_filename]):
+                    # no dotfiles
+                    log.warning(f"{filename} is a hidden file and will not be copied")
+                    continue
                 try:
-                    split_filename = filename.split("/")
                     split_site = site.split("/")
                     if len(split_filename[:-1]) == len(split_site):
                         shutil.copy2(src=filename, dst=site)

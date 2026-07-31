@@ -3,7 +3,6 @@
 import argparse
 import asyncio
 import datetime
-import json
 import logging
 import os
 import shutil
@@ -27,7 +26,7 @@ log.addHandler(console_handler)
 AUTO = os.getenv("AUTO", False)
 BASE_URL = os.getenv("BASE_URL", "https://myuser.codeberg.page")
 
-CURSING = ["moron"] # Foul words in your language
+CURSING = ["moron"]  # Foul words in your language
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 
@@ -40,6 +39,7 @@ STATICS = {
     f"{SRC}/assets": [".css", ".js"],
     f"{SRC}/img": [".png"],
 }
+
 
 def render_template(filename: str, **kwargs) -> str:
     """Render a filename template using jinja2."""
@@ -160,7 +160,7 @@ def save_as_html(
         try:
             with open(html_file, "w+", encoding="utf-8") as f:
                 f.write(header)
-                f.write(f"\n    <main role=\"main\">\n{content}\n    </main>\n")
+                f.write(f'\n    <main role="main">\n{content}\n    </main>\n')
                 f.write(footer)
         except OSError as error:
             log.error(f"Failed to save {html_file}, error: {error}")
@@ -245,7 +245,9 @@ def find_last_post(year: str, src: str = SRC) -> str:
                 last = filename
                 last_ctime = file_ctime
             elif last_ctime == file_ctime:
-                log.warning(f"Two files {last} | {filename} have the same creation timestamp")
+                log.warning(
+                    f"Two files {last} | {filename} have the same creation timestamp"
+                )
     log.info(f"Last file found: {last}")
     return last
 
@@ -291,14 +293,16 @@ def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool
         with open(year_index) as f:
             # the index is a small file so reading it is safe
             year_index_data = f.readlines()
-        if filename not in ','.join(year_index_data):
+        if filename not in ",".join(year_index_data):
             title = extract_post_title(filename=filename)
             # check if the title is new, in case of an update, duplicates are avoided
             if title and title not in get_index_titles(year=year, src=src):
                 formatted_filename = filename.split("/")[-1].split(".")[0]
-                entry = ("    <li><h3><a href=\"{{ base_url }}/posts/" +
-                        f"{year}/{formatted_filename}.html\">" +
-                        f"{title}</a></h3></li>\n")
+                entry = (
+                    '    <li><h3><a href="{{ base_url }}/posts/'
+                    + f'{year}/{formatted_filename}.html">'
+                    + f"{title}</a></h3></li>\n"
+                )
                 # making sure it's not appending twice the same line
                 if entry != year_index_data[1]:
                     year_index_data.insert(1, entry)
@@ -308,13 +312,16 @@ def append_last_title_to_index(filename: str, year: str, src: str = SRC) -> bool
                     for line in year_index_data:
                         f.write(line)
             except OSError:
-                log.error(f"Failed to update the year {year} index, a backup was created")
+                log.error(
+                    f"Failed to update the year {year} index, a backup was created"
+                )
                 return False
     except (OSError, ValueError) as error:
         log.error(f"Failed to open the year {year} index: {error}")
         return False
     os.remove(backup)
     return True
+
 
 async def run_asynchronously(tasks: list) -> list:
     results = await asyncio.gather(*tasks)
@@ -351,7 +358,7 @@ if __name__ == "__main__":
     )
 
     # convert all /src markdowns to HTML files and populate /site
-        
+
     for filename in list_of_files(dirname=base_dirname):
         if "README" in filename:
             continue
@@ -376,27 +383,30 @@ if __name__ == "__main__":
             file_errors = True
             break
 
-    last_file = (find_last_post(year=LAST_YEAR, src=SRC))
+    last_file = find_last_post(year=LAST_YEAR, src=SRC)
     if not last_file:
-        log.error("There is a conflict in post creation timestamps, the process will stop")
-        #sys.exit(1)
-    
+        log.error(
+            "There is a conflict in post creation timestamps, the process will stop"
+        )
+        # sys.exit(1)
+
     year_indexes = None
 
     if append_last_title_to_index(filename=last_file, year=LAST_YEAR):
         last_year = int(LAST_YEAR)
         first_year = last_year - int(YEAR_LOOKBACK)
         YEARS = [str(year) for year in range(first_year, last_year + 1)]
-        year_indexes = asyncio.run(build_year_index(years=YEARS, header=header, footer=footer))
+        year_indexes = asyncio.run(
+            build_year_index(years=YEARS, header=header, footer=footer)
+        )
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:
-        foul_language, broken_anchors = asyncio.run(run_asynchronously(
-            [
-                has_foul_language(),
-                has_broken_anchors(dest=f"{DEST}")
-            ]
-        ))
+        foul_language, broken_anchors = asyncio.run(
+            run_asynchronously(
+                [has_foul_language(), has_broken_anchors(dest=f"{DEST}")]
+            )
+        )
 
         if arguments.scan and not foul_language:
             log.info("Cursing found in the results, do you want to continue? [Y/n]")
@@ -407,4 +417,3 @@ if __name__ == "__main__":
                 response = "y"
             if response.lower() != "y":
                 sys.exit(1)
-

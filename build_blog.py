@@ -96,7 +96,7 @@ if __name__ == "__main__":
                     "in_main": True,
                 },
             )
-        log.warning(assert("<!-- NAV_MAIN -->" in content is True))
+        log.warning("<!-- NAV_MAIN -->" in content)
         if "[ NAV_MAIN ]: #" in content or "<!-- NAV_MAIN -->" in content:
             log.warning(f"{filename} is in index")
             file_footer = render_template(

@@ -24,7 +24,7 @@ DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
 INDEX_PAGES = os.getenv("INDEX_PAGES", None)
 
-if not INDEX_PAGES:
+if INDEX_PAGES is None:
     INDEX_PAGES = ["index", "about"]
 INDEX_PAGES = tuple(INDEX_PAGES.replace(" ", "").split(","))
 

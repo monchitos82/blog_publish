@@ -163,6 +163,51 @@ pipeline {
                 }
             }
         }
+        stage('Go Live in Codeberg') {
+            steps {
+                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
+                    script {
+                        if (fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
+                            sh '''
+                            pwd
+                            echo "Pages is already present"
+                            cd ..
+                            git clone ${SITE_PAGES_URL}
+                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cd  ${SITE_PAGES}
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push
+                            cd ..
+                            '''
+                        } else {
+                            sh '''
+                            cd ${SITE_PAGES}
+                            git pull
+                            cd ..
+                            cp -r ${SITE_DIR} ${SITE_PAGES}
+                            cd  ${SITE_PAGES}
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push
+                            cd ..
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+        stage('Go Live in Neocities') {
+            steps {
+                catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
+                    sh '''
+                        cd blog_builder
+                        $HOME/.local/bin/uv run neocities_upload.py
+                        cd ..
+                    '''
+                }
+            }
+        }
     }
     post {
         aborted {

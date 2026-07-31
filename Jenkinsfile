@@ -6,7 +6,7 @@ pipeline {
         ACCOUNT = "rgarciamx"
         SITE_NAME = "${ACCOUNT}"
         SITE_TITLE = "${AUTHOR}'s blog"
-        USE_CODEBERG = "${params.USE_FALLBACK ? 'true' : ''}"
+        USE_FALLBACK = "${params.USE_FALLBACK ? 'true' : ''}"
         USE_NEOCITIES = "${params.USE_FALLBACK ? '' : 'true'}"
 
         // build specifics
@@ -112,7 +112,6 @@ pipeline {
           steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
               sh '''
-              echo ${CODEBERG_PAGES_URL}
               $HOME/.local/bin/uv run pytest
               '''
             }

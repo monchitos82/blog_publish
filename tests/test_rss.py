@@ -11,6 +11,8 @@ def test_generate_rss(tmp_path):
 
     post = posts / "01_01_my-post.md"
     post.write_text("### My Post (01/01)\nHello")
+    index_post = posts / "index.md"
+    index_post.write_text("foo")
 
     result = generate_rss_feed(
         src=str(src),
@@ -27,3 +29,4 @@ def test_generate_rss(tmp_path):
     assert feed.exists()
     content = feed.read_text()
     assert "My Post" in content
+    assert "foo" not in content

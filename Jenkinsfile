@@ -99,7 +99,7 @@ pipeline {
                 """
             }
         }
-        stage('Publish to the public') {
+        stage('Promote release') {
             
             when {
                 expression { 
@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        input message: 'Publish the blog to the public?', ok: 'Publish'
+                        input message: 'Promote the latest update?', ok: 'Publish'
                     } catch (err) {
                         currentBuild.result = 'ABORTED'
                         error('Publish was rejected')

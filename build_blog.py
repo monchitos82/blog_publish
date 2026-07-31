@@ -201,7 +201,7 @@ async def has_foul_language(dest: str = DEST, extension: str = "html") -> bool|N
         with open('foul.txt', 'r') as f:
             foul_language_content = [word for word in f]
     except OSError:
-        log.warning('No list of bad words found, the scan will not continue')
+        log.warning('No list of bad words found, the scan for foul language will not continue')
         return None
     else:
         foul_language = []
@@ -438,7 +438,6 @@ if __name__ == "__main__":
         log.error(
             "There is a conflict in post creation timestamps, the process will stop"
         )
-        # sys.exit(1)
 
     year_indexes = None
     YEARS = [LAST_YEAR]
@@ -460,11 +459,13 @@ if __name__ == "__main__":
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:
-        foul_language, broken_anchors = asyncio.run(
+        foul_language, broken_anchors, _ = asyncio.run(
             run_asynchronously(
-                [has_foul_language(),
-                has_broken_anchors(dest=f"{DEST}")],
-                clean_files(path=f"{SRC}/posts", extension="md", target=YEARS)
+                [
+                    has_foul_language(),
+                    has_broken_anchors(dest=f"{DEST}"),
+                    clean_files(path=f"{SRC}/posts", extension="md", target=YEARS)
+                ]
             )
         )
 

@@ -80,8 +80,7 @@ pipeline {
                         sh '''
                             cd ..
                             git clone ${GIT_URL}
-                            cd blog_builder
-                        '''
+\                        '''
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/${SOURCE}")) {
                             sh '''
@@ -95,7 +94,6 @@ pipeline {
                             sh '''
                             cd ..
                             git clone ${GIT_URL}
-                            cd blog_builder
                             '''
                         }
                     }
@@ -176,7 +174,6 @@ pipeline {
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
-                            cd ..
                             '''
                         } else {
                             sh '''
@@ -190,8 +187,7 @@ pipeline {
                             git add -A
                             git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
-                            cd ..
-                            '''
+\                            '''
                         }
                     }
                 }
@@ -201,10 +197,7 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update page'){
                     sh '''
-                        pwd
-                        cd blog_builder
                         $HOME/.local/bin/uv run neocities_upload.py
-                        cd ..
                     '''
                 }
             }

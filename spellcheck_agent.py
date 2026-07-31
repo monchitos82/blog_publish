@@ -31,7 +31,7 @@ except OSError as error:
 
 
 def evaluate(msg: str, tools: list = tools) -> str | None:
-    print(msg)
+    log.error(msg, tools)
     model = None
     agent = None
     result = {}
@@ -62,7 +62,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
             try:
                 result = agent.invoke({"messages": [HumanMessage(content=msg)]})
             except Exception as error:
-                print(f"No response was given, error: {error}")
+                log.error(f"No response was given, error: {error}")
                 return
 
             if result:

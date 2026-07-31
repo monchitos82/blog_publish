@@ -31,6 +31,7 @@ def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
             base_url=os.getenv(
                 "OLLAMA_BASE_URL", "http://host.containers.internal:11434"
             ),
+            temperature=0,
         )
     except Exception as error:
         log.error(f"No model was created, error: {error}")
@@ -41,7 +42,6 @@ def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
             agent = create_agent(
                 model=model,
                 tools=tools,
-                temperature=0,
             )
         except Exception as error:
             log.error(f"No agent was setup for the model, error: {error}")

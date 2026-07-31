@@ -4,9 +4,8 @@ pipeline {
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         // build specifics
         ACCOUNT = "ramongarciamx"
-        //GIT_URL = "ssh://git@codeberg.org/${ACCOUNT}"
         SOURCE = "rgarciamx"
-        GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/"
+        GIT_URL = "ssh://git@192.168.0.110:/home/git/projects/${SOURCE}.git"
         TRACKING = "https://${ACCOUNT}.goatcounter.com"
         // project specifics
         BASE_URL = "https://${ACCOUNT}.neocities.org"
@@ -53,7 +52,7 @@ pipeline {
                         dir("${SOURCE}") { deleteDir() }
                         dir("site") { deleteDir() }
                         sh '''
-                            git clone ${GIT_URL}/${SOURCE}.git
+                            git clone ${GIT_URL}
                         '''
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/blog/${SOURCE}")) {
@@ -64,7 +63,7 @@ pipeline {
                             '''
                         } else {
                             sh '''
-                            git clone ${GIT_URL}/${SOURCE}
+                            git clone ${GIT_URL}
                             '''
                         }
                     }

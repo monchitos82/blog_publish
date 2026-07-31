@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 
+from requests.exceptions import ConnectionError, HTTPError
 from neocitizen import NeocitiesApi
 from neocitizen.errors import ApiError
 
@@ -14,7 +15,7 @@ def upload_site(api_key: str = "", dest: str = "../site") -> bool:
     try:
         api = NeocitiesApi(api_key=api_key)
         api.upload_dir(dest)
-    except ApiError:
+    except (ApiError, ConnectionError, HTTPError):
         log.error(f"Failed to upload site {dest}", exc_info=True)
     else:
         result = True

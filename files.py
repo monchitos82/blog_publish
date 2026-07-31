@@ -22,20 +22,23 @@ def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> 
     return files_list
 
 
-def copy_dirs(src: str, dest: str, depth=1) -> bool:
+def copy_dirs(src: str, dest: str, depth=0) -> bool:
     """Mirror the structure of directories within a src path (1 level non-recursive)."""
     try:
         for item in os.listdir(src):
-            if os.path.isdir(os.path.join(src, item)) and not item.startswith("."):
+            if item.startswith("."):
+                # no dotfiles
+                continue
+            if os.path.isdir(os.path.join(src, item)):
                 # added some recursion after splitting posts, ideally 1 level depth max
-                if depth:
-                    copy_dirs(
-                        src=os.path.join(src, item),
-                        dest=os.path.join(dest, item),
-                        depth=(depth - 1),
-                    )
                 try:
                     os.mkdir(f"{dest}/{item}")
+                    if depth:
+                        copy_dirs(
+                            src=os.path.join(src, item),
+                            dest=os.path.join(dest, item),
+                            depth=(depth - 1),
+                        )
                 except FileExistsError:
                     # this may be acceptable, especially if the dir already exists
                     pass

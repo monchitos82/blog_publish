@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     # first step is to clean-up the page files
 
-    if not copy_dirs(src=SRC, dest=DEST, depth=1):
+    if not copy_dirs(src=SRC, dest=DEST, depth=2):
         file_errors = True
     copy_statics(src=SRC, dest=DEST, statics=STATICS)
 

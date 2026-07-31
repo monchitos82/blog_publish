@@ -100,7 +100,7 @@ if __name__ == "__main__":
                     "in_main": True,
                 },
             )
-        elif split_filename[-1] in index_pages:
+        elif split_filename[-1] in INDEX_PAGES:
             # other pages at root
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                     "in_index": True,
                 },
             )
-        elif split_filename[-1] not in index_pages:
+        elif split_filename[-1] not in INDEX_PAGES:
             # posts will point back to their year index in the footer
             if len(split_filename) == 5:
                 year = split_filename[-2]

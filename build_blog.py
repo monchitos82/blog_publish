@@ -29,17 +29,11 @@ TITLE = os.getenv("TITLE", None)
 AUTHOR = os.getenv("AUTHOR", None)
 EMAIL = os.getenv("EMAIL", None)
 ACCOUNT = os.getenv("ACCOUNT", None)
-NO_RENDER = os.getenv("NO_RENDER", "<!--NO RENDER-->")
-
 
 if __name__ == "__main__":
 
     file_errors = False
     base_dirname = SRC
-
-    INDEX_PAGES = env_list_as_tuple("INDEX_PAGES")
-    if INDEX_PAGES is None:
-        INDEX_PAGES = ["index", "about"]
 
     STATICS = {
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
@@ -102,8 +96,7 @@ if __name__ == "__main__":
                     "in_main": True,
                 },
             )
-        elif split_filename[-1] in INDEX_PAGES:
-            # other pages at root
+        if "[ NAV_MAIN ]: #" in content or "<!-- NAV_MAIN -->" in content:
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",
                 **{
@@ -111,7 +104,7 @@ if __name__ == "__main__":
                     "in_index": True,
                 },
             )
-        elif split_filename[-1] not in INDEX_PAGES:
+        else:
             # posts will point back to their year index in the footer
             if len(split_filename) == 5:
                 year = split_filename[-2]
@@ -126,7 +119,7 @@ if __name__ == "__main__":
                     },
                 )
 
-        if NO_RENDER not in content:
+        if "[ NO_RENDER ] #" not in content and "<!-- NO_RENDER -->" not in content:
             content = render_content_as_template(
                 content=content,
                 **{

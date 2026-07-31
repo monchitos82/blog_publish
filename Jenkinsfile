@@ -2,10 +2,11 @@ pipeline {
     agent { label 'python' }
     environment {
         // site specifics
-        ACCOUNT = "ramongarciamx"
         AUTHOR = "Ramon Garcia"
+        ACCOUNT = "ramongarciamx"
         EMAIL = "${ACCOUNT}@proton.me"
         TITLE = "Ramon's blog"
+        SITE_NAME = "ramongarciamx"
         SOURCE = "rgarciamx"
 
         //build specifics
@@ -20,18 +21,18 @@ pipeline {
     }
     parameters {
         booleanParam(
-            name: 'FORCE_SETUP', 
-            defaultValue: false, 
+            name: 'FORCE_SETUP',
+            defaultValue: false,
             description: 'Force a fresh installation of uv and sync environment'
         )
         booleanParam(
-            name: 'CLEAN_REPOSITORIES', 
-            defaultValue: false, 
+            name: 'CLEAN_REPOSITORIES',
+            defaultValue: false,
             description: 'Remove the repositories in the workspace'
         )
         booleanParam(
-            name: 'LOCAL_VALIDATION', 
-            defaultValue: true, 
+            name: 'LOCAL_VALIDATION',
+            defaultValue: true,
             description: 'Execute a local deployment to validate results'
         )
         booleanParam(
@@ -109,9 +110,9 @@ pipeline {
             }
         }
         stage('Promote Release') {
-            
+
             when {
-                expression { 
+                expression {
                     params.LOCAL_VALIDATION == true
                 }
             }

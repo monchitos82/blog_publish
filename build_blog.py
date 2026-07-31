@@ -22,20 +22,19 @@ log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
 
 # These are env variables needed for this script to work properly
-BASE_URL = os.getenv("BASE_URL", None)
+BASE_URL = os.getenv("BASE_URL", "")
 LAST_YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
 YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
-TRACKING = os.getenv("TRACKING", None)
-TITLE = os.getenv("TITLE", None)
-AUTHOR = os.getenv("AUTHOR", None)
-EMAIL = os.getenv("EMAIL", None)
-ACCOUNT = os.getenv("ACCOUNT", None)
+TRACKING = os.getenv("TRACKING", "")
+TITLE = os.getenv("TITLE", "")
+AUTHOR = os.getenv("AUTHOR", "")
+EMAIL = os.getenv("EMAIL", "")
+SITE_NAME = os.getenv("SITE_NAME", "")
 
 if __name__ == "__main__":
     file_errors = False
-    base_dirname = SRC
 
     STATICS = {
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
@@ -44,7 +43,7 @@ if __name__ == "__main__":
         f"{SRC}/static": env_list_as_tuple("STATICS_STATIC", (".txt",)),
     }
 
-    (clean_files(path=f"{DEST}", extension="html"),)
+    clean_files(path=f"{DEST}", extension="html")
 
     # first step is to clean-up the page files
 
@@ -88,7 +87,7 @@ if __name__ == "__main__":
     )
 
     # convert all /src markdowns to HTML files and populate /site
-    for filename in list_of_files(dirname=base_dirname):
+    for filename in list_of_files(dirname=SRC):
         file_header = header
         file_footer = footer
         split_filename = filename.split("/")
@@ -196,7 +195,7 @@ if __name__ == "__main__":
                 author=AUTHOR,
                 email=EMAIL,
                 base_url=BASE_URL,
-                site_name=ACCOUNT,
+                site_name=SITE_NAME,
                 site_title=TITLE,
             ):
                 log.warning("The RSS feed could not be generated")

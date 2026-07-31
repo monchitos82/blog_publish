@@ -25,6 +25,14 @@ def list_of_files(dirname: str, extension: str = "md", clean_extension=True) -> 
 def copy_dirs(src: str, dest: str, depth=0) -> bool:
     """Mirror the structure of directories within a src path (1 level non-recursive)."""
     try:
+        if not os.path.exists(dest):
+            # make sure the destination is available
+            os.mkdir(dest)
+        elif not os.path.isdir(dest):
+            # if the destination is not a dir, backup and create a dir
+            os.rename(src=dest, dst=f'{dest}.backup')
+            os.mkdir(dest)
+
         for item in os.listdir(src):
             if item.startswith("."):
                 # no dotfiles
@@ -40,7 +48,8 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                             depth=(depth - 1),
                         )
                 except FileExistsError:
-                    # this may be acceptable, especially if the dir already exists
+                    # this is an acceptable scenario
+                    log.warning(f"Directory {item} is already present in: {dest}")
                     pass
                 except OSError as error:
                     # other errors should be addressed

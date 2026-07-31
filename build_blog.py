@@ -75,21 +75,38 @@ if __name__ == "__main__":
         },
     )
 
-    indexes = ('index', 'about', 'notes') # make sure index is always 0 here
+    index_pages = ('index', 'about', 'notes')
 
     # convert all /src markdowns to HTML files and populate /site
     for filename in list_of_files(dirname=base_dirname):
         file_footer = footer
-        no_path_filename = filename.split("/")[-1]
-        if "README" in filename or no_path_filename.startswith("."):
+        split_filename = filename.split("/")
+        if "README" in filename or split_filename[-1].startswith("."):
             continue
 
-        # parsing content firsthand to do transformations later
         content = parse_markdown_file(filename=filename)
 
-        # adding a different footer in the event of creating a post:
-        split_filename = filename.split("/")
-        if split_filename[-1] not in indexes:
+        if filename == f'{SRC}/index':
+            # base, index.md at root
+            file_footer = render_template(
+                filename=f"{SRC}/templates/footer.html.j2",
+                **{
+                    "base_url": BASE_URL,
+                    "tracking_url": TRACKING,
+                    "in_main": True,
+                },
+            )
+        elif split_filename[-1] in index_pages:
+            # other pages at root
+            file_footer = render_template(
+                filename=f"{SRC}/templates/footer.html.j2",
+                **{
+                    "base_url": BASE_URL,
+                    "in_index": True,
+                },
+            )
+        elif split_filename[-1] not in index_pages:
+            # posts will point back to their year index in the footer
             if len(split_filename) == 5:
                 year = split_filename[-2]
                 page = split_filename[-1]
@@ -102,23 +119,6 @@ if __name__ == "__main__":
                         "page_name": f"{page}"
                     },
                 )
-        elif split_filename[-1] in indexes[1:]: # abusing the in_index flag
-            file_footer = render_template(
-                filename=f"{SRC}/templates/footer.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "in_index": True,
-                },
-            )
-        else: # if index.md (aka main)
-            file_footer = render_template(
-                filename=f"{SRC}/templates/footer.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "tracking_url": TRACKING,
-                    "in_main": True,
-                },
-            )
                 
         html_save = save_as_html(
             filename=filename,

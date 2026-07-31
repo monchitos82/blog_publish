@@ -51,7 +51,6 @@ pipeline {
                         dir("site") { deleteDir() }
                         sh '''
                             git clone ${GIT_URL}/${SOURCE}
-                            mkdir -p ./site
                         '''
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/blog/${SOURCE}")) {
@@ -73,6 +72,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
+                    mkdir -p ./site
                     $HOME/.local/bin/uv run build_blog.py
                 '''
             }

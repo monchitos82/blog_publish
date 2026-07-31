@@ -87,8 +87,9 @@ pipeline {
         cleanup {
             script {
                 if (params.CLEAN_REPOSITORIES) {
-                    dir("${SOURCE}") { deleteDir() }
-                    dir("pages") { deleteDir() }
+                    echo 'clean dirs'
+                    //dir("${SOURCE}") { deleteDir() }
+                    //dir("pages") { deleteDir() }
                 }
             }
         }

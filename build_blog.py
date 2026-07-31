@@ -56,7 +56,6 @@ if __name__ == "__main__":
         filename=f"{SRC}/templates/menu.html.j2",
         **{
             "base_url": BASE_URL,
-            "progressbar": False,
         },
     )
     header = render_template(
@@ -66,6 +65,7 @@ if __name__ == "__main__":
             "menu": menu,
             "title": TITLE,
             "author": AUTHOR,
+            "progressbar": False,
         },
     )
     footer = render_template(
@@ -90,10 +90,13 @@ if __name__ == "__main__":
 
         # adding a progressbar if annotated
         if "<!-- SCROLLABLE -->" in content:
-            menu = render_template(
-                filename=f"{SRC}/templates/menu.html.j2",
+            header = render_template(
+                filename=f"{SRC}/templates/header.html.j2",
                 **{
                     "base_url": BASE_URL,
+                    "menu": menu,
+                    "title": TITLE,
+                    "author": AUTHOR,
                     "progressbar": True,
                 },
             )

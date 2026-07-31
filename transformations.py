@@ -8,7 +8,7 @@ from jinja2.exceptions import TemplateError
 log = logging.getLogger(__name__)
 
 
-def title_h4_href(title: str, date: str, path: str) -> str:
+def title_h4_href(title: str, date: str, path: str = ".") -> str:
     log.error(f"Title is: {title} and path is: {path}")
     html_title = f"{urllib.parse.quote(title)}_{date.replace('/', '_')}"
     return f"""

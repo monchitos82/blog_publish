@@ -99,9 +99,7 @@ pipeline {
         stage('Local Publish') {
             steps {
                 sh """
-                mkdir -p /opt/deploy
                 mkdir -p /opt/deploy/site
-                mkdir -p ./last
                 mkdir -p ./last/site
                 cp -r /opt/deploy/site ./last/
                 cp -r ./site /opt/deploy/

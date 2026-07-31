@@ -7,9 +7,8 @@ pipeline {
         SOURCE = "rgarciamx"
         TRACKING = "https://${ACCOUNT}-neocities.goatcounter.com"
         // project specifics
-        BASE_URL = "https://${ACCOUNT}.codeberg.page"
-        NEOCITIES_URL = "https://${ACCOUNT}.neocities.org"
-        DEST = "./pages"
+        BASE_URL = "https://${ACCOUNT}.neocities.org"
+        DEST = "./site"
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 1
     }
@@ -52,7 +51,7 @@ pipeline {
                         dir("pages") { deleteDir() }
                         sh '''
                             git clone ${GIT_URL}/${SOURCE}
-                            git clone ${GIT_URL}/pages
+                            mkdir -p site
                         '''
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/blog/${SOURCE}")) {
@@ -64,17 +63,6 @@ pipeline {
                         } else {
                             sh '''
                             git clone ${GIT_URL}/${SOURCE}
-                            '''
-                        }
-                        if (fileExists("/home/jenkins/agent/workspace/blog/pages")) {
-                            sh '''
-                            cd pages
-                            git pull
-                            cd ..
-                            '''
-                        } else {
-                            sh '''
-                            git clone ${GIT_URL}/pages
                             '''
                         }
                     }
@@ -93,9 +81,9 @@ pipeline {
         stage('Publish Local') {
             steps {
                 sh """
-                mkdir -p /opt/deploy/blog
-                cp -r ./pages/* /opt/deploy/blog/
-                find /opt/deploy/blog -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/blog|g' {} +
+                mkdir -p /opt/deploy/site
+                cp -r ./pages/* /opt/deploy/site/
+                find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
                 """
             }
         }
@@ -125,14 +113,7 @@ pipeline {
             steps {
                 catchError (buildResult: 'NOT_BUILT', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     sh '''
-                        cd deployment
-                        ./deploy.sh
-                        cd ..
-                        cd pages
-                        git add -A
-                        git commit -am \"Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)\"
-                        git push origin master
-                        cd ..
+                        $HOME/.local/bin/uv run neocities_upload.py
                     '''
                 }
             }

@@ -1,3 +1,4 @@
+import html
 import logging
 import os
 import sys
@@ -66,6 +67,6 @@ if __name__ == "__main__":
                     system_prompt=system_prompt,
                 )
                 if response:
-                    print(response.encode("utf-8"))
+                    print(html.escape(response))
     except IOError:
         log.error(f"File {filename} could not be read")

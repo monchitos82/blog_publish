@@ -68,6 +68,7 @@ if __name__ == "__main__":
         "progressbar": True,
         "menu": None,
         "years": YEARS,
+        "title": TITLE,
     }
 
     arguments["menu"] = parse_template(
@@ -174,7 +175,7 @@ if __name__ == "__main__":
                 email=EMAIL,
                 base_url=BASE_URL,
                 site_name=SITE_NAME,
-                site_title=SITE_NAME,
+                site_title=SITE_TITLE,
             ):
                 log.warning("The RSS feed could not be generated")
 

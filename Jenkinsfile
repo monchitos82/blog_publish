@@ -5,6 +5,7 @@ pipeline {
         AUTHOR = "Ramon Garcia"
         ACCOUNT = "ramongmx"
         SITE_NAME = "${ACCOUNT}.neocities.org"
+        SITE_TITLE = "${AUTHOR}'s blog"
 
         // build specifics
         SOURCE = "blog"

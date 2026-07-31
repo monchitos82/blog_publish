@@ -23,7 +23,7 @@ def save_as_html(
         try:
             with open(html_filename, "w+", encoding="utf-8") as html_file:
                 html_file.write(header)
-                html_file.write(f'\n    <main role="main">\n{content}\n    </main>\n')
+                html_file.write(f'\n<main role="main">\n{content}\n</main>\n')
                 html_file.write(footer)
         except OSError:
             log.error(f"Failed to save {html_filename}", exc_info=True)

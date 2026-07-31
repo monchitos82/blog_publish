@@ -7,16 +7,16 @@ from langchain_ollama import ChatOllama
 tools = []
 
 
-def evaluate(msg, tools=tools):
+def evaluate(msg: str, tools: list = tools) -> str | None:
     model = None
     agent = None
     result = {}
-    output = ""
+    output = None
     try:
         model = ChatOllama(model=os.getenv("OLLAMA_MODEL", "granite4.1:8b"))
     except Exception:
         print("No model was created")
-        return output
+        return
 
     if model:
         try:
@@ -27,30 +27,30 @@ def evaluate(msg, tools=tools):
             )
         except Exception:
             print("No agent was setup for the model")
-            return output
-        else:
-            if agent:
-                try:
-                    result = agent.invoke(
-                        {
-                            "messages": [
-                                HumanMessage(
-                                    content=f"please analyze the following text and find spelling and grammar errors: {msg}"
-                                )
-                            ]
-                        }
-                    )
-                except Exception:
-                    print("No response was given")
-                    return output
+            return
 
-                if result:
-                    messages = result.get("messages", [])
-                    if messages and len(messages) >= 1:
-                        if isinstance(messages[1], AIMessage):
-                            output = messages[1].content
-                        else:
-                            print("No AI message was received")
+        if agent:
+            try:
+                result = agent.invoke(
+                    {
+                        "messages": [
+                            HumanMessage(
+                                content=f"please analyze the following text and find spelling and grammar errors: {msg}"
+                            )
+                        ]
+                    }
+                )
+            except Exception:
+                print("No response was given")
+                return
+
+            if result:
+                messages = result.get("messages", [])
+                if messages and len(messages) >= 1:
+                    if isinstance(messages[1], AIMessage):
+                        output = messages[1].content
                     else:
-                        print("Malformed response was received")
+                        print("No AI message was received")
+                else:
+                    print("Malformed response was received")
     return output

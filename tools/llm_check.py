@@ -27,9 +27,7 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
 
     if model:
         setup_otel_instrumentation()
-        trace = setup_otel_tracing()
-        tracer = trace.get_tracer("llm_check")
-
+        tracer = setup_otel_tracing()
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=message)]
         try:
             with tracer.start_as_current_span("ollama_request"):

@@ -32,10 +32,9 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
             log.error(f"No response was given, error: {error}")
             return
 
-        log.warning(result)
         if result and isinstance(result, AIMessage):
             try:
-                output = result.content
+                output = result.content.encode
             except AttributeError as error:
                 log.error(f"No AI message was received, error: {error}")
         else:

@@ -5,7 +5,7 @@ import sys
 
 from langchain.agents import create_agent
 from langchain.tools import tool
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
 
 log = logging.getLogger(__name__)
@@ -18,19 +18,9 @@ def echo(input: str) -> str | None:
 
 
 tools = [echo]
-agent_prompt = """
-You are an assistant whose function is to validate content is grammatically correct"
-"""
-
-try:
-    with open("./base_prompt.md") as b:
-        base_prompt = b.read()
-except OSError as error:
-    log.error(f"Could not read base prompt, error: {error}")
-    base_prompt = ""
 
 
-def evaluate(msg: str, tools: list = tools) -> str | None:
+def evaluate(msg: str, system_prompt: str, tools: list = tools) -> str | None:
     model = None
     agent = None
     result = {}
@@ -51,7 +41,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
             agent = create_agent(
                 model=model,
                 tools=tools,
-                system_prompt=(base_prompt + "\n" + agent_prompt),
+                temperature=0,
             )
         except Exception as error:
             log.error(f"No agent was setup for the model, error: {error}")
@@ -59,7 +49,14 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
 
         if agent:
             try:
-                result = agent.invoke({"messages": [HumanMessage(content=msg)]})
+                result = agent.invoke(
+                    {
+                        "messages": [
+                            SystemMessage(content=system_prompt),
+                            HumanMessage(content=msg),
+                        ]
+                    }
+                )
             except Exception as error:
                 log.error(f"No response was given, error: {error}")
                 return
@@ -78,11 +75,30 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
 
 if __name__ == "__main__":
     filename = sys.argv[1]
+
+    agent_prompt = """
+    You are an assistant whose function is to validate content is grammatically correct"
+    """
+
+    try:
+        with open("./base_prompt.md") as b:
+            base_prompt = b.read()
+    except OSError as error:
+        log.error(f"Could not read base prompt, error: {error}")
+        base_prompt = ""
+
+    system_prompt = base_prompt + "\n" + agent_prompt
     try:
         with open(filename) as f:
             content = f.read()
             if content:
                 message = f"for the file {filename}, if it is a markdown, evaluate if it is grammatically correct: {content}"
-                print(evaluate(msg=message))
+                print(
+                    evaluate(
+                        msg=message,
+                        system_prompt=system_prompt,
+                        tools=tools,
+                    )
+                )
     except IOError:
         log.error(f"File {filename} could not be read")

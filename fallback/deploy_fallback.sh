@@ -15,4 +15,4 @@ find ./blog/ -type f -exec sed -i "s|${BASE_URL}|https://${FALLBACK_URL}|g" {} +
 find ./blog/ -type f -exec sed -i "s|https://${TRACKING}|${TRACKING_FALLBACK}|g" {} +
 
 # upload
-.,/,venv/bin/python neocities_upload.py
+../.venv/bin/python neocities_upload.py

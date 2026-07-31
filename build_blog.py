@@ -10,6 +10,7 @@ from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
 from operations import extract_post_title, build_year_index
 from transformations import parse_markdown_file, render_template, save_as_html
 from validations import has_broken_anchors
+from rss import generate_rss_feed
 from utils import env_list_as_tuple, run_async
 
 log = logging.getLogger(__name__)
@@ -25,6 +26,7 @@ DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
 TITLE = os.getenv("TITLE", None)
 AUTHOR = os.getenv("AUTHOR", None)
+ACCOUNT = os.getenv("ACCOUNT", None)
 
 
 if __name__ == "__main__":
@@ -170,6 +172,16 @@ if __name__ == "__main__":
         for result in asyncio.run(run_async(tasks)):
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")
+        
+        rss_settings = {
+            "site_name": ACCOUNT,
+            "author": AUTHOR,
+            "base_url": BASE_URL,
+            "title": TITLE,
+        }
+
+        generate_rss_feed(src=SRC, dest=DEST, years=YEARS, settings=rss_settings)
+
     elif file_errors:
         log.critical("The build cannot continue, there are file errors making the build inconsistent")
     elif not year_indexes:

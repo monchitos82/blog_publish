@@ -34,8 +34,6 @@ def generate_rss_feed(src: str, dest: str, years: list, author: str, base_url: s
                 filename = post.split("/")[-1].split(".")[0]
                 title_url = f"{base_url}/posts/{year}/{filename}.html"
 
-                print(title_text, title_date, title_url)
-
                 if title_text and title_date and title_url:
                     fe = fg.add_entry()
                     fe.id(title)

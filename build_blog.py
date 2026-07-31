@@ -71,7 +71,7 @@ if __name__ == "__main__":
         "in_index": False,
         "in_main": False,
         "in_post": False,
-        "in_codeberg" IN_CODEBERG,
+        "in_codeberg": IN_CODEBERG,
         "progressbar": True,
         "menu": None,
         "years": YEARS,

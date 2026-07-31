@@ -14,7 +14,7 @@ from transformations import (
     render_template,
     save_as_html,
 )
-from utils import env_list_as_tuple, run_async
+from utils import env_list_as_tuple, run_async, load_static_env
 from validations import has_broken_anchors
 
 log = logging.getLogger(__name__)
@@ -41,6 +41,8 @@ if __name__ == "__main__":
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
     }
+
+    STATICS.update(load_static_env(src=SRC))
 
     clean_files(path=f"{DEST}", extension="html")
 

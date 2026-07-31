@@ -36,7 +36,9 @@ b) There are some environment variables needed to run the script:
 
 These are defined in the Jenkinsfile as well, so pretty much all that I need to publish, it is controlled by these variables.
 
-c) If new directories are added, they need to be mapped by the `STATICS` dictionary in `blog_builder.py`. `STATICS` is a map of paths and extensions, this tells the build process from where to take the sources and what files are to be taken, e.g. if I add `/extras` and add `json`, `txt` and `xml` files, but I only want to publish the `txt` files, I will specify that by updating the map (line 40):
+c) If new directories are added, they need to be mapped by the `STATICS` dictionary in `blog_builder.py (40)`. `STATICS` is a map of paths and extensions, this tells the build process from where to take the sources and what files are to be taken; to do this, we may use environment variables to do this as well.
+
+In the following example, we can add the `/extras` directory, where only `.txt` files are meant to be published:
 
 ```
     STATICS = {
@@ -44,6 +46,14 @@ c) If new directories are added, they need to be mapped by the `STATICS` diction
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
         f"{SRC}/extras": (".txt",),
     }
+```
+
+To achieve the same, we may just declare an environment variable:
+
+```
+export STATICS_EXTRAS=".txt"
+
+# if I have more dirs in the path, then STATICS_A_B_C would be converted to {SRC}/a/b/c in the map
 ```
 
 In this example `env_list_as_tuple` serves to pass a list of text like `"a,b,c"` as environment variable so it loads into the map as `("a", "b", "c")`.

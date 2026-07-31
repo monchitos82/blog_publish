@@ -1,6 +1,6 @@
 import os
 
-from utils import env_list_as_tuple, run_async
+from utils import env_list_as_tuple, run_async, load_static_env
 import asyncio
 
 
@@ -40,3 +40,23 @@ def test_run_async_fail():
 def test_run_async_multiple():
     results = asyncio.run(run_async([task_a(), task_c()]))
     assert results == ['ok', 'good']
+
+def test_load_static_env():
+    os.environ["STATIC_TEST_1"] = "a, b"
+    os.environ["STATIC_TEST2"] = "*"
+    src = "base"
+    static = load_static_env(src=src)
+    del os.environ["STATIC_TEST_1"]
+    del os.environ["STATIC_TEST2"]
+    expected = {
+        f'{src}/test/1': ('a', 'b'),
+        f'{src}/test2': ('*',),
+    }
+    assert static == expected
+
+def test_load_static_env_bad_env():
+    os.environ["STATIC_"] = "a, b"
+    src = "base"
+    static = load_static_env(src=src)
+    del os.environ["STATIC_"]
+    assert static == {}

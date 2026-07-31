@@ -129,16 +129,16 @@ pipeline {
         }
         stage('Local Publish') {
             steps {
-                sh """
+                sh '''
                 mkdir -p ${LOCAL_PATH_SITE}
                 mkdir -p ../${STABLE}/${SITE_DIR}
                 cp -r ${LOCAL_PATH_SITE} ../${STABLE}/
                 cp -r ${DEST} ${LOCAL_PATH_ROOT}
-                find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}|g' {} +
+                find ${LOCAL_PATH_SITE} -type f -exec sed -i "s|${BASE_URL}|${LOCAL_BASE_URL}|g" {} +
                 if [ ! -z "${TRACKING_URL}" ]; then
-                  find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
+                  find ${LOCAL_PATH_SITE} -type f -exec sed -i "s|.*${TRACKING_URL}.*|<!-- no tracking -->|g" {} +
                 fi
-                """
+                '''
             }
         }
         stage('Promote Release') {
@@ -167,15 +167,20 @@ pipeline {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
                         if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
-                            sh """
+                            sh '''
                             cd ..
                             git clone ${SITE_PAGES_URL}
                             cd ..
                             cp -r ${SITE_DIR} ${SITE_PAGES}
-                            """
+                            cd  ${SITE_PAGES}
+                            find ${LOCAL_PATH_SITE} -type f -exec sed -i "s|${BASE_URL}|${CODEBERG_PAGES_URL}|g" {} +
+                            git add -A
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
+                            git push
+                            '''
                         } else {
-                            sh """
-                            echo 'Pages is already present'
+                            sh '''
+                            echo "Pages is already present"
                             cd ..
                             cd ${SITE_PAGES}
                             git pull
@@ -183,9 +188,9 @@ pipeline {
                             cp -r ${SITE_DIR} ${SITE_PAGES}
                             cd  ${SITE_PAGES}
                             git add -A
-                            git commit -am \"$(date +'%Y-%m-%d %H:%M:%S')\"
+                            git commit -am "$(date +'%Y-%m-%d %H:%M:%S')"
                             git push
-                            """
+                            '''
                         }
                     }
                 }
@@ -195,7 +200,7 @@ pipeline {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update page'){
                     sh '''
-                        $HOME/.local/bin/uv run neocities_upload.py
+                    $HOME/.local/bin/uv run neocities_upload.py
                     '''
                 }
             }

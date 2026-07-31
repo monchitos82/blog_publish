@@ -4,11 +4,7 @@ import pytest
 from jinja2 import Environment, FunctionLoader
 
 from jinja_functions import JinjaFunctions
-from transformations import (
-    parse_markdown,
-    parse_template,
-    render_annotations,
-)
+from transformations import parse_markdown, parse_template, render_annotations
 
 
 @pytest.fixture

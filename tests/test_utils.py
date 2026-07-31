@@ -2,6 +2,7 @@ import asyncio
 import os
 
 import pytest
+
 from utils import (PATH_CLEAR_TERMS, clean_terms, env_list_as_tuple,
                    load_static_env, run_async)
 

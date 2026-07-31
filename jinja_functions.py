@@ -16,7 +16,13 @@ class JinjaFunctions:
 @JinjaFunctions.jinja_function
 @pass_context
 def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
-    """Render a header using an anchor quick reference format"""
+    """
+    Render a header using an anchor quick reference format, this generates an h4 header
+    with a title anchor and an href anchor.
+
+    Use inside the template:
+    {{ title_h4_href('title to the url', 'yyyy-mm-dd', 'name-of-page.html') }}
+    """
     base_url = context.get("base_url", "")
     html_title = f"{urllib.parse.quote(title.lower().replace(' ', '_'))}_{date.replace('/', '_')}"
     return (

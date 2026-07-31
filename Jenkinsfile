@@ -34,6 +34,11 @@ pipeline {
             defaultValue: true, 
             description: 'Execute a local deployment to validate results'
         )
+        booleanParam(
+            name: 'UPDATE_RSS',
+            defaultValue: true,
+            description: 'Update the RSS feed (only works for Posts)'
+        )
     }
     stages {
         stage('Environment Setup') {
@@ -77,10 +82,17 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh '''
+                script {
+                    if (params.UPDATE_RSS) {
+                      environment {
+                        UPDATE_RSS = true
+                      }
+                    }
+                    sh '''
                     mkdir -p ./site
                     $HOME/.local/bin/uv run build_blog.py
-                '''
+                    '''
+                }
             }
 
         }

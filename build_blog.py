@@ -174,17 +174,19 @@ if __name__ == "__main__":
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")
         
-        if not generate_rss_feed(
-            src=SRC,
-            dest=DEST,
-            years=YEARS,
-            author=AUTHOR,
-            email=EMAIL,
-            base_url=BASE_URL,
-            site_name=ACCOUNT,
-            site_title=TITLE,
-        ):
-            log.warning("The RSS feed could not be generated")
+        update_rss = os.getenv('UPDATE_RSS', None)
+        if update_rss:
+            if not generate_rss_feed(
+                src=SRC,
+                dest=DEST,
+                years=YEARS,
+                author=AUTHOR,
+                email=EMAIL,
+                base_url=BASE_URL,
+                site_name=ACCOUNT,
+                site_title=TITLE,
+            ):
+                log.warning("The RSS feed could not be generated")
 
     elif file_errors:
         log.critical("The build cannot continue, there are file errors making the build inconsistent")

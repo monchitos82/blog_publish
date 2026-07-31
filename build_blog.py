@@ -358,6 +358,7 @@ if __name__ == "__main__":
         **{
             "base_url": BASE_URL,
             "in_post": False,
+            "in_index": False,
         },
     )
 
@@ -405,8 +406,15 @@ if __name__ == "__main__":
         last_year = int(LAST_YEAR)
         first_year = last_year - int(YEAR_LOOKBACK)
         YEARS = [str(year) for year in range(first_year, last_year + 1)]
+        index_footer = render_template(
+            filename=f"{SRC}/templates/footer.html.j2",
+            **{
+                "base_url": BASE_URL,
+                "in_index": True,
+            },
+        )
         year_indexes = asyncio.run(
-            build_year_index(years=YEARS, header=header, footer=footer)
+            build_year_index(years=YEARS, header=header, footer=index_footer)
         )
 
     # if all year indexes are ready we can build the index from them

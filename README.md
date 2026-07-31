@@ -37,7 +37,7 @@ b) There are some environment variables needed to run the script:
 
 These are defined in the Jenkinsfile as well, so pretty much all that I need to publish, it is controlled by these variables.
 
-c) If new directories are added, they need to be mapped by the `STATICS` dictionary in `blog_builder.py (40)`. `STATICS` is a map of paths and extensions, this tells the build process from where to take the sources and what files are to be taken.
+c) If new directories are added, they need to be mapped by the `STATICS` dictionary in [`build_blog.py`](https://codeberg.org/monfg/blog_builder/src/branch/master/build_blog.py). `STATICS` is a map of paths and extensions, this tells the build process from where to take the sources and what files are to be taken.
 
 In the following example, we can add the `/extras` directory, where only `.txt` files are meant to be published:
 

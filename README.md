@@ -77,9 +77,9 @@ Files may contain some comments that will alter their behavior. In a similar man
 .---------------.                       
 | markdown file | --> << Markdown Parsing >> 
 '---------------'                 |    .---------------------------.        
-                                  -->  | html file with jinja tags | --> << Jinja Parsing >>
+                                  └->  | html file with jinja tags | --> << Jinja Parsing >>
                                        '---------------------------'              |    .------------------.
-                                                                                  -->  | html static file |
+                                                                                  └->  | html static file |
                                                                                        '------------------'
 
 </code></pre>

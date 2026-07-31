@@ -127,7 +127,7 @@ def append_last_title_to_index(src: str, filename: str, year: str) -> bool:
 
 
 async def build_year_index(
-    src: str, dest: str, base_url: str, years: list, header: str, footer: str
+    src: str, dest: str, base_url: str, years: list, header: str, footer: str, tracking_element: str,
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
@@ -144,6 +144,8 @@ async def build_year_index(
                 footer=footer,
                 content=parse_markdown_file(filename=filename),
                 replace={src: dest},
+                tracking_element=tracking_element,
+
             )
         except OSError as error:
             logging.error(f"Failed to save index file for {year}, {error}")

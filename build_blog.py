@@ -148,6 +148,7 @@ if __name__ == "__main__":
                 years=YEARS,
                 header=header,
                 footer=index_footer,
+                tracking_element=TRACKING,
             )
         )
 

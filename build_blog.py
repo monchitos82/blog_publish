@@ -138,16 +138,17 @@ if __name__ == "__main__":
             file_errors = True
             break
 
-    file_arguments = dict(arguments)
-    file_arguments["progressbar"] = False
-    file_arguments["in_index"] = True
+    # build the indexes from the posts in /src
+    index_arguments = dict(arguments)
+    index_arguments["progressbar"] = False
+    index_arguments["in_index"] = True
     index_header = parse_template(
         filename=f"{SRC}/templates/header.html.j2",
-        **file_arguments,
+        **index_arguments,
     )
     index_footer = parse_template(
         filename=f"{SRC}/templates/footer.html.j2",
-        **file_arguments,
+        **index_arguments,
     )
     year_indexes = build_year_index(
         src=SRC,
@@ -170,6 +171,7 @@ if __name__ == "__main__":
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")
 
+        # once indexes are ready, update the RSS if enabled
         update_rss = os.getenv("UPDATE_RSS", None)
         if update_rss:
             log.info("RSS updates enabled")
@@ -187,7 +189,7 @@ if __name__ == "__main__":
 
     elif file_errors:
         log.critical(
-            "The build cannot continue, there are file errors making the build inconsistent"
+            "The build process cannot continue, there are file errors making the site inconsistent"
         )
     elif not year_indexes:
-        log.critical("Year indexes were not built, the build navigation will be broken")
+        log.critical("Year indexes were not built, the site navigation will be broken")

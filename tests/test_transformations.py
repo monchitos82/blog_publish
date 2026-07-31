@@ -107,7 +107,7 @@ def test_render_annotations_in_post():
         **arguments,
     )
     assert '"in_post": True' in file_footer
-    assert '"year": 2026' in file_footer
+    assert '"post_year": 2026' in file_footer
 
 
 def test_render_annotations_nav_main():

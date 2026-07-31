@@ -4,8 +4,9 @@ pipeline {
         VENV_DIR = ".venv"
         PYTHON = "python3"
         SOURCE = "rgarciamx"
-        BASE_URL = "https://rgarciamx.codeberg.page"
-        SRC = "../rgarciamx"
+        BASE_URL = "https://${SOURCE}.codeberg.page"
+        GIT_URL = "ssh://git@codeberg.org/${SOURCE}"
+        SRC = "../${SOURCE}"
         DEST = "../pages"
         YEAR_LOOKBACK = 2
     }
@@ -13,8 +14,8 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 sh '''
-                    $PYTHON -m venv $VENV_DIR
-                    . $VENV_DIR/bin/activate
+                    ${PYTHON} -m venv ${VENV_DIR}
+                    . ${VENV_DIR}/bin/activate
                     pip install --upgrade pip setuptools wheel
                     pip install -r requirements.txt
                 '''
@@ -23,11 +24,10 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    . $VENV_DIR/bin/activate
-                    git clone $SOURCE # clone my sources
-                    git clone pages # clone the destination repository
+                    . ${VENV_DIR}/bin/activate
+                    git clone ${GIT_URL}/${SOURCE} # clone my sources
+                    git clone ${GIT_URL}/pages # clone the destination repository
                     python build_blog.py
-                    cd -
                 '''
             }
         }
@@ -36,7 +36,7 @@ pipeline {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh '''
                         export AUTO="true"
-                        . $VENV_DIR/bin/activate
+                        . ${VENV_DIR}/bin/activate
                         python build_blog.py -s
                     '''
                 }
@@ -45,7 +45,7 @@ pipeline {
         stage('Publish') {
             steps {
                 sh '''
-                    . $VENV_DIR/bin/activate
+                    . ${VENV_DIR}/bin/activate
                     cd pages
                     git add -A
                     git commit -am "Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)"

@@ -51,7 +51,7 @@ pipeline {
                     . ${VENV_DIR}/bin/activate
                     cd pages
                     git add -A
-                    git commit -am "Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)"
+                    git commit -am \"Published from Jenkins on $(date +%Y-%m-%sT%H:%M:%S)\"
                     git push origin master
                 '''
             }

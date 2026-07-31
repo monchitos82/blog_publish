@@ -3,10 +3,10 @@ pipeline {
     environment {
         // site specifics
         AUTHOR = "Ramon Garcia"
-        ACCOUNT = "ramongarciamx"
+        ACCOUNT = "monfg"
         EMAIL = "${ACCOUNT}@proton.me"
         TITLE = "Ramon's blog"
-        SITE_NAME = "ramongarciamx"
+        SITE_NAME = "monfg"
         SOURCE = "rgarciamx"
 
         //build specifics

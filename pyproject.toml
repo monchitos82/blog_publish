@@ -29,6 +29,7 @@ build-blog = "build_blog:main"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = [
+    "test_build.py",
     "test_files.py",
     "test_operations.py",
     "test_validations.py",

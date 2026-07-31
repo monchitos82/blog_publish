@@ -22,30 +22,36 @@ YEAR_LOOKBACK = os.getenv("YEAR_LOOKBACK", "1")
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 TRACKING = os.getenv("TRACKING", None)
-INDEX_PAGES = os.getenv("INDEX_PAGES", None)
-
-if INDEX_PAGES is None:
-    INDEX_PAGES = ["index", "about"]
-INDEX_PAGES = tuple(INDEX_PAGES.replace(" ", "").split(","))
 
 
-# These are directory and extensions that should be copied
-STATICS = {
-    f"{SRC}": [".txt", ".ico"],
-    f"{SRC}/assets": [".css"],
-    f"{SRC}/img": [".png", ".jpeg", ".jpg", ".gif", ".svg"],
-    f"{SRC}/archive": ["*"],
-    f"{SRC}/experiments": ["*"],
-}
+def env_list_as_tuple(var_name: str, default: tuple | None = None) -> tuple | None:
+    env_var = os.getenv(var_name, None)
+    if not env_var:
+        return default
+    split_var = env_var.replace(" ", "").split(",")
+    if split_var[-1] == "":
+        split_var.pop()
+    if not split_var:
+        return default
+    return tuple(split_var)
 
-
-async def run_asynchronously(tasks: list) -> list:
-    return await asyncio.gather(*tasks, return_exceptions=True)
 
 if __name__ == "__main__":
 
     file_errors = False
     base_dirname = SRC
+
+    INDEX_PAGES = env_list_as_tuple("INDEX_PAGES")
+    if INDEX_PAGES is None:
+        INDEX_PAGES = ["index", "about"]
+    
+    STATICS = {
+        f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".ico")),
+        f"{SRC}/assets": env_list_as_tuple("STATICS_ASSETS", (".css",)),
+        f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg")),
+        f"{SRC}/archive": env_list_as_tuple("STATICS_ARCHIVE", ("*",)),
+        f"{SRC}/experiments": env_list_as_tuple("STATICS_EXPERIMENTS", ("*",)),
+    }
 
     clean_files(path=f"{DEST}", extension="html"),
 
@@ -160,19 +166,16 @@ if __name__ == "__main__":
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:
-        results = asyncio.run(
-            run_asynchronously(
-                [
-                    has_broken_anchors(dest=f"{DEST}"),
-                    async_clean_files(
-                        path=f"{SRC}/posts", extension="md", target=YEARS
-                    ),
-                    async_clean_files(
-                        path=f"{SRC}/posts", extension="html", target=YEARS
-                    ),
-                ]
-            )
-        )
+        tasks = [
+            has_broken_anchors(dest=f"{DEST}"),
+            async_clean_files(
+                path=f"{SRC}/posts", extension="md", target=YEARS
+            ),
+            async_clean_files(
+                path=f"{SRC}/posts", extension="html", target=YEARS
+            ),
+        ]
+        results = asyncio.gather(tasks, return_exceptions=True)
         for result in results:
             if isinstance(result, Exception):
                 log.error(f"A task failed with an exception: {result}")

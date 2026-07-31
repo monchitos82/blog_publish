@@ -60,6 +60,7 @@ pipeline {
             name: 'USE_FALLBACK',
             defaultValue: false,
             description: 'Deploy to fallback site'
+        )
     }
     stages {
         stage('Environment Setup') {

@@ -39,7 +39,7 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
             agent = create_agent(
                 model=model,
                 tools=tools,
-                system_prompt=(base_promt + "\n" + agent_prompt),
+                system_prompt=(base_prompt + "\n" + agent_prompt),
             )
         except Exception as error:
             print(f"No agent was setup for the model, error: {error}")

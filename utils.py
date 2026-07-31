@@ -1,8 +1,28 @@
 import asyncio
 import os
 
-
-PATH_CLEAR_TERMS = (" ", "(", ")", "|", ":", ".", ";", "&", "--", "{", "[", "]", "}", "$", "`", "~", "%", "!", '//', '\\\\')
+PATH_CLEAR_TERMS = (
+    " ",
+    "(",
+    ")",
+    "|",
+    ":",
+    ".",
+    ";",
+    "&",
+    "--",
+    "{",
+    "[",
+    "]",
+    "}",
+    "$",
+    "`",
+    "~",
+    "%",
+    "!",
+    "//",
+    "\\\\",
+)
 
 
 def env_list_as_tuple(var_name: str, default: tuple | None = None) -> tuple | None:
@@ -25,8 +45,9 @@ async def run_async(tasks: list) -> list:
 def clean_terms(word: str, terms: tuple | None) -> str:
     if terms:
         for term in terms:
-            word = word.replace(term, '')
+            word = word.replace(term, "")
     return word
+
 
 def load_static_env(src: str, prefix: str = "STATIC") -> dict:
     static = {}

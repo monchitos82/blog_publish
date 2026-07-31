@@ -5,7 +5,9 @@ import shutil
 log = logging.getLogger(__name__)
 
 
-def list_of_files(dirname: str, extension: str = "md", clean_extension=True, invert=False) -> list:
+def list_of_files(
+    dirname: str, extension: str = "md", clean_extension=True, invert=False
+) -> list:
     """Generate a list of files having an [extension]."""
     files_list = []
 

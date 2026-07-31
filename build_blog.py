@@ -5,16 +5,13 @@ import datetime
 import logging
 import os
 
-from files import async_clean_files, clean_files, copy_dirs, copy_statics, list_of_files
+from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
+                   list_of_files)
 from operations import build_year_index, extract_post_title
 from rss import generate_rss_feed
-from transformations import (
-    parse_markdown_file,
-    render_content_as_template,
-    render_template,
-    save_as_html,
-)
-from utils import env_list_as_tuple, run_async, load_static_env
+from transformations import (parse_markdown_file, render_content_as_template,
+                             render_template, save_as_html)
+from utils import env_list_as_tuple, load_static_env, run_async
 from validations import has_broken_anchors
 
 log = logging.getLogger(__name__)

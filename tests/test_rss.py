@@ -1,5 +1,6 @@
 from rss import generate_rss_feed
 
+
 def test_generate_rss(tmp_path):
     src = tmp_path / "src"
     dest = tmp_path / "dest"

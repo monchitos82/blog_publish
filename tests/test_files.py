@@ -2,7 +2,9 @@ import asyncio
 import os
 from unittest.mock import patch
 
-from files import list_of_files, copy_dirs, copy_statics, clean_files, async_clean_files
+from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
+                   list_of_files)
+
 
 def test_list_of_files_finds_by_extension(tmp_path):
     (tmp_path / "post.md").write_text("hello")
@@ -54,6 +56,7 @@ def test_list_of_files_ignores_dotfiles(tmp_path):
 def test_list_of_files_empty_dir(tmp_path):
     result = list_of_files(str(tmp_path), extension="md")
     assert result == []
+
 
 def test_copy_dirs_mirrors_structure(tmp_path):
     src = tmp_path / "src"

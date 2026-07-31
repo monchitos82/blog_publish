@@ -1,6 +1,8 @@
 import os
 
-from transformations import render_template, render_content_as_template, parse_markdown, parse_markdown_file, save_as_html
+from transformations import (parse_markdown, parse_markdown_file,
+                             render_content_as_template, render_template,
+                             save_as_html)
 
 
 def test_render_template_renders_variables(tmp_path):

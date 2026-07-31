@@ -1,4 +1,4 @@
-from operations import extract_post_title, build_year_index
+from operations import build_year_index, extract_post_title
 
 
 def test_extract_post_title_returns_title(tmp_path):

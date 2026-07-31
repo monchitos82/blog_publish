@@ -49,7 +49,7 @@ pipeline {
                             git clone ${GIT_URL}/pages
                         '''
                     } else {
-                        if (fileExists '/home/jenkins/agent/workspace/blog/${SOURCE}') {
+                        if (fileExists "/home/jenkins/agent/workspace/blog/${SOURCE}") {
                             sh '''
                             cd ${SOURCE}
                             git pull
@@ -60,7 +60,7 @@ pipeline {
                             git clone ${GIT_URL}/${SOURCE}
                             '''
                         }
-                        if (fileExists '/home/jenkins/agent/workspace/blog/pages') {
+                        if (fileExists "/home/jenkins/agent/workspace/blog/pages") {
                             sh '''
                             cd pages
                             git pull

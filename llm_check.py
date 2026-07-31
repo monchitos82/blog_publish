@@ -32,6 +32,7 @@ def evaluate_prompt(message: str, system_prompt: str) -> str | None:
             log.error(f"No response was given, error: {error}")
             return
 
+        log.warning(result)
         if result and isinstance(result, AIMessage):
             try:
                 output = result.content

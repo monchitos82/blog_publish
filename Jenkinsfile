@@ -87,8 +87,8 @@ pipeline {
         stage('Publish Local') {
             steps {
                 sh '''
-                mkdir /opt/deploy/blog
-                cp -r ./pages/* /opt/deploy/blog
+                mkdir -p /opt/deploy/blog
+                cp -r ./pages/* /opt/deploy/blog/
                 '''
             }
         }

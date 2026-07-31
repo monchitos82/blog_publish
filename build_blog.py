@@ -7,9 +7,9 @@ import os
 
 from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
                    list_of_files)
-from operations import build_year_index
+from operations import extract_post_title, build_year_index
 from transformations import parse_markdown_file, render_template, save_as_html
-from validations import extract_post_title, has_broken_anchors
+from validations import has_broken_anchors
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

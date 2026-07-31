@@ -65,7 +65,6 @@ if __name__ == "__main__":
             "menu": menu,
             "title": TITLE,
             "author": AUTHOR,
-            "progressbar": False,
         },
     )
     footer = render_template(
@@ -75,7 +74,6 @@ if __name__ == "__main__":
             "in_post": False,
             "in_index": False,
             "in_main": False,
-            "scrollable": False,
         },
     )
 
@@ -87,19 +85,6 @@ if __name__ == "__main__":
             continue
 
         content = parse_markdown_file(filename=filename)
-
-        # adding a progressbar if annotated
-        if "<!-- SCROLLABLE -->" in content:
-            header = render_template(
-                filename=f"{SRC}/templates/header.html.j2",
-                **{
-                    "base_url": BASE_URL,
-                    "menu": menu,
-                    "title": TITLE,
-                    "author": AUTHOR,
-                    "progressbar": True,
-                },
-            )
 
         if filename == f"{SRC}/index":
             # base, index.md at root

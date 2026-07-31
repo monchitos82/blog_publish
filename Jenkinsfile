@@ -16,11 +16,13 @@ pipeline {
             steps {
                 script {
                     def uvExists = fileExists '/home/jenkins/.local/bin/uv'
-                    sh '''
-                        curl -LsSf https://astral.sh/uv/install.sh | sh
-                        export PATH="$HOME/.local/bin:$PATH"
-                        uv sync --frozen
-                    '''
+                    if (!uvExists || env.FORCE_INSTALL) {
+                        sh '''
+                            curl -LsSf https://astral.sh/uv/install.sh | sh
+                            export PATH="$HOME/.local/bin:$PATH"
+                            uv sync --frozen
+                        '''
+                    }
                 }
             }
         }

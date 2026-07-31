@@ -131,7 +131,6 @@ if __name__ == "__main__":
                 content=content,
                 **{
                     "base_url": BASE_URL,
-                    "year": year,
                 },
             )
 

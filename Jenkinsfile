@@ -176,15 +176,17 @@ pipeline {
             }
             steps {
                 sh '''
-                echo "---" > ${LOCAL_PATH_SITE}/llm_summary.txt
+                echo "---" > ${LOCAL_PATH_SITE}/llm_summary.md
                 cd ${SRC}
                 CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
                 cd -
                 for filename in ${CHANGED_FILES}; do
-                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/llm_summary.txt
-                    $HOME/.local/bin/uv run llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.txt
-                    echo "" >> ${LOCAL_PATH_SITE}/llm_summary.txt
+                    echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/llm_summary.md
+                    $HOME/.local/bin/uv run llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.md
+                    echo "" >> ${LOCAL_PATH_SITE}/llm_summary.md
                 done
+                pandoc -f markdown ${LOCAL_PATH_SITE}/llm_summary.md > ${LOCAL_PATH_SITE}/llm_summary.html
+                rm ${LOCAL_PATH_SITE}/llm_summary.md
                 '''
             }
         }
@@ -213,9 +215,6 @@ pipeline {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
                     script {
-                        sh '''
-                        echo "Deploying to fallback site"
-                        '''
                         if (!fileExists("/home/jenkins/agent/workspace/${SITE_PAGES}")) {
                             sh '''
                             cd ..

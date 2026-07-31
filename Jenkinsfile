@@ -135,9 +135,9 @@ pipeline {
                 mkdir -p ../${STABLE}/${SITE_DIR}
                 cp -r ${LOCAL_PATH_SITE} ../${STABLE}/
                 cp -r ${DEST} ${LOCAL_PATH_ROOT}
-                find ${LOCAL_PATH} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/${SITE_DIR}|g' {} +
+                find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/${SITE_DIR}|g' {} +
                 if [ ! -z "${TRACKING_URL}" ]; then
-                  find ${LOCAL_PATH} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
+                  find ${LOCAL_PATH_SITE} -type f -exec sed -i 's|.*${TRACKING_URL}.*|<!-- no tracking -->|g' {} +
                 fi
                 """
             }

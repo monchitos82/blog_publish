@@ -1,4 +1,27 @@
-from operations import build_year_index
+from operations import extract_post_title, build_year_index
+
+
+def test_extract_post_title_returns_title(tmp_path):
+    f = tmp_path / "post.md"
+    f.write_text("### My Great Post\nsome content")
+    assert extract_post_title(str(f)) == "My Great Post"
+
+
+def test_extract_post_title_wrong_heading_returns_none(tmp_path):
+    f = tmp_path / "post.md"
+    f.write_text("# Not H3\nsome content")
+    assert extract_post_title(str(f)) is None
+
+
+def test_extract_post_title_missing_file_returns_none():
+    assert extract_post_title("/nonexistent/post.md") is None
+
+
+def test_extract_post_title_strips_whitespace(tmp_path):
+    f = tmp_path / "post.md"
+    f.write_text("###   Padded Title   \n")
+    assert extract_post_title(str(f)) == "Padded Title"
+
 
 def test_build_year_index_creates_index(tmp_path):
     src = tmp_path / "src"

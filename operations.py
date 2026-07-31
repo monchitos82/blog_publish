@@ -2,9 +2,20 @@ import logging
 
 from files import list_of_files
 from transformations import save_as_html
-from validations import extract_post_title
 
 log = logging.getLogger(__name__)
+
+
+def extract_post_title(filename: str, title_format: str = "### ") -> str | None:
+    """Extract the title of a post based on the H3 header for a markdown file"""
+    try:
+        with open(filename) as post_file:
+            title = post_file.readline()
+        if title_format in title:
+            return title.replace(title_format, "").replace("\n", "").strip()
+    except OSError as error:
+        log.warning(f"Failed to open post when looking for a title: {error}")
+    return None
 
 
 def build_year_index(

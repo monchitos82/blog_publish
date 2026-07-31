@@ -61,7 +61,7 @@ async def build_year_index(
             if title:
                 formatted_filename = post.split("/")[-1].split(".")[0]
                 year_content += (
-                    f'    <li><h4><a href="{base_url}/posts/'
+                    f'    <li class="clean"><h4><a href="{base_url}/posts/'
                     + f'{year}/{formatted_filename}.html">'
                     + f"{title}</a></h4></li>\n"
                 )

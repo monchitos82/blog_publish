@@ -87,6 +87,7 @@ if __name__ == "__main__":
     markdown_files = list_of_files(dirname=SRC)
     if markdown_files:
         for filename in markdown_files:
+            log.info(f"Transformation started for file {filename}")
             split_filename = filename.split("/")
             file_name = split_filename[-1]
             if file_name == "README" or file_name.startswith("."):

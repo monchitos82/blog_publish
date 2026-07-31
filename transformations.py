@@ -71,12 +71,12 @@ def render_annotations(
     """Render annotations and transformation for specific filename cases"""
     file_arguments = kwargs
     file_header = parse_template(
-        filename=f"{SRC}/templates/header.html.j2",
+        filename=f"{src}/templates/header.html.j2",
         **file_arguments,
     )
 
     file_footer = parse_template(
-        filename=f"{SRC}/templates/footer.html.j2",
+        filename=f"{src}/templates/footer.html.j2",
         **file_arguments,
     )
     split_filename = filename.split("/")

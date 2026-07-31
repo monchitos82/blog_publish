@@ -1,6 +1,7 @@
 pipeline {
     agent { label 'python' }
     environment {
+        LOCAL_BASE_URL = "http://127.0.0.1:2080"
         // build specifics
         ACCOUNT = "ramongarciamx"
         GIT_URL = "ssh://git@codeberg.org/${ACCOUNT}"
@@ -86,8 +87,8 @@ pipeline {
                 mkdir -p ./last
                 cp -r /opt/deploy ./last
                 cp -r ./site /opt/deploy/
-                find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
-                find /opt/deploy/site -type f -exec sed -i 's|${TRACKING}|#|g' {} +
+                find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/site|g' {} +
+                find /opt/deploy/site -type f -exec sed -i 's|${TRACKING}|${LOCAL_BASE_URL}/pixel.png|g' {} +
                 """
             }
         }

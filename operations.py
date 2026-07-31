@@ -34,8 +34,11 @@ def build_year_index(
     for year in years:
         year_content = '<ul class="clean">\n'
         # the trick here is enable invert to get a desc order by date list of files and then revert the whole list sorted by name
+        posts = list_of_files(f"{src}/posts/{year}", clean_extension=False, invert=True)
+        if not posts:
+            continue
         for post in sorted(
-            list_of_files(f"{src}/posts/{year}", clean_extension=False, invert=True),
+            posts,
             key=lambda f: f.split("/")[-1][:5],
             reverse=True,
         ):

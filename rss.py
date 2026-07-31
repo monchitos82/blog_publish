@@ -33,8 +33,11 @@ def generate_rss_feed(
         fg.generator(generator="blog generator", version="0.1", uri="undefined")
 
         for year in years:
+            posts = list_of_files(f"{src}/posts/{year}", clean_extension=False)
+            if not posts:
+                continue
             for post in sorted(
-                list_of_files(f"{src}/posts/{year}", clean_extension=False),
+                posts,
                 key=lambda f: f.split("/")[-1][:5],
             ):
                 if "index" in post:

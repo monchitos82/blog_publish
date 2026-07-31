@@ -5,12 +5,22 @@ import datetime
 import logging
 import os
 
-from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
-                   list_of_files, load_file_content)
+from files import (
+    async_clean_files,
+    clean_files,
+    copy_dirs,
+    copy_statics,
+    list_of_files,
+    load_file_content,
+)
 from operations import build_year_index
 from rss import generate_rss_feed
-from transformations import (parse_markdown, parse_template,
-                             render_annotations, save_as_html)
+from transformations import (
+    parse_markdown,
+    parse_template,
+    render_annotations,
+    save_as_html,
+)
 from utils import load_static_env, run_async
 from validations import has_broken_anchors
 
@@ -77,47 +87,49 @@ if __name__ == "__main__":
     )
 
     # convert all /src markdowns to HTML files and populate /site
-    for filename in list_of_files(dirname=SRC):
-        split_filename = filename.split("/")
-        if split_filename[-1] == 'README' or split_filename[-1].startswith("."):
-            continue
+    markdown_files = list_of_files(dirname=SRC)
+    if markdown_files:
+        for filename in markdown_files:
+            split_filename = filename.split("/")
+            if split_filename[-1] == "README" or split_filename[-1].startswith("."):
+                continue
 
-        raw_content = load_file_content(filename, extension="md")
-        if not raw_content:
-            continue
+            raw_content = load_file_content(filename, extension="md")
+            if not raw_content:
+                continue
 
-        content = parse_markdown(content=raw_content)
-        if not content:
-            continue
+            content = parse_markdown(content=raw_content)
+            if not content:
+                continue
 
-        file_arguments = dict(arguments)
-        file_header, file_footer = render_annotations(
-            src=SRC,
-            filename=filename,
-            header=header,
-            footer=footer,
-            content=content,
-            **file_arguments,
-        )
-
-        # using NO_RENDER bypasses the jinja rendering on the content
-        if "<!-- NO_RENDER -->" not in content:
-            content = parse_template(
+            file_arguments = dict(arguments)
+            file_header, file_footer = render_annotations(
+                src=SRC,
+                filename=filename,
+                header=header,
+                footer=footer,
                 content=content,
                 **file_arguments,
             )
 
-        html_save = save_as_html(
-            filename=filename,
-            header=file_header,
-            footer=file_footer,
-            content=content,
-            replace={SRC: DEST},
-        )
-        if not html_save:
-            log.error(f"File {filename} failed to be generated!")
-            file_errors = True
-            break
+            # using NO_RENDER bypasses the jinja rendering on the content
+            if "<!-- NO_RENDER -->" not in content:
+                content = parse_template(
+                    content=content,
+                    **file_arguments,
+                )
+
+            html_save = save_as_html(
+                filename=filename,
+                header=file_header,
+                footer=file_footer,
+                content=content,
+                replace={SRC: DEST},
+            )
+            if not html_save:
+                log.error(f"File {filename} failed to be generated!")
+                file_errors = True
+                break
 
     # build the indexes from the posts in /src
     index_arguments = dict(arguments)

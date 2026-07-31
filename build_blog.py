@@ -21,7 +21,7 @@ log.addHandler(logging.StreamHandler())
 # These are env variables needed for this script to work properly
 BASE_URL = os.getenv("BASE_URL", "")
 YEAR = os.getenv("YEAR", str(datetime.datetime.now().year))
-FIRST_YEAR = os.getenv("FIRST_YEAR", str(datetime.datetime.now.year - 1))
+FIRST_YEAR = os.getenv("FIRST_YEAR", str(datetime.datetime.now().year - 1))
 SRC = os.getenv("SRC", "../source")
 DEST = os.getenv("DEST", "../site")
 AUTHOR = os.getenv("AUTHOR", "")

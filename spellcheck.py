@@ -8,7 +8,7 @@ from langchain_ollama import ChatOllama
 tools = []
 agent_prompt = """
 You are an assistant that will use tools to help, you will analyze text and reply with facts, without modifying the input or giving an opinion.
-Do not include the original text in your reply and make your response as brief as possible
+Do not include the original text in your reply and make your responses as brief as possible.
 """
 
 try:
@@ -51,7 +51,13 @@ def evaluate(msg: str, tools: list = tools) -> str | None:
                     {
                         "messages": [
                             HumanMessage(
-                                content=f"please analyze the following content and find spelling and grammar errors: {msg}, do not analyze code snippets and do not suggest editions, just point the errors when they are present"
+                                content=f"""
+                                Review the following content and find spelling and grammar errors.
+                                Do not analyze code snippets and do not suggest editions, just point the errors when they are present.
+                                START OF CONTENT -
+                                {msg}
+                                - END OF CONTENT
+                                """
                             )
                         ]
                     }

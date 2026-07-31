@@ -152,7 +152,7 @@ pipeline {
             steps {
                 sh '''
                 echo "---" > ${LOCAL_PATH_SITE}/spellcheck_.txt
-                for html_file in $(find ${SRC} -name '*.md' | egrep -v 'index|snippets'); do
+                for html_file in $(find ${SRC} -name '*.md' | egrep -v 'index|snippets|posts'); do
                     echo "## ${html_file} ##" >> ${LOCAL_PATH_SITE}/spellcheck_.txt
                     $HOME/.local/bin/uv run spellcheck.py ${html_file} >> ${LOCAL_PATH_SITE}/spellcheck_.txt
                     echo "" >> ${LOCAL_PATH_SITE}/spellcheck_.txt

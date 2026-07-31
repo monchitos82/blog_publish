@@ -151,11 +151,13 @@ pipeline {
             }
             steps {
                 sh '''
+                echo "<html>" > ${LOCAL_PATH_SITE}/spellcheck_.html
                 for html_file in $(find ${DEST} -name '*.html' | egrep -v 'index|snippets'); do
                     echo "<h3> ${html_file} </h3>" >> ${LOCAL_PATH_SITE}/spellcheck_.html
                     $HOME/.local/bin/uv run spellcheck.py ${html_file} >> ${LOCAL_PATH_SITE}/spellcheck_.html
                     echo "" >> ${LOCAL_PATH_SITE}/spellcheck_.html
                 done
+                echo "</html>" >> ${LOCAL_PATH_SITE}/spellcheck_.html
                 '''
             }
         }

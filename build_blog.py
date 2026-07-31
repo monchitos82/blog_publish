@@ -36,10 +36,10 @@ SITE_NAME = os.getenv("SITE_NAME", "")
 if __name__ == "__main__":
     file_errors = False
 
+    # this is used to signal where to copy files and which extensions to use
     STATICS = {
         f"{SRC}": env_list_as_tuple("STATICS_BASE", (".txt", ".css")),
         f"{SRC}/img": env_list_as_tuple("STATICS_IMG", (".png", ".svg", ".ico")),
-        f"{SRC}/extra": env_list_as_tuple("STATICS_EXTRA", (".html")),
     }
 
     clean_files(path=f"{DEST}", extension="html")

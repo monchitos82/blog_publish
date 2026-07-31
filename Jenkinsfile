@@ -24,7 +24,6 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    . ${VENV_DIR}/bin/activate
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
                     uv run build_blog.py

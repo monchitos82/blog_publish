@@ -1,11 +1,14 @@
 pipeline {
     agent { label 'python' }
     environment {
+        // build specifics
         VENV_DIR = ".venv"
         PYTHON = "python3"
         SOURCE = "rgarciamx"
-        BASE_URL = "https://${SOURCE}.codeberg.page"
-        GIT_URL = "ssh://git@codeberg.org/ramongarciamx"
+        GIT_ACCOUNT = "ramongarciamx"
+        GIT_URL = "ssh://git@codeberg.org/${GIT_ACCOUNT}"
+        // project specifics
+        BASE_URL = "https://${GIT_ACCOUNT}.codeberg.page"
         SRC = "./${SOURCE}"
         DEST = "./pages"
         YEAR_LOOKBACK = 2

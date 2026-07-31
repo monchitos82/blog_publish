@@ -86,13 +86,22 @@ pipeline {
         }
         stage('Publish Local') {
             steps {
-                sh 'ls; pwd;'
-                //sh 'cp -r ./build/* /opt/deploy/'
+                sh '''
+                mkdir /opt/deploy/blog
+                cp -r ./pages/* /opt/deploy/blog
+                '''
             }
         }
         stage('Publish to the public') {
             steps {
-                input message: 'Are you ready to publish?', ok: 'Publish'
+                script {
+                    try {
+                        input message: 'Publish the blog to the public?', ok: 'Publish'
+                    } catch (err) {
+                        currentBuild.result = 'ABORTED'
+                        error('Publish was rejected')
+                    }
+                }
             }
         }
 

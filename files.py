@@ -69,10 +69,10 @@ def copy_statics(src: str, dest: str, statics: list) -> None:
                     log.error(f"Copy of static file {filename} failed, error: {error}")
 
 
-def clean_files(path: str, extension: str, target: list | None = None) -> bool:
+def clean_files(path: str, extension: str, target: list | None = None, keep_prefix: str | None ) -> bool:
     """Delete files from [path] with an [extension]."""
     for filename in list_of_files(
-        dirname=path, extension=extension, clean_extension=False
+        dirname=path, extension=extension, clean_extension=False,
     ):
         if (
             target
@@ -87,6 +87,8 @@ def clean_files(path: str, extension: str, target: list | None = None) -> bool:
                 continue
         try:
             if ".keep" not in filename:
+                if keep_prefix and filename.startswith(keep_prefix):
+                    continue
                 os.remove(filename)
         except OSError:
             log.error("Site could not be cleaned", exc_info=True)

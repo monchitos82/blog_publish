@@ -157,12 +157,15 @@ if __name__ == "__main__":
 
     # if all year indexes are ready we can build the index from them
     if not file_errors and year_indexes:
-        broken_anchors, _ = asyncio.run(
+        broken_anchors, _, _ = asyncio.run(
             run_asynchronously(
                 [
                     has_broken_anchors(dest=f"{DEST}"),
                     async_clean_files(
                         path=f"{SRC}/posts", extension="md", target=YEARS
+                    ),
+                    async_clean_files(
+                        path=f"{SRC}/posts", extension="html", target=YEARS
                     ),
                 ]
             )

@@ -18,7 +18,7 @@ pipeline {
             description: 'Force a fresh installation of uv and sync environment'
         )
         booleanParam(
-            name: 'KEEP_REPOSITORIES', 
+            name: 'CLEAN_REPOSITORIES', 
             defaultValue: true, 
             description: 'Preserve the existing repositories in the workspace'
         )
@@ -41,15 +41,17 @@ pipeline {
         stage('Setup Sources') {
             steps {
                 script {
-                    if (params.KEEP_REPOSITORIES) {
-                        sh '''
-                            git pull ${GIT_URL}/${SOURCE} # clone my sources
-                            git pull ${GIT_URL}/pages # clone the destination repository
-                        '''
-                    } else {
+                    if (params.CLEAN_REPOSITORIES) {
+                        dir("${SOURCE}") { deleteDir() }
+                        dir("pages") { deleteDir() }
                         sh '''
                             git clone ${GIT_URL}/${SOURCE} # clone my sources
                             git clone ${GIT_URL}/pages # clone the destination repository
+                        '''
+                    } else {
+                        sh '''
+                            git pull ${GIT_URL}/${SOURCE} # clone my sources
+                            git pull ${GIT_URL}/pages # clone the destination repository
                         '''
                     }
                 }
@@ -83,7 +85,7 @@ pipeline {
         }
         cleanup {
             script {
-                if (!params.KEEP_REPOSITORIES) {
+                if (params.CLEAN_REPOSITORIES) {
                     dir("${SOURCE}") { deleteDir() }
                     dir("pages") { deleteDir() }
                 }

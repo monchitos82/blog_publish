@@ -10,6 +10,7 @@ from jinja2.runtime import Context
 log = logging.getLogger(__name__)
 
 
+# functions available inside jinja should be included here before their declaration
 JINJA_FUNCTIONS = ["title_h4_href"]
 
 
@@ -27,33 +28,37 @@ def title_h4_href(context: Context, title: str, date: str, path: str) -> str:
     """
 
 
-def render_template(filename: str, **kwargs) -> str:
-    """Render a filename template using jinja2."""
-    content = ""
-    try:
-        with open(filename) as template_file:
-            template = Template(source=template_file.read())
-            content = template.render(kwargs)
-    except OSError as err:
-        log.error(f"Could not open the template, error: {err}")
-    except TemplateError as err:
-        log.error(f"Failed to render the template, error: {err}")
-    return content
-
-
-def render_content_as_template(
-    content: str, functions: list = JINJA_FUNCTIONS, **kwargs
+def parse_template(
+    filename: str | None = None,
+    content: str | None = None,
+    functions: list = JINJA_FUNCTIONS,
+    **kwargs,
 ) -> str | None:
-    """Render content as a template using jinja2 (no file used here)."""
+    """Render a filename template using jinja2."""
     try:
-        template_as_content = Template(content)
+        if not content and not filename:
+            log.error(
+                "Parse template requires either a filename (preferred) or content"
+            )
+            return None
+        elif filename:
+            try:
+                with open(filename) as template_file:
+                    template = Template(source=template_file.read())
+            except OSError as err:
+                log.error(f"Could not open the template, error: {err}")
+                return None
+        elif content:
+            template = Template(content)
         current_module = sys.modules[__name__]
         for function in functions:
-            template_as_content.globals[function] = getattr(current_module, function)
-        content = template_as_content.render(kwargs)
+            try:
+                template.globals[function] = getattr(current_module, function)
+            except AttributeError:
+                log.warning(f"Function: {function} has not been declared in the module")
+        content = template.render(kwargs)
     except TemplateError as err:
-        log.error(f"Failed to render the content as template, error: {err}")
-        return None
+        log.error(f"Failed to render the template, error: {err}")
     return content
 
 
@@ -68,11 +73,11 @@ def render_annotations(
 
     if filename == f"{src}/index":
         file_arguments["in_main"] = True
-        file_footer = render_template(
+        file_footer = parse_template(
             filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
-        file_header = render_template(
+        file_header = parse_template(
             filename=f"{src}/templates/header.html.j2",
             **file_arguments,
         )
@@ -81,14 +86,14 @@ def render_annotations(
         year = split_filename[-2]
         file_arguments["year"] = year
         file_arguments["in_post"] = True
-        file_footer = render_template(
+        file_footer = parse_template(
             filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
 
     if "<!-- NAV_MAIN -->" in content:
         file_arguments["in_index"] = True
-        file_footer = render_template(
+        file_footer = parse_template(
             filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
@@ -96,14 +101,14 @@ def render_annotations(
     if "<!-- NAV_MAIN_ES -->" in content:
         file_arguments["in_index"] = True
         file_arguments["in_es"] = True
-        file_footer = render_template(
+        file_footer = parse_template(
             filename=f"{src}/templates/footer.html.j2",
             **file_arguments,
         )
 
     if "<!-- NO_PROGRESSBAR -->" in content:
         file_arguments["progressbar"] = False
-        file_header = render_template(
+        file_header = parse_template(
             filename=f"{src}/templates/header.html.j2",
             **file_arguments,
         )
@@ -128,8 +133,8 @@ def parse_markdown(content: str) -> str:
 
 def save_as_html(
     filename: str,
-    header: str,
-    footer: str,
+    header: str | None,
+    footer: str | None,
     content: str | None,
     replace: dict,
     tracking_url: str | None,

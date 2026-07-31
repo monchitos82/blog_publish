@@ -3,9 +3,13 @@ import os
 import pytest
 from jinja2 import Environment, FunctionLoader
 
-from transformations import (parse_markdown, render_annotations,
-                             render_content_as_template, render_template,
-                             save_as_html, title_h4_href)
+from transformations import (
+    parse_markdown,
+    parse_template,
+    render_annotations,
+    save_as_html,
+    title_h4_href,
+)
 
 
 @pytest.fixture
@@ -15,25 +19,25 @@ def jinja_env():
     return env
 
 
-def test_render_template_renders_variables(tmp_path):
+def test_parse_template_renders_variables(tmp_path):
     t = tmp_path / "tmpl.j2"
     t.write_text("Hello {{ name }}!")
-    assert render_template(str(t), name="world") == "Hello world!"
+    assert parse_template(filename=t, name="world") == "Hello world!"
 
 
-def test_render_template_missing_file_returns_empty():
-    assert render_template("/nonexistent/template.j2") == ""
+def test_parse_template_missing_file_returns_empty():
+    assert parse_template("/nonexistent/template.j2") == None
 
 
-def test_render_template_no_variables(tmp_path):
+def test_parse_template_no_variables(tmp_path):
     t = tmp_path / "tmpl.j2"
     t.write_text("<html/>")
-    assert render_template(str(t)) == "<html/>"
+    assert parse_template(filename=t) == "<html/>"
 
 
-def test_render_content_as_template():
+def test_parse_template_with_content():
     content = "{{ foo }}"
-    assert render_content_as_template(content, foo="var") == "var"
+    assert parse_template(content=content, foo="var") == "var"
 
 
 def test_parse_markdown_basic():

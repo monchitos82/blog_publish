@@ -5,13 +5,22 @@ import datetime
 import logging
 import os
 
-from files import (async_clean_files, clean_files, copy_dirs, copy_statics,
-                   list_of_files, load_file_content)
+from files import (
+    async_clean_files,
+    clean_files,
+    copy_dirs,
+    copy_statics,
+    list_of_files,
+    load_file_content,
+)
 from operations import build_year_index, extract_post_title
 from rss import generate_rss_feed
-from transformations import (parse_markdown, render_annotations,
-                             render_content_as_template, render_template,
-                             save_as_html)
+from transformations import (
+    parse_markdown,
+    parse_template,
+    render_annotations,
+    save_as_html,
+)
 from utils import env_list_as_tuple, load_static_env, run_async
 from validations import has_broken_anchors
 
@@ -70,17 +79,17 @@ if __name__ == "__main__":
         "years": YEARS,
     }
 
-    menu = render_template(
+    menu = parse_template(
         filename=f"{SRC}/templates/menu.html.j2",
         **arguments,
     )
     arguments["menu"] = menu
 
-    header = render_template(
+    header = parse_template(
         filename=f"{SRC}/templates/header.html.j2",
         **arguments,
     )
-    footer = render_template(
+    footer = parse_template(
         filename=f"{SRC}/templates/footer.html.j2",
         **arguments,
     )
@@ -110,7 +119,8 @@ if __name__ == "__main__":
         )
 
         if "<!-- NO_RENDER -->" not in content:
-            content = render_content_as_template(
+            content = parse_template(
+                filename=None,
                 content=content,
                 **file_arguments,
             )
@@ -132,11 +142,11 @@ if __name__ == "__main__":
     file_arguments = dict(arguments)
     file_arguments["progressbar"] = False
     file_arguments["in_index"] = True
-    index_header = render_template(
+    index_header = parse_template(
         filename=f"{SRC}/templates/header.html.j2",
         **file_arguments,
     )
-    index_footer = render_template(
+    index_footer = parse_template(
         filename=f"{SRC}/templates/footer.html.j2",
         **file_arguments,
     )

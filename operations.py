@@ -27,8 +27,8 @@ def build_year_index(
     dest: str,
     base_url: str,
     years: list,
-    header: str,
-    footer: str,
+    header: str | None,
+    footer: str | None,
     tracking_url: str,
 ) -> bool:
     """Create a yearly index of all posts available."""

@@ -29,7 +29,7 @@ def generate_rss_feed(
         fg.link(href="f{base_url}", rel="alternate")
         fg.logo(f"{base_url}/img/favicon.ico")
         fg.subtitle("Personal blog updates")
-        fg.link(href=f"{base_url}/feed.xml", rel="self")
+        fg.link(href=f"{base_url}/atom.xml", rel="self")
         fg.language("en")
         fg.generator(generator="blog generator", version="0.1")
 
@@ -56,7 +56,7 @@ def generate_rss_feed(
                         )
                     )
 
-        fg.rss_file(f"{dest}/feed.xml")
+        fg.rss_file(f"{dest}/atom.xml")
     except (OSError, AttributeError) as error:
         log.error(f"Failed to generate RSS feed: {error}")
         return False

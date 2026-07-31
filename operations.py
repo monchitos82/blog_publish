@@ -52,11 +52,14 @@ def extract_post_title(filename: str, title_format: str = "### ") -> str | None:
 def build_year_index(
     src: str,
     dest: str,
-    base_url: str,
-    years: list,
     **kwargs,
 ) -> bool:
     """Create a yearly index of all posts available."""
+    years = kwargs.get("years", [])
+    base_url = kwargs.get("base_url", "")
+    if not years:
+        return False
+
     for year in years:
         year_content = '<ul class="clean">'
         # the trick here is enable invert to get a desc order by date list of files and then revert the whole list sorted by name

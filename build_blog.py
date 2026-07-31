@@ -152,8 +152,6 @@ if __name__ == "__main__":
     year_indexes = build_year_index(
         src=SRC,
         dest=DEST,
-        base_url=BASE_URL,
-        years=YEARS,
         **index_arguments,
     )
 

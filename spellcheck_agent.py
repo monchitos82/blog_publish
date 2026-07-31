@@ -31,13 +31,14 @@ except OSError as error:
 
 
 def evaluate(msg: str, tools: list = tools) -> str | None:
+    print(msg)
     model = None
     agent = None
     result = {}
     output = None
     try:
         model = ChatOllama(
-            model=os.getenv("OLLAMA_MODEL", "phi4-mini"),
+            model=os.getenv("OLLAMA_MODEL", "gemma3n:latest"),
             base_url=os.getenv(
                 "OLLAMA_BASE_URL", "http://host.containers.internal:11434"
             ),

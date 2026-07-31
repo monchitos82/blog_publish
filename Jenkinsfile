@@ -25,8 +25,8 @@ pipeline {
         DEST = "../${SITE_DIR}"
         SRC = "../${SOURCE}"
         LOCAL_PATH_ROOT = "/opt/deploy"
-        LOCAL_PATH = "${LOCAL_PATH_ROOT}/site"
-        STABLE = "../last"
+        LOCAL_PATH_SITE = "${LOCAL_PATH_ROOT}/site"
+        STABLE = "last"
 
         // blog path specifics
         STATICS_IMG = ".ico,.webp"
@@ -76,6 +76,7 @@ pipeline {
                         dir("../${SOURCE}") { deleteDir() }
                         dir("../${SITE_PAGES}") { deleteDir() }
                         dir("../${SITE_DIR}") { deleteDir() }
+                        dir("../${STABLE}") { deleteDir() }
                         sh '''
                             cd ..
                             git clone ${GIT_URL}
@@ -130,9 +131,9 @@ pipeline {
         stage('Local Publish') {
             steps {
                 sh """
-                mkdir -p ${LOCAL_PATH}
-                mkdir -p ${STABLE}/${SITE_DIR}
-                cp -r ${LOCAL_PATH} ${STABLE}/
+                mkdir -p ${LOCAL_PATH_SITE}
+                mkdir -p ../${STABLE}/${SITE_DIR}
+                cp -r ${LOCAL_PATH_SITE} ../${STABLE}/
                 cp -r ${DEST} ${LOCAL_PATH_ROOT}
                 find ${LOCAL_PATH} -type f -exec sed -i 's|${BASE_URL}|${LOCAL_BASE_URL}/${SITE_DIR}|g' {} +
                 if [ ! -z "${TRACKING_URL}" ]; then
@@ -167,7 +168,7 @@ pipeline {
         aborted {
             sh """
             echo 'Rolling back local changes'
-            cp -r ${STABLE}/${SITE_DIR} ${LOCAL_PATH_ROOT}
+            cp -r ../${STABLE}/${SITE_DIR} ${LOCAL_PATH_ROOT}
             """
         }
         failure {
@@ -180,6 +181,7 @@ pipeline {
                     dir("../${SOURCE}") { deleteDir() }
                     dir("../${SITE_DIR}") { deleteDir() }
                     dir("../${SITE_PAGES}") { deleteDir() }
+                    dir("../${STABLE}") { deleteDir() }
                 }
             }
         }

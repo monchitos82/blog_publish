@@ -27,7 +27,7 @@ def generate_rss_feed(
         fg.author({"name": f"{author}", "email": f"{email}"})
         fg.link(href="f{base_url}", rel="alternate")
         fg.logo(f"{base_url}/img/favicon.ico")
-        fg.subtitle("Personal blog updates")
+        fg.subtitle(f"{author} blog updates")
         fg.link(href=f"{base_url}/atom.xml", rel="self")
         fg.language("en")
         fg.generator(generator="blog generator", version="0.1", uri="undefined")

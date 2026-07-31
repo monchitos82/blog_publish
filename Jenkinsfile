@@ -51,7 +51,7 @@ pipeline {
                         dir("site") { deleteDir() }
                         sh '''
                             git clone ${GIT_URL}/${SOURCE}
-                            mkdir -p site
+                            mkdir -p ./site
                         '''
                     } else {
                         if (fileExists("/home/jenkins/agent/workspace/blog/${SOURCE}")) {
@@ -81,7 +81,7 @@ pipeline {
         stage('Publish Local') {
             steps {
                 sh """
-                cp -r site /opt/deploy/
+                cp -r ./site /opt/deploy/
                 find /opt/deploy/site -type f -exec sed -i 's|${BASE_URL}|http://127.0.0.1:2080/site|g' {} +
                 """
             }

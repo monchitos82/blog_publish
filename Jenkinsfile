@@ -182,7 +182,9 @@ pipeline {
                 cd -
                 for filename in ${CHANGED_FILES}; do
                     echo "## ${filename} ##" >> ${LOCAL_PATH_SITE}/llm_summary.md
-                    $HOME/.local/bin/uv run ./tools/llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.md
+                    cd tools
+                    $HOME/.local/bin/uv run llm_check.py ${SRC}/${filename} >> ${LOCAL_PATH_SITE}/llm_summary.md
+                    cd ..
                     echo "" >> ${LOCAL_PATH_SITE}/llm_summary.md
                 done
                 '''

@@ -12,7 +12,8 @@ async def build_year_index(
 ) -> bool:
     """Create a yearly index of all posts available."""
     for year in years:
-        year_content = f'<ul class="clean">\n'
+        year_content = f"<div style=\"background-image: url('{base_url}/experiments/stars.svg');background-size: cover;background-repeat: no-repeat;\"/>"
+        year_content += f'<ul class="clean">\n'
         for post in sorted(
             list_of_files(f"{src}/posts/{year}", clean_extension=False),
             key=lambda f: f.split("/")[-1][:5],

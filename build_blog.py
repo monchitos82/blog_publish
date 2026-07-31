@@ -160,6 +160,16 @@ if __name__ == "__main__":
     last_year = int(LAST_YEAR)
     first_year = last_year - int(YEAR_LOOKBACK)
     YEARS = [str(year) for year in range(first_year, last_year + 1)]
+    index_header = render_template(
+        filename=f"{SRC}/templates/header.html.j2",
+        **{
+            "base_url": BASE_URL,
+            "menu": menu,
+            "title": TITLE,
+            "author": AUTHOR,
+            "progressbar": False,
+        },
+    )
     index_footer = render_template(
         filename=f"{SRC}/templates/footer.html.j2",
         **{
@@ -172,7 +182,7 @@ if __name__ == "__main__":
         dest=DEST,
         base_url=BASE_URL,
         years=YEARS,
-        header=header,
+        header=index_header,
         footer=index_footer,
         tracking_url=TRACKING,
     )

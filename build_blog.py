@@ -85,7 +85,7 @@ if __name__ == "__main__":
             continue
         # adding a different footer in the event of creating a post:
         split_filename = filename.split("/")
-        if split_filename[-1] != "index":
+        if split_filename[-1] not in ("index", "about"):
             if len(split_filename) == 5:
                 year = split_filename[-2]
                 page = split_filename[-1]
@@ -98,6 +98,14 @@ if __name__ == "__main__":
                         "page_name": f"{page}"
                     },
                 )
+        else if split_filename[-1] == "about": # abusing the in_index flag to treat about as index menu
+            file_footer = render_template(
+                filename=f"{SRC}/tempaltes/footer.html.j2",
+                **{
+                    "base_url": BASE_URL,
+                    "in_index": True,
+                },
+            )
         else: # if index.md (aka main)
             file_footer = render_template(
                 filename=f"{SRC}/templates/footer.html.j2",

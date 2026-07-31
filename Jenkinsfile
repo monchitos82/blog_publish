@@ -11,6 +11,18 @@ pipeline {
         SRC = "./${SOURCE}"
         YEAR_LOOKBACK = 2
     }
+    parameters {
+        booleanParam(
+            name: 'FORCE_SETUP', 
+            defaultValue: false, 
+            description: 'Force a fresh installation of uv and sync environment'
+        )
+        booleanParam(
+            name: 'KEEP_REPOSITORIES', 
+            defaultValue: false, 
+            description: 'Preserve the existing repositories in the workspace'
+        )
+    }
     stages {
         stage('Setup Environment') {
             steps {
@@ -31,7 +43,6 @@ pipeline {
                 sh '''
                     git clone ${GIT_URL}/${SOURCE} # clone my sources
                     git clone ${GIT_URL}/pages # clone the destination repository
-                    find ./pages -name '*.html' -delete
                 '''
             }
 
@@ -62,8 +73,12 @@ pipeline {
             cleanWs()
         }
         cleanup {
-            dir("${SOURCE}") { deleteDir() }
-            dir("pages") { deleteDir() }
+            script {
+                if (!env.KEEP_REPOSITORIES) {
+                    dir("${SOURCE}") { deleteDir() }
+                    dir("pages") { deleteDir() }
+                }
+            }
         }
     }
 }

@@ -13,7 +13,6 @@ pipeline {
         LOCAL_BASE_URL = "http://127.0.0.1:2080"
         DEST = "./site"
         SRC = "./${SOURCE}"
-        YEAR_LOOKBACK = 1
 
         //blog path specifics
         STATICS_IMG = ".ico,.webp"

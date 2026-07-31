@@ -59,7 +59,6 @@ def parse_template(
             rendered_content = template.render(kwargs)
     except TemplateError:
         log.error(f"Failed to render the template {filename}", exc_info=True)
-    print("parse template", kwargs)
     return rendered_content
 
 
@@ -112,5 +111,4 @@ def render_annotations(
                 filename=f"{src}/templates/header.html.j2",
                 **file_arguments,
             )
-    print("render annotations", file_arguments)
     return (file_header, file_footer)

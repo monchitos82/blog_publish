@@ -121,6 +121,8 @@ if __name__ == "__main__":
                 content=content,
                 **file_arguments,
             )
+            if "snippets" in filename:
+                print(file_footer, file_arguments)
 
             # using NO_RENDER bypasses the jinja rendering on the content
             if "<!-- NO_RENDER -->" not in content:

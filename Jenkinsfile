@@ -210,6 +210,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Go Live') {
             steps {
                 catchError (buildResult: 'UNSTABLE', stageResult: 'FAILURE', message: 'Failed to update fallback page'){
@@ -242,6 +243,7 @@ pipeline {
                 }
             }
         }
+        */
     }
     post {
         aborted {

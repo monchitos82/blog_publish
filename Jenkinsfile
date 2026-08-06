@@ -14,10 +14,10 @@ pipeline {
 
         // Codeberg pages specifics
         SITE_PAGES = "pages"
-        SITE_PAGES_URL = "ssh://git@codeberg.org/${ACCOUNT}/${SITE_PAGES}.git"
+        SITE_PAGES_URL = ""
 
         // Base URL definitions
-        BASE_URL = "https://${ACCOUNT}.codeberg.page"
+        BASE_URL = "https://${ACCOUNT}"
         LOCAL_BASE_URL = "http://127.0.0.1:2080/${SITE_DIR}"
         TRACKING_URL = ""
 

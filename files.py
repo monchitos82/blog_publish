@@ -72,7 +72,6 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                 except FileExistsError:
                     # this is an acceptable scenario
                     log.warning(f"Directory {item} is already present in: {dest}")
-                    pass
                 except OSError:
                     # other errors should be addressed
                     log.exception(f"Creation of directory {item} failed")

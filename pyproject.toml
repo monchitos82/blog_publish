@@ -6,6 +6,7 @@ requires-python = ">=3.13"
 
 dependencies = [
     "aiofiles==25.1.0",
+    "bandit>=1.9.4",
     "bs4==0.0.2",
     "certifi==2026.6.17",
     "charset-normalizer==3.4.7",
@@ -23,6 +24,7 @@ dependencies = [
     "opentelemetry-instrumentation-ollama>=0.62.1",
     "pytest>=9.0.3",
     "requests==2.34.2",
+    "ruff>=0.16.3",
     "toolz==1.1.0",
     "urllib3==2.7.0",
     "validators==0.35.0",

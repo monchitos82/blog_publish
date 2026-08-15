@@ -118,6 +118,16 @@ pipeline {
             }
           }
         }
+        stage('Run Safety Check') {
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+              sh '''
+              $HOME/.local/bin/uv run bandit
+              '''
+            }
+          }
+        }
+
         stage('Build') {
             steps {
                 script {

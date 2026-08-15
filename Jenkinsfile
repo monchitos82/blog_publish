@@ -122,7 +122,7 @@ pipeline {
           steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
               sh '''
-              $HOME/.local/bin/uv run bandit
+              $HOME/.local/bin/uv run bandit *.py
               '''
             }
           }

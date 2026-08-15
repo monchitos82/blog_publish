@@ -16,7 +16,7 @@ def load_file_content(filename: str, limit: int = 262100) -> str | None:
                 f"The file size exceeds the limit of {limit} bytes, content will not be loaded"
             )
     except (IOError, OSError):
-        log.error(f"Failed to access the file {filename}", exc_info=True)
+        log.exception(f"Failed to access the file {filename}", exc_info=True)
     return content
 
 
@@ -75,10 +75,10 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                     pass
                 except OSError:
                     # other errors should be addressed
-                    log.error(f"Creation of directory {item} failed", exc_info=True)
+                    log.exception(f"Creation of directory {item} failed", exc_info=True)
                     return False
     except OSError:
-        log.error(f"Access to {src} failed", exc_info=True)
+        log.exception(f"Access to {src} failed", exc_info=True)
         return False
     return True
 
@@ -93,7 +93,7 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
             )
             for filename in files:
                 split_filename = filename.split("/")
-                if any([item.startswith(".") for item in split_filename[1:]]):
+                if any(item.startswith(".") for item in split_filename[1:]):
                     # no dotfiles except for ",/"
                     log.warning(f"{filename} is a hidden file and will not be copied")
                     continue
@@ -108,7 +108,7 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
                     log.debug(f"Static file {filename} copied to {dest}")
 
                 except OSError:
-                    log.error(
+                    log.exception(
                         f"Copy of static file {filename} failed, error", exc_info=True
                     )
                     return False
@@ -147,7 +147,7 @@ def clean_files(
                     continue
                 os.remove(filename)
         except OSError:
-            log.error("Site could not be cleaned", exc_info=True)
+            log.exception("Site could not be cleaned", exc_info=True)
             return False
     log.info("Site clean!")
     return True

@@ -41,7 +41,7 @@ def parse_template(
                 with open(filename) as template_file:
                     template = Template(source=template_file.read())
             except OSError:
-                log.exception("Could not open the template", exc_info=True)
+                log.exception("Could not open the template")
                 return ""
         else:
             if not content:
@@ -55,7 +55,7 @@ def parse_template(
             try:
                 template.globals.update(JinjaFunctions.functions)
             except (AttributeError, ValueError):
-                log.exception("There are no available jinja functions", exc_info=True)
+                log.exception("There are no available jinja functions")
             else:
                 rendered_content = template.render(kwargs)
     except TemplateError:

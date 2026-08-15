@@ -27,7 +27,7 @@ def save_as_html(
                 html_file.write(f'<main role="main">{content}</main>')
                 html_file.write(footer)
         except OSError:
-            log.exception(f"Failed to save {html_filename}", exc_info=True)
+            log.exception(f"Failed to save {html_filename}")
         else:
             save = True
     return save

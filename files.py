@@ -16,7 +16,7 @@ def load_file_content(filename: str, limit: int = 262100) -> str | None:
                 f"The file size exceeds the limit of {limit} bytes, content will not be loaded"
             )
     except (IOError, OSError):
-        log.exception(f"Failed to access the file {filename}", exc_info=True)
+        log.exception(f"Failed to access the file {filename}")
     return content
 
 
@@ -75,10 +75,10 @@ def copy_dirs(src: str, dest: str, depth=0) -> bool:
                     pass
                 except OSError:
                     # other errors should be addressed
-                    log.exception(f"Creation of directory {item} failed", exc_info=True)
+                    log.exception(f"Creation of directory {item} failed")
                     return False
     except OSError:
-        log.exception(f"Access to {src} failed", exc_info=True)
+        log.exception(f"Access to {src} failed")
         return False
     return True
 
@@ -109,7 +109,7 @@ def copy_statics(src: str, dest: str, statics: dict) -> bool:
 
                 except OSError:
                     log.exception(
-                        f"Copy of static file {filename} failed, error", exc_info=True
+                        f"Copy of static file {filename} failed, error"
                     )
                     return False
     return True
@@ -147,7 +147,7 @@ def clean_files(
                     continue
                 os.remove(filename)
         except OSError:
-            log.exception("Site could not be cleaned", exc_info=True)
+            log.exception("Site could not be cleaned")
             return False
     log.info("Site clean!")
     return True
